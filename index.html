@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MateJuegos - Aprende Matemáticas Jugando</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: #f8fafc;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3b82f6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🧮";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23374151" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border: 2px solid #3b82f6;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #3b82f6;
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .floating-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .math-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .math-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .math-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .math-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .math-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Grades Section */
+        .grades-section {
+            padding: 5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .grades-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .grade-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #3b82f6;
+        }
+
+        .grade-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grade-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .grade-info h3 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+
+        .grade-info p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .topics-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .topics-list li {
+            padding: 0.5rem 0;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .topics-list li:last-child {
+            border-bottom: none;
+        }
+
+        .topics-list li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .games-count {
+            background: #eff6ff;
+            color: #3b82f6;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Featured Games Section */
+        .featured-games {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+        }
+
+        .games-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .game-feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .game-feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-image {
+            height: 200px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .game-content {
+            padding: 2rem;
+        }
+
+        .game-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+
+        .game-content p {
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-grade {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .game-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #fbbf24;
+        }
+
+        .play-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 4rem 2rem;
+            background: #f8fafc;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .author-info h4 {
+            color: #f1f5f9;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .floating-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">MateJuegos</a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#grados">Grados</a></li>
+                <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#estadisticas">Estadísticas</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+            </ul>
+            <a href="complete-login-html.html" class="cta-btn">Ingresar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="inicio">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Aprende <span class="gradient-text">Matemáticas</span><br>Jugando</h1>
+                    <p>Descubre una nueva forma de dominar las matemáticas y estadística a través de juegos interactivos diseñados especialmente para estudiantes colombianos de 6° a 11° grado.</p>
+                    <div class="hero-buttons">
+                        <a href="#grados" class="btn-primary">🚀 Comenzar Ahora</a>
+                        <a href="#juegos" class="btn-secondary">🎮 Ver Juegos</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-cards">
+                        <div class="math-card">
+                            <div class="icon">📊</div>
+                            <h3>Estadística</h3>
+                            <p>Gráficas interactivas</p>
+                        </div>
+                        <div class="math-card">
+                            <div class="icon">📐</div>
+                            <h3>Geometría</h3>
+                            <p>Construcciones 3D</p>
+                        </div>
+                        <div class="math-card">
+                            <div class="icon">🔢</div>
+                            <h3>Álgebra</h3>
+                            <p>Ecuaciones dinámicas</p>
+                        </div>
+                        <div class="math-card">
+                            <div class="icon">📈</div>
+                            <h3>Cálculo</h3>
+                            <p>Visualizaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grades-section" id="grados">
+            <div class="grades-container">
+                <div class="section-title fade-in">
+                    <h2>Explora por Grado</h2>
+                    <p>Contenido alineado con el currículo colombiano y los Derechos Básicos de Aprendizaje</p>
+                </div>
+                <div class="grades-grid">
+                    <div class="grade-card fade-in" onclick="selectGrade(6)">
+                        <div class="grade-header">
+                            <div class="grade-number">6°</div>
+                            <div class="grade-info">
+                                <h3>Sexto Grado</h3>
+                                <p>Fundamentos matemáticos</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Números enteros y operaciones</li>
+                            <li>Fracciones y decimales</li>
+                            <li>Geometría básica</li>
+                            <li>Estadística descriptiva</li>
+                        </ul>
+                        <span class="games-count">8 Juegos disponibles</span>
+                    </div>
+
+                    <div class="grade-card fade-in" onclick="selectGrade(7)">
+                        <div class="grade-header">
+                            <div class="grade-number">7°</div>
+                            <div class="grade-info">
+                                <h3>Séptimo Grado</h3>
+                                <p>Razonamiento numérico</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Números racionales</li>
+                            <li>Proporcionalidad</li>
+                            <li>Geometría plana</li>
+                            <li>Probabilidad básica</li>
+                        </ul>
+                        <span class="games-count">10 Juegos disponibles</span>
+                    </div>
+
+                    <div class="grade-card fade-in" onclick="selectGrade(8)">
+                        <div class="grade-header">
+                            <div class="grade-number">8°</div>
+                            <div class="grade-info">
+                                <h3>Octavo Grado</h3>
+                                <p>Pensamiento algebraico</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Expresiones algebraicas</li>
+                            <li>Ecuaciones lineales</li>
+                            <li>Teorema de Pitágoras</li>
+                            <li>Medidas de tendencia central</li>
+                        </ul>
+                        <span class="games-count">12 Juegos disponibles</span>
+                    </div>
+
+                    <div class="grade-card fade-in" onclick="selectGrade(9)">
+                        <div class="grade-header">
+                            <div class="grade-number">9°</div>
+                            <div class="grade-info">
+                                <h3>Noveno Grado</h3>
+                                <p>Funciones y relaciones</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Funciones lineales</li>
+                            <li>Sistemas de ecuaciones</li>
+                            <li>Geometría analítica</li>
+                            <li>Estadística avanzada</li>
+                        </ul>
+                        <span class="games-count">14 Juegos disponibles</span>
+                    </div>
+
+                    <div class="grade-card fade-in" onclick="selectGrade(10)">
+                        <div class="grade-header">
+                            <div class="grade-number">10°</div>
+                            <div class="grade-info">
+                                <h3>Décimo Grado</h3>
+                                <p>Matemáticas avanzadas</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Trigonometría</li>
+                            <li>Logaritmos</li>
+                            <li>Geometría del espacio</li>
+                            <li>Estadística inferencial</li>
+                        </ul>
+                        <span class="games-count">16 Juegos disponibles</span>
+                    </div>
+
+                    <div class="grade-card fade-in" onclick="selectGrade(11)">
+                        <div class="grade-header">
+                            <div class="grade-number">11°</div>
+                            <div class="grade-info">
+                                <h3>Once Grado</h3>
+                                <p>Preparación universitaria</p>
+                            </div>
+                        </div>
+                        <ul class="topics-list">
+                            <li>Cálculo diferencial</li>
+                            <li>Combinatoria</li>
+                            <li>Preparación SABER 11</li>
+                            <li>Estadística aplicada</li>
+                        </ul>
+                        <span class="games-count">18 Juegos disponibles</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-games" id="juegos">
+            <div class="games-container">
+                <div class="section-title fade-in">
+                    <h2>Juegos Destacados</h2>
+                    <p>Descubre nuestros juegos más populares que hacen el aprendizaje divertido</p>
+                </div>
+                <div class="games-grid">
+                    <div class="game-feature-card fade-in">
+                        <div class="game-image">🕵️‍♂️</div>
+                        <div class="game-content">
+                            <h3>Detective de Datos</h3>
+                            <p>Conviértete en detective y resuelve misterios interpretando gráficas estadísticas. Perfecto para estudiantes de 6° grado.</p>
+                            <div class="game-meta">
+                                <span class="game-grade">6° Grado</span>
+                                <div class="game-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <button class="play-btn" onclick="playGame('detective-datos')">
+                                <i class="fas fa-play"></i>
+                                Jugar Ahora
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="game-feature-card fade-in">
+                        <div class="game-image">🧩</div>
+                        <div class="game-content">
+                            <h3>Álgebra Quest</h3>
+                            <p>Embárcate en una aventura épica resolviendo ecuaciones algebraicas. Diseñado para estudiantes de 8° y 9° grado.</p>
+                            <div class="game-meta">
+                                <span class="game-grade">8°-9° Grado</span>
+                                <div class="game-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <button class="play-btn" onclick="playGame('algebra-quest')">
+                                <i class="fas fa-play"></i>
+                                Jugar Ahora
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="game-feature-card fade-in">
+                        <div class="game-image">📐</div>
+                        <div class="game-content">
+                            <h3>Misión Pitágoras</h3>
+                            <p>Aplica el teorema de Pitágoras para resolver desafíos geométricos en este emocionante juego para 8° grado.</p>
+                            <div class="game-meta">
+                                <span class="game-grade">8° Grado</span>
+                                <div class="game-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <button class="play-btn" onclick="playGame('mision-pitagoras')">
+                                <i class="fas fa-play"></i>
+                                Jugar Ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section" id="estadisticas">
+            <div class="stats-container">
+                <div class="stat-item fade-in">
+                    <h3 id="students-count">2,543</h3>
+                    <p>Estudiantes activos</p>
+                </div>
+                <div class="stat-item fade-in">
+                    <h3 id="games-completed">15,762</h3>
+                    <p>Juegos completados</p>
+                </div>
+                <div class="stat-item fade-in">
+                    <h3 id="schools-count">127</h3>
+                    <p>Instituciones educativas</p>
+                </div>
+                <div class="stat-item fade-in">
+                    <h3 id="success-rate">94%</h3>
+                    <p>Mejora en calificaciones</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section" id="testimonios">
+            <div class="testimonials-container">
+                <div class="section-title fade-in">
+                    <h2>Lo que dicen nuestros usuarios</h2>
+                    <p>Experiencias reales de estudiantes y docentes que utilizan MateJuegos</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card fade-in">
+                        <div class="testimonial-text">
+                            "Desde que uso MateJuegos, mis estudiantes están más motivados con las matemáticas. Las calificaciones han mejorado notablemente."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">PG</div>
+                            <div class="author-info">
+                                <h4>Profesora González</h4>
+                                <p>Docente de Matemáticas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card fade-in">
+                        <div class="testimonial-text">
+                            "¡Los juegos son súper divertidos! Antes no me gustaban las matemáticas, pero ahora es mi clase favorita."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">CR</div>
+                            <div class="author-info">
+                                <h4>Carlos Rodríguez</h4>
+                                <p>Estudiante de 7° grado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card fade-in">
+                        <div class="testimonial-text">
+                            "Como padre, veo cómo mi hija ha mejorado su comprensión matemática de forma divertida. ¡Recomiendo totalmente MateJuegos!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">ML</div>
+                            <div class="author-info">
+                                <h4>María López</h4>
+                                <p>Madre de estudiante</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3><i class="fas fa-gamepad"></i> MateJuegos</h3>
+                <p>Transformando el aprendizaje de matemáticas a través de juegos interactivos para estudiantes colombianos.</p>
+            </div>
+
+            <div class="footer-col">
+                <h3><i class="fas fa-link"></i> Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="#grados"><i class="fas fa-graduation-cap"></i> Grados</a></li>
+                    <li><a href="#juegos"><i class="fas fa-gamepad"></i> Juegos</a></li>
+                    <li><a href="#estadisticas"><i class="fas fa-chart-line"></i> Estadísticas</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3><i class="fas fa-book"></i> Recursos</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-download"></i> Material Descargable</a></li>
+                    <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Recursos para Docentes</a></li>
+                    <li><a href="#"><i class="fas fa-file-alt"></i> Guías de Aprendizaje</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3><i class="fas fa-envelope"></i> Contacto</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> info@matejuegos.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +57 1 234 5678</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 MateJuegos. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (element.id === 'success-rate') {
+                    element.textContent = Math.floor(current) + '%';
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // Animate counters when stats section is visible
+        const statsSection = document.querySelector('.stats-section');
+        let statsAnimated = false;
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsAnimated) {
+                    animateCounter(document.getElementById('students-count'), 2543);
+                    animateCounter(document.getElementById('games-completed'), 15762);
+                    animateCounter(document.getElementById('schools-count'), 127);
+                    animateCounter(document.getElementById('success-rate'), 94);
+                    statsAnimated = true;
+                }
+            });
+        });
+
+        statsObserver.observe(statsSection);
+
+        // Grade selection
+        function selectGrade(grade) {
+            alert(`¡Excelente! Seleccionaste ${grade}° grado. 🎯\n\nAquí encontrarás juegos diseñados específicamente para tu nivel educativo.\n\n¿Te gustaría que desarrolle algún juego específico para este grado?`);
+        }
+
+        // Play game function
+        function playGame(gameId) {
+            if (gameId === 'detective-datos') {
+                window.location.href = 'detective-datos-game.html';
+            } else {
+                alert(`🎮 ¡El juego ${gameId} se está cargando!\n\n¿Te gustaría que desarrolle este juego como el próximo paso?`);
+            }
+        }
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(15, 23, 42, 0.98)';
+            } else {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+            }
+        });
+
+        // Add some interactive elements
+        document.querySelectorAll('.math-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.05) rotateY(5deg)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1) rotateY(0deg)';
+            });
+        });
+
+        console.log('🚀 MateJuegos - Página principal cargada exitosamente');
+    </script>
+</body>
+</html>
