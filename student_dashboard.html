@@ -599,7 +599,7 @@
                     <p>8° Grado - Colegio San Patricio</p>
                 </div>
                 <div class="user-avatar" id="userAvatar">M</div>
-                <a href="math_games_website.html" class="logout-btn" onclick="logout()">Salir</a>
+                <a href="index.html" class="logout-btn" onclick="logout()">Salir</a>
             </div>
         </div>
     </header>
@@ -739,87 +739,216 @@
     </div>
 
     <script>
-        // Datos del estudiante (simulados)
+        // Obtener datos del usuario autenticado
+        const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+        if (!user) {
+            window.location.href = "complete-login-html.html";
+        }
+        const metrics = user.metrics;
+
+        // Datos del estudiante reales
         const studentData = {
-            name: "María González",
-            grade: 8,
-            school: "Colegio San Patricio",
-            totalPoints: 2450,
-            gamesCompleted: 12,
-            level: 8,
-            streak: 7,
-            avatar: "M"
+            name: `${user.firstName} ${user.lastName}`,
+            grade: user.grade,
+            school: user.institution,
+            totalPoints: metrics.totalPoints,
+            gamesCompleted: metrics.gamesCompleted,
+            level: metrics.level,
+            streak: metrics.streak,
+            avatar: user.avatar || user.firstName[0],
+            progress: metrics.progress,
+            visits: metrics.visits
         };
 
-        // Datos de los juegos
-        const gamesData = [
-            {
-                id: 1,
-                title: "Álgebra Quest",
-                category: "Expresiones Algebraicas",
-                icon: "🧙‍♂️",
-                status: "completed",
-                progress: 100,
-                stars: 3,
-                points: 250,
-                description: "Domina las expresiones algebraicas"
-            },
-            {
-                id: 2,
-                title: "Ecuaciones Lineales",
-                category: "Álgebra",
-                icon: "⚖️",
-                status: "progress",
-                progress: 65,
-                stars: 2,
-                points: 180,
-                description: "Resuelve ecuaciones de primer grado"
-            },
-            {
-                id: 3,
-                title: "Teorema de Pitágoras",
-                category: "Geometría",
-                icon: "📐",
-                status: "new",
+const gradeContent = {
+    6: {
+        topics: [
+            "Números enteros y operaciones",
+            "Fracciones y decimales",
+            "Geometría básica (perímetros, áreas)",
+            "Introducción a la estadística (frecuencias, gráficos)"
+        ],
+        games: [
+            { title: "Batalla de Fracciones", description: "Comparación y operaciones con fracciones", icon: "⚔️", file: "batalla_fracciones.html" },
+            { title: "Constructor de Figuras", description: "Perímetros y áreas", icon: "🏗️", file: "constructor_figuras.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" },
+            { title: "Analista de Datos", description: "Media, mediana, moda", icon: "📊", file: "data_analyst_game.html" }
+        ]
+    },
+    7: {
+        topics: [
+            "Números racionales",
+            "Proporcionalidad",
+            "Geometría (círculos, polígonos)",
+            "Probabilidad básica"
+        ],
+        games: [
+            { title: "Mercado Virtual", description: "Proporciones y porcentajes", icon: "🛒", file: "mercado_virtual.html" },
+            { title: "Ruleta de Probabilidades", description: "Probabilidad básica", icon: "🎡", file: "ruleta_probabilidades.html" },
+            { title: "Arquitecto Geométrico", description: "Construcción de figuras", icon: "🏛️", file: "arquitecto_geometrico.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" }
+        ]
+    },
+    8: {
+        topics: [
+            "Expresiones algebraicas",
+            "Ecuaciones lineales",
+            "Teorema de Pitágoras",
+            "Medidas de tendencia central"
+        ],
+        games: [
+            { title: "Álgebra Quest", description: "Resolución de ecuaciones", icon: "🧙‍♂️", file: "algebra_quest.html" },
+            { title: "Misión Pitágoras", description: "Aplicaciones del teorema", icon: "📐", file: "mision-pitagoras-game.html" },
+            { title: "Analista de Datos", description: "Media, mediana, moda", icon: "📊", file: "data_analyst_game.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" },
+            { title: "Ruleta de Probabilidades", description: "Probabilidad básica", icon: "🎡", file: "ruleta_probabilidades.html" }
+        ]
+    },
+    9: {
+        topics: [
+            "Funciones lineales y cuadráticas",
+            "Geometría analítica",
+            "Estadística descriptiva avanzada",
+            "Sistemas de ecuaciones"
+        ],
+        games: [
+            { title: "Graficador Espacial", description: "Funciones en el plano cartesiano", icon: "🗺️",file: "batalla_fracciones.html"  },
+            { title: "Laboratorio Estadístico", description: "Estadística avanzada", icon: "🔬", file: "laboratorio_estadistico.html" },
+            { title: "Guerra de sistemas", description: "Ecuaciones simultáneas", icon: "🔢", file: "guerra_sistemas_ecuaciones.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" }
+        ]
+    },
+    10: {
+        topics: [
+            "Trigonometría",
+            "Logaritmos y exponenciales",
+            "Estadística inferencial básica",
+            "Geometría del espacio"
+        ],
+        games: [
+            { title: "Navegante Trigonométrico", description: "Aplicaciones trigonométricas", icon: "🧭", file: "navegante_trigonometrico.html" },
+            { title: "Explorador Exponencial", description: "Logaritmos y exponenciales", icon: "🚀", file: "explorador_exponencial.html" },
+            { title: "Inspector de Muestras", description: "Estadística inferencial", icon: "🔎", file: "inspector_muestras.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" },
+            { title: "Misión Pitágoras", description: "Aplicaciones del teorema", icon: "📐", file: "mision-pitagoras-game.html" }
+        ]
+    },
+    11: {
+        topics: [
+            "Cálculo diferencial básico",
+            "Combinatoria y probabilidad avanzada",
+            "Estadística aplicada",
+            "Preparación pruebas SABER 11"
+        ],
+        games: [
+            { title: "Simulador SABER 11", description: "Preguntas tipo examen", icon: "📝", file: "simulador_saber11.html" },
+            { title: "Casino Matemático", description: "Probabilidades complejas", icon: "🎰", file: "casino_matematico.html" },
+            { title: "Derivadas en Acción", description: "Cálculo diferencial", icon: "📈", file: "derivadas_en_accion.html" },
+            { title: "Detective de Datos", description: "Interpretación de gráficas básicas", icon: "🕵️‍♂️", file: "detective-datos-game.html" }
+        ]
+    }
+};
+
+// Datos de los juegos
+const gamesData = [
+    {
+        id: 1,
+        title: "Álgebra Quest",
+        category: "Expresiones Algebraicas",
+        icon: "🧙‍♂️",
+        status: "completed",
+        progress: 100,
+        stars: 3,
+        points: 250,
+        description: "Domina las expresiones algebraicas"
+    },
+    {
+        id: 2,
+        title: "Ecuaciones Lineales",
+        category: "Álgebra",
+        icon: "⚖️",
+        status: "progress",
+        progress: 65,
+        stars: 2,
+        points: 180,
+        description: "Resuelve ecuaciones de primer grado"
+    },
+    {
+        id: 3,
+        title: "Teorema de Pitágoras",
+        category: "Geometría",
+        icon: "📐",
+        status: "new",
+        progress: 0,
+        stars: 0,
+        points: 0,
+        description: "Explora los triángulos rectángulos"
+    },
+    {
+        id: 4,
+        title: "Gráficas Estadísticas",
+        category: "Estadística",
+        icon: "📊",
+        status: "progress",
+        progress: 30,
+        stars: 1,
+        points: 75,
+        description: "Interpreta y crea gráficas"
+    },
+    {
+        id: 5,
+        title: "Sistemas de Ecuaciones",
+        category: "Álgebra Avanzada",
+        icon: "🔢",
+        status: "locked",
+        progress: 0,
+        stars: 0,
+        points: 0,
+        description: "Desbloquea completando Ecuaciones Lineales"
+    },
+    {
+        id: 6,
+        title: "Funciones Lineales",
+        category: "Funciones",
+        icon: "📈",
+        status: "completed",
+        progress: 100,
+        stars: 3,
+        points: 300,
+        description: "Entiende el comportamiento lineal"
+    }
+];
+
+        // Sincroniza los juegos del curso con los datos del usuario
+function syncUserGamesWithGrade() {
+    const gradeGames = gradeContent[studentData.grade].games;
+    if (!metrics.games) metrics.games = [];
+
+    // Para cada juego del grado, verifica si existe en metrics.games, si no, lo agrega como nuevo
+    gradeGames.forEach(game => {
+        let userGame = metrics.games.find(g => g.title === game.title);
+        if (!userGame) {
+            metrics.games.push({
+                title: game.title,
+                status: 'new',
                 progress: 0,
-                stars: 0,
-                points: 0,
-                description: "Explora los triángulos rectángulos"
-            },
-            {
-                id: 4,
-                title: "Gráficas Estadísticas",
-                category: "Estadística",
-                icon: "📊",
-                status: "progress",
-                progress: 30,
-                stars: 1,
-                points: 75,
-                description: "Interpreta y crea gráficas"
-            },
-            {
-                id: 5,
-                title: "Sistemas de Ecuaciones",
-                category: "Álgebra Avanzada",
-                icon: "🔢",
-                status: "locked",
-                progress: 0,
-                stars: 0,
-                points: 0,
-                description: "Desbloquea completando Ecuaciones Lineales"
-            },
-            {
-                id: 6,
-                title: "Funciones Lineales",
-                category: "Funciones",
-                icon: "📈",
-                status: "completed",
-                progress: 100,
-                stars: 3,
-                points: 300,
-                description: "Entiende el comportamiento lineal"
-            }
-        ];
+                stars: 0
+            });
+        }
+    });
+
+    // Opcional: elimina juegos que ya no están en el grado actual
+    metrics.games = metrics.games.filter(g => gradeGames.some(game => game.title === g.title));
+
+    // Guarda los cambios en LocalStorage
+    let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+    const userIndex = usersDB.findIndex(u => u.email === user.email);
+    if (userIndex !== -1) {
+        usersDB[userIndex].metrics.games = metrics.games;
+        localStorage.setItem('usersDB', JSON.stringify(usersDB));
+        localStorage.setItem('currentUser', JSON.stringify(usersDB[userIndex]));
+    }
+}
 
         // Generar el calendario de racha
         function generateStreakCalendar() {
@@ -859,391 +988,146 @@
             }
         }
 
-        // Generar tarjetas de juegos
-        function generateGameCards() {
-            const gamesGrid = document.getElementById('gamesGrid');
-            
-            gamesData.forEach((game, index) => {
-                const gameCard = document.createElement('div');
-                gameCard.className = 'game-card';
-                gameCard.style.animationDelay = `${index * 0.1}s`;
-                
-                let statusClass = `status-${game.status}`;
-                let statusText = {
-                    'new': 'Nuevo',
-                    'progress': 'En Progreso',
-                    'completed': 'Completado',
-                    'locked': 'Bloqueado'
-                }[game.status];
-                
-                let stars = '';
-                for (let i = 0; i < 3; i++) {
-                    stars += `<span class="star ${i < game.stars ? '' : 'empty'}">★</span>`;
-                }
-                
-                let buttonText = 'Jugar Ahora';
-                let buttonDisabled = '';
-                if (game.status === 'locked') {
-                    buttonText = 'Bloqueado';
-                    buttonDisabled = 'disabled';
-                } else if (game.status === 'progress') {
-                    buttonText = 'Continuar';
-                } else if (game.status === 'completed') {
-                    buttonText = 'Jugar de Nuevo';
-                }
-                
-                gameCard.innerHTML = `
-                    <div class="game-header">
-                        <div class="game-icon">${game.icon}</div>
-                        <div class="game-info">
-                            <h3>${game.title}</h3>
-                            <div class="game-category">${game.category}</div>
-                        </div>
-                    </div>
-                    <div class="game-progress">
-                        <div class="game-status">
-                            <span class="status-badge ${statusClass}">${statusText}</span>
-                            <div class="stars">${stars}</div>
-                        </div>
-                        ${game.progress > 0 ? `
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${game.progress}%;"></div>
-                            </div>
-                            <div class="progress-text">${game.progress}% completado</div>
-                        ` : ''}
-                        <p style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0;">${game.description}</p>
-                        <button class="play-btn" ${buttonDisabled} onclick="playGame(${game.id})">${buttonText}</button>
-                    </div>
-                `;
-                
-                gamesGrid.appendChild(gameCard);
-            });
+        // Renderizar temáticas y juegos según el grado
+function renderTopicsAndGames(grade) {
+    const content = gradeContent[grade];
+    if (!content) return;
+
+    // Temáticas
+    const welcomeSection = document.querySelector('.welcome-section .welcome-content');
+    let topicsHtml = `<h3 style="margin-top:2rem;color:#fbbf24;">Temáticas principales</h3><ul style="margin:1rem 0 2rem 1.5rem;color:#fbbf24;">`;
+    content.topics.forEach(topic => {
+        topicsHtml += `<li>${topic}</li>`;
+    });
+    topicsHtml += `</ul>`;
+    welcomeSection.insertAdjacentHTML('beforeend', topicsHtml);
+
+    // Juegos
+    const gamesGrid = document.getElementById('gamesGrid');
+    gamesGrid.innerHTML = '';
+    content.games.forEach((game, index) => {
+        // Buscar progreso y estado del juego por título en los datos reales del usuario
+        const userGame = (metrics.games || []).find(g => g.title === game.title);
+
+        let statusClass = 'status-new', statusText = 'Nuevo', progress = 0, stars = 0;
+        if (userGame) {
+            statusClass = `status-${userGame.status}`;
+            statusText = {
+                'new': 'Nuevo',
+                'progress': 'En Progreso',
+                'completed': 'Completado',
+                'locked': 'Bloqueado'
+            }[userGame.status];
+            progress = userGame.progress;
+            stars = userGame.stars;
         }
 
-        // Animar contadores al cargar
-        function animateCounters() {
-            const counters = [
-                { element: document.getElementById('gamesCompleted'), target: studentData.gamesCompleted },
-                { element: document.getElementById('totalPoints'), target: studentData.totalPoints },
-                { element: document.getElementById('currentLevel'), target: studentData.level },
-                { element: document.getElementById('streakCount'), target: studentData.streak }
-            ];
-
-            counters.forEach(counter => {
-                let current = 0;
-                const increment = counter.target / 60; // 60 frames para la animación
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= counter.target) {
-                        current = counter.target;
-                        clearInterval(timer);
-                    }
-                    
-                    if (counter.element.id === 'totalPoints') {
-                        counter.element.textContent = Math.floor(current).toLocaleString();
-                    } else {
-                        counter.element.textContent = Math.floor(current);
-                    }
-                }, 16);
-            });
+        let starsHtml = '';
+        for (let i = 0; i < 3; i++) {
+            starsHtml += `<span class="star ${i < stars ? '' : 'empty'}">★</span>`;
         }
 
-        // Función para jugar un juego
-        function playGame(gameId) {
-            const game = gamesData.find(g => g.id === gameId);
-            
-            if (game.status === 'locked') {
-                alert('🔒 Este juego está bloqueado. Completa los juegos anteriores para desbloquearlo.');
-                return;
-            }
-            
-            // Mostrar modal de juego o redirigir
-            showGameModal(game);
+        let buttonText = 'Jugar';
+        let buttonDisabled = '';
+        if (userGame && userGame.status === 'locked') {
+            buttonText = 'Bloqueado';
+            buttonDisabled = 'disabled';
+        } else if (userGame && userGame.status === 'progress') {
+            buttonText = 'Continuar';
+        } else if (userGame && userGame.status === 'completed') {
+            buttonText = 'Jugar de Nuevo';
         }
 
-        // Modal de juego
-        function showGameModal(game) {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-                backdrop-filter: blur(10px);
-            `;
-            
-            modal.innerHTML = `
-                <div style="
-                    background: rgba(15, 23, 42, 0.95);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 25px;
-                    padding: 3rem;
-                    max-width: 500px;
-                    width: 90%;
-                    text-align: center;
-                    color: white;
-                ">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">${game.icon}</div>
-                    <h2 style="margin-bottom: 1rem; color: #f1f5f9;">${game.title}</h2>
-                    <p style="color: #cbd5e1; margin-bottom: 2rem; line-height: 1.6;">${game.description}</p>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-                        <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 15px;">
-                            <div style="font-size: 1.5rem; font-weight: bold; color: #3b82f6;">⭐</div>
-                            <div style="color: #cbd5e1; font-size: 0.9rem;">Puntos por completar</div>
-                            <div style="color: white; font-weight: bold;">${game.points || 300} pts</div>
-                        </div>
-                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 15px;">
-                            <div style="font-size: 1.5rem; font-weight: bold; color: #22c55e;">🏆</div>
-                            <div style="color: #cbd5e1; font-size: 0.9rem;">Dificultad</div>
-                            <div style="color: white; font-weight: bold;">${getDifficulty(game.category)}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
-                        <button onclick="startGame(${game.id})" style="
-                            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                            color: white;
-                            border: none;
-                            padding: 1rem 2rem;
-                            border-radius: 20px;
-                            font-weight: bold;
-                            cursor: pointer;
-                            font-size: 1rem;
-                        ">🎮 Empezar Juego</button>
-                        <button onclick="closeModal()" style="
-                            background: transparent;
-                            color: #cbd5e1;
-                            border: 2px solid #475569;
-                            padding: 1rem 2rem;
-                            border-radius: 20px;
-                            font-weight: bold;
-                            cursor: pointer;
-                            font-size: 1rem;
-                        ">Cancelar</button>
+        gamesGrid.innerHTML += `
+            <div class="game-card" style="animation-delay: ${index * 0.1}s">
+                <div class="game-header">
+                    <div class="game-icon">${game.icon}</div>
+                    <div class="game-info">
+                        <h3>${game.title}</h3>
                     </div>
                 </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Cerrar modal al hacer clic fuera
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-            
-            window.closeModal = () => {
-                document.body.removeChild(modal);
-            };
-            
-            window.startGame = (gameId) => {
-                closeModal();
-                // Aquí simularemos el inicio del juego
-                simulateGameStart(gameId);
-            };
-        }
-
-        function getDifficulty(category) {
-            const difficulties = {
-                'Expresiones Algebraicas': 'Media',
-                'Álgebra': 'Media',
-                'Geometría': 'Básica',
-                'Estadística': 'Básica',
-                'Álgebra Avanzada': 'Difícil',
-                'Funciones': 'Media'
-            };
-            return difficulties[category] || 'Media';
-        }
-
-        function simulateGameStart(gameId) {
-            const game = gamesData.find(g => g.id === gameId);
-            
-            // Crear overlay de carga del juego
-            const loadingOverlay = document.createElement('div');
-            loadingOverlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(135deg, #0f172a, #1e293b);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                z-index: 2000;
-                color: white;
-            `;
-            
-            loadingOverlay.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 5rem; margin-bottom: 2rem; animation: bounce 1s infinite;">${game.icon}</div>
-                    <h2 style="margin-bottom: 1rem;">Cargando ${game.title}...</h2>
-                    <div style="width: 300px; height: 6px; background: rgba(255, 255, 255, 0.2); border-radius: 3px; overflow: hidden;">
-                        <div id="loadingBar" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); width: 0%; transition: width 0.3s ease;"></div>
+                <div class="game-progress">
+                    <div class="game-status">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <div class="stars">${starsHtml}</div>
                     </div>
-                    <p style="margin-top: 1rem; color: #cbd5e1;">Preparando la experiencia de aprendizaje...</p>
+                    ${progress > 0 ? `
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%;"></div>
+                        </div>
+                        <div class="progress-text">${progress}% completado</div>
+                    ` : ''}
+                    <p style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0;">${game.description}</p>
+                    <button class="play-btn" ${buttonDisabled} onclick="window.location.href='${game.file}'">${buttonText}</button>
                 </div>
-            `;
-            
-            document.body.appendChild(loadingOverlay);
-            
-            // Simular progreso de carga
-            let progress = 0;
-            const loadingBar = loadingOverlay.querySelector('#loadingBar');
-            
-            const loadingInterval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(loadingInterval);
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(loadingOverlay);
-                        
-                        // Mostrar mensaje de juego iniciado
-                        showNotification(`🎮 ¡${game.title} iniciado!`, 'success');
-                        
-                        // Aquí normalmente redirigiríamos al juego real
-                        setTimeout(() => {
-                            alert(`🎯 ¡Genial! El juego "${game.title}" se está cargando...\n\n¿Te gustaría que desarrolle este juego específico como el próximo paso?`);
-                        }, 1000);
-                    }, 500);
-                }
-                
-                loadingBar.style.width = progress + '%';
-            }, 200);
-        }
-
-        // Sistema de notificaciones
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? 'rgba(34, 197, 94, 0.9)' : 'rgba(59, 130, 246, 0.9)'};
-                color: white;
-                padding: 1rem 2rem;
-                border-radius: 15px;
-                backdrop-filter: blur(10px);
-                z-index: 3000;
-                animation: slideInRight 0.5s ease;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            `;
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.5s ease forwards';
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 500);
-            }, 3000);
-        }
-
-        // Función de logout
-        function logout() {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-                showNotification('¡Hasta luego! Sigue aprendiendo 📚', 'info');
-                setTimeout(() => {
-                    alert('Redirigiendo a la página de inicio...');
-                    // Aquí normalmente redirigiríamos al login
-                }, 2000);
-            }
-        }
-
-        // Crear partículas matemáticas flotantes
-        function createMathParticles() {
-            const symbols = ['∑', '∫', 'π', '∞', '√', '∆', '∂', 'α', 'β', 'γ', '≈', '≤', '≥', '±', 'θ', 'Ω'];
-            
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'math-float';
-                    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                    particle.style.left = Math.random() * 100 + 'vw';
-                    particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                    particle.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                    
-                    document.body.appendChild(particle);
-                    
-                    setTimeout(() => {
-                        if (document.body.contains(particle)) {
-                            document.body.removeChild(particle);
-                        }
-                    }, 15000);
-                }, Math.random() * 2000);
-            }
-        }
-
-        // Animaciones adicionales
-        const additionalStyles = `
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                40% { transform: translateY(-10px); }
-                60% { transform: translateY(-5px); }
-            }
-            
-            @keyframes slideInRight {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            
-            @keyframes slideOutRight {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-            
-            .progress-fill {
-                animation: fillProgress 2s ease-out forwards;
-            }
-            
-            @keyframes fillProgress {
-                from { width: 0%; }
-            }
+            </div>
         `;
-        
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = additionalStyles;
-        document.head.appendChild(styleSheet);
+    });
+}
 
-        // Inicialización de la página
-        document.addEventListener('DOMContentLoaded', function() {
-            // Generar contenido dinámico
-            generateGameCards();
+function renderLeaderboard() {
+    const leaderboardCard = document.querySelector('.leaderboard-card');
+    const usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+    // Filtrar por colegio y grado
+    const sameGroup = usersDB.filter(u =>
+        u.institution === studentData.school &&
+        u.grade === studentData.grade &&
+        u.metrics && typeof u.metrics.totalPoints === 'number'
+    );
+    // Ordenar por puntos
+    sameGroup.sort((a, b) => b.metrics.totalPoints - a.metrics.totalPoints);
+
+    // Generar HTML del ranking
+    let html = '';
+    sameGroup.forEach((u, idx) => {
+        const isCurrent = u.email === user.email;
+        html += `
+            <div class="leaderboard-item${isCurrent ? '" style="background: rgba(59, 130, 246, 0.1); border-radius: 8px; margin: 0 -8px; padding-left: 8px; padding-right: 8px;' : ''}">
+                <span class="leaderboard-position">#${idx + 1}</span>
+                <span class="leaderboard-name">${isCurrent ? 'Tú (' + studentData.name + ')' : u.firstName + ' ' + u.lastName[0] + '.'}</span>
+                <span class="leaderboard-score">${u.metrics.totalPoints.toLocaleString()} pts</span>
+            </div>
+        `;
+    });
+
+    leaderboardCard.innerHTML = `
+        <h3>🥇 Ranking del Grado</h3>
+        ${html}
+    `;
+}
+
+// Llama a la función en la inicialización
+document.addEventListener('DOMContentLoaded', function() {
+    // Sincroniza los juegos del usuario con los del grado actual
+    syncUserGamesWithGrade();
+
+            // Actualizar datos del usuario en el header
+            document.querySelector('.welcome-text h2').textContent = `¡Hola, ${studentData.name}!`;
+            document.querySelector('.welcome-text p').textContent = `${studentData.grade}° Grado - ${studentData.school}`;
+            document.getElementById('userAvatar').textContent = studentData.avatar;
+
+            // Actualizar badge de grado
+            document.querySelector('.grade-badge').textContent = `${studentData.grade}° Grado`;
+
+            // Progreso real
+            document.querySelectorAll('.progress-card')[0].querySelector('.progress-fill').style.width = studentData.progress.algebra + '%';
+    document.querySelectorAll('.progress-card')[0].querySelector('.progress-text').textContent = studentData.progress.algebra + '% completado';
+    document.querySelectorAll('.progress-card')[1].querySelector('.progress-fill').style.width = studentData.progress.geometria + '%';
+    document.querySelectorAll('.progress-card')[1].querySelector('.progress-text').textContent = studentData.progress.geometria + '% completado';
+    document.querySelectorAll('.progress-card')[2].querySelector('.progress-fill').style.width = studentData.progress.estadistica + '%';
+    document.querySelectorAll('.progress-card')[2].querySelector('.progress-text').textContent = studentData.progress.estadistica + '% completado';
+
+            // Renderizar temáticas y juegos según el grado
+renderTopicsAndGames(studentData.grade);
+renderLeaderboard();
+
+            // El resto de la inicialización...
             generateStreakCalendar();
-            
-            // Animar contadores después de un delay
-            setTimeout(() => {
-                animateCounters();
-            }, 500);
-            
-            // Iniciar partículas matemáticas
+            setTimeout(() => { animateCounters(); }, 500);
             createMathParticles();
             setInterval(createMathParticles, 12000);
-            
-            // Mostrar notificación de bienvenida
-            setTimeout(() => {
-                showNotification('¡Bienvenida de vuelta, María! 🌟', 'success');
-            }, 1000);
-            
-            // Simular notificación de nuevo logro después de 5 segundos
-            setTimeout(() => {
-                showNotification('🏆 ¡Nuevo logro desbloqueado: Estudiante Constante!', 'success');
-            }, 5000);
+            setTimeout(() => { showNotification(`¡Bienvenida de vuelta, ${studentData.name}! 🌟`, 'success'); }, 1000);
+            setTimeout(() => { showNotification('🏆 ¡Nuevo logro desbloocado: Estudiante Constante!', 'success'); }, 5000);
         });
 
         // Easter egg: Konami code

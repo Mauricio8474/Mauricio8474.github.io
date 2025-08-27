@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de Probabilidades - Grado 7°</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            max-width: 1200px;
+            width: 100%;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .casino-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(238, 90, 36, 0.3);
+        }
+
+        .game-title {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+
+        .score-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .wheel-section {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            border: 3px solid #dee2e6;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #2c3e50;
+            position: relative;
+            transition: transform 3s cubic-bezier(0.23, 1, 0.320, 1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid #e74c3c;
+            z-index: 10;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #2c3e50;
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .spin-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-section {
+            background: linear-gradient(145deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 20px;
+            border: 3px solid #17a2b8;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #17a2b8;
+        }
+
+        .scenario-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .scenario-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #495057;
+            line-height: 1.5;
+        }
+
+        .probability-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .probability-input input {
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 80px;
+            text-align: center;
+        }
+
+        .probability-input input:focus {
+            border-color: #17a2b8;
+            outline: none;
+            box-shadow: 0 0 5px rgba(23, 162, 184, 0.3);
+        }
+
+        .probability-formats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .format-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+            text-align: center;
+        }
+
+        .format-label {
+            font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .format-value {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .check-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(40, 167, 69, 0.4);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .experiments-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .experiment-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .result-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+            margin: 2px;
+            animation: popIn 0.3s ease;
+        }
+
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+        }
+
+        .progress-ring-circle {
+            fill: transparent;
+            stroke: #e9ecef;
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: transparent;
+            stroke: #28a745;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .game-complete {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spin 3s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .wheel-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .score-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="casino-badge">
+                <span style="font-size: 1.5rem;">🎰</span>
+                <strong style="color: white; margin-left: 10px;">Ruleta de Probabilidades</strong>
+            </div>
+            <h1 class="game-title">¡Descubre los Secretos del Azar!</h1>
+            <p style="color: #6c757d; font-size: 1.1rem;">Grado 7° - Probabilidad Básica</p>
+        </div>
+
+        <div class="score-dashboard">
+            <div class="score-card">
+                <div class="score-value" id="current-level">1</div>
+                <div class="score-label">Nivel Actual</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="total-score">0</div>
+                <div class="score-label">Puntos Totales</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="accuracy">0%</div>
+                <div class="score-label">Precisión</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="experiments-done">0</div>
+                <div class="score-label">Experimentos</div>
+            </div>
+        </div>
+
+        <div id="game-content">
+            <div class="game-area">
+                <div class="wheel-section">
+                    <h3 id="wheel-title">Ruleta de Colores</h3>
+                    <div class="wheel-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="probability-wheel">
+                            <!-- Los segmentos se generan dinámicamente -->
+                        </div>
+                        <div class="wheel-center"></div>
+                    </div>
+                    <button class="spin-btn" id="spin-button" onclick="spinWheel()">
+                        🎯 ¡Girar Ruleta!
+                    </button>
+                    <div id="wheel-result" style="margin-top: 15px; font-size: 1.2rem; font-weight: bold;"></div>
+                </div>
+
+                <div class="question-section">
+                    <div class="scenario-card">
+                        <div class="scenario-title" id="scenario-title">Cargando escenario...</div>
+                        <div class="scenario-text" id="scenario-description">Cargando descripción...</div>
+                        
+                        <div id="question-container">
+                            <div style="margin-bottom: 15px;">
+                                <strong>¿Cuál es la probabilidad de obtener <span id="target-outcome"></span>?</strong>
+                            </div>
+                            
+                            <div class="probability-formats">
+                                <div class="format-card">
+                                    <div class="format-label">Fracción</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="numerator" placeholder="1" min="0" max="100">
+                                        <span>/</span>
+                                        <input type="number" id="denominator" placeholder="6" min="1" max="100">
+                                    </div>
+                                </div>
+                                
+                                <div class="format-card">
+                                    <div class="format-label">Decimal</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="decimal" placeholder="0.167" step="0.001" min="0" max="1">
+                                    </div>
+                                </div>
+                                
+                                <div class="format-card">
+                                    <div class="format-label">Porcentaje</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="percentage" placeholder="16.7" step="0.1" min="0" max="100">
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="check-btn" onclick="checkAnswer()">✅ Verificar Respuesta</button>
+                            <button class="check-btn" onclick="runExperiment()" style="background: linear-gradient(45deg, #6c5ce7, #a29bfe);">
+                                🧪 Hacer Experimento
+                            </button>
+                        </div>
+
+                        <div id="feedback" class="feedback" style="display: none;"></div>
+                        <button class="next-btn" id="next-button" onclick="nextLevel()" style="display: none;">
+                            ➡️ Siguiente Nivel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experiments-section">
+                <h4>🔬 Laboratorio de Experimentos</h4>
+                <p>Resultados de tus experimentos:</p>
+                <div class="experiment-results" id="experiment-results"></div>
+                <div class="statistics" id="statistics"></div>
+            </div>
+        </div>
+
+        <div id="game-complete" class="game-complete" style="display: none;">
+            <h2>🎉 ¡Felicitaciones, Maestro de las Probabilidades! 🎉</h2>
+            <div style="font-size: 2rem; margin: 20px 0;" id="final-score">0 puntos</div>
+            <div id="final-medals"></div>
+            <p id="final-message">¡Has dominado los conceptos básicos de probabilidad!</p>
+            <button class="next-btn" onclick="restartGame()" style="margin-top: 30px;">
+                🔄 Jugar de Nuevo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Estado del juego
+        let gameState = {
+            currentLevel: 0,
+            totalScore: 0,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            experimentResults: [],
+            isSpinning: false,
+            lastResult: null
+        };
+
+        // Configuraciones de niveles
+        const levels = [
+            {
+                title: "Ruleta de Colores Básica",
+                description: "Una ruleta dividida en 6 secciones iguales con diferentes colores.",
+                segments: [
+                    {color: "#e74c3c", label: "Rojo", count: 2},
+                    {color: "#3498db", label: "Azul", count: 2},
+                    {color: "#2ecc71", label: "Verde", count: 1},
+                    {color: "#f39c12", label: "Amarillo", count: 1}
+                ],
+                question: "el color ROJO",
+                correctFraction: [2, 6],
+                tip: "Cuenta cuántas secciones rojas hay del total de secciones."
+            },
+            {
+                title: "Dados de Seis Caras",
+                description: "Un dado estándar con números del 1 al 6.",
+                segments: [
+                    {color: "#9b59b6", label: "1", count: 1},
+                    {color: "#e67e22", label: "2", count: 1},
+                    {color: "#1abc9c", label: "3", count: 1},
+                    {color: "#e74c3c", label: "4", count: 1},
+                    {color: "#3498db", label: "5", count: 1},
+                    {color: "#2ecc71", label: "6", count: 1}
+                ],
+                question: "un número PAR",
+                correctFraction: [3, 6],
+                tip: "Los números pares en un dado son: 2, 4, 6"
+            },
+            {
+                title: "Bolsa de Caramelos",
+                description: "Una bolsa con 12 caramelos de diferentes sabores.",
+                segments: [
+                    {color: "#e74c3c", label: "Fresa", count: 4},
+                    {color: "#f39c12", label: "Naranja", count: 3},
+                    {color: "#2ecc71", label: "Menta", count: 3},
+                    {color: "#9b59b6", label: "Uva", count: 2}
+                ],
+                question: "un caramelo de FRESA",
+                correctFraction: [4, 12],
+                tip: "Simplifica la fracción dividiendo numerador y denominador por su máximo común divisor."
+            },
+            {
+                title: "Cartas Básicas",
+                description: "8 cartas: 4 rojas y 4 negras.",
+                segments: [
+                    {color: "#e74c3c", label: "♥️", count: 2},
+                    {color: "#e74c3c", label: "♦️", count: 2},
+                    {color: "#2c3e50", label: "♠️", count: 2},
+                    {color: "#2c3e50", label: "♣️", count: 2}
+                ],
+                question: "una carta ROJA",
+                correctFraction: [4, 8],
+                tip: "Las cartas rojas son corazones y diamantes."
+            },
+            {
+                title: "Spinner de Deportes",
+                description: "Ruleta con diferentes deportes, algunos más frecuentes que otros.",
+                segments: [
+                    {color: "#27ae60", label: "Fútbol", count: 5},
+                    {color: "#e67e22", label: "Básquet", count: 3},
+                    {color: "#3498db", label: "Tenis", count: 2},
+                    {color: "#9b59b6", label: "Natación", count: 2},
+                    {color: "#e74c3c", label: "Atletismo", count: 1},
+                    {color: "#f39c12", label: "Voleibol", count: 1}
+                ],
+                question: "FÚTBOL",
+                correctFraction: [5, 14],
+                tip: "El fútbol ocupa 5 secciones de un total de 14 secciones."
+            }
+        ];
+
+        // Inicializar juego
+        function initGame() {
+            updateScoreboard();
+            loadLevel();
+        }
+
+        // Actualizar marcadores
+        function updateScoreboard() {
+            document.getElementById('current-level').textContent = gameState.currentLevel + 1;
+            document.getElementById('total-score').textContent = gameState.totalScore;
+            document.getElementById('experiments-done').textContent = gameState.experimentResults.length;
+            
+            const accuracy = gameState.totalQuestions > 0 ? 
+                Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        // Cargar nivel actual
+        function loadLevel() {
+            if (gameState.currentLevel >= levels.length) {
+                endGame();
+                return;
+            }
+
+            const level = levels[gameState.currentLevel];
+            
+            document.getElementById('wheel-title').textContent = level.title;
+            document.getElementById('scenario-title').textContent = level.title;
+            document.getElementById('scenario-description').textContent = level.description;
+            document.getElementById('target-outcome').textContent = level.question;
+            
+            createWheel(level.segments);
+            clearInputs();
+            hideElements();
+            updateScoreboard();
+        }
+
+        // Crear ruleta visual
+        function createWheel(segments) {
+            const wheel = document.getElementById('probability-wheel');
+            wheel.innerHTML = '';
+
+            let totalSegments = segments.reduce((sum, seg) => sum + seg.count, 0);
+            let currentAngle = 0;
+            const segmentAngle = 360 / totalSegments;
+
+            segments.forEach(segment => {
+                for (let i = 0; i < segment.count; i++) {
+                    const segmentDiv = document.createElement('div');
+                    segmentDiv.style.position = 'absolute';
+                    segmentDiv.style.width = '50%';
+                    segmentDiv.style.height = '50%';
+                    segmentDiv.style.backgroundColor = segment.color;
+                    segmentDiv.style.transformOrigin = '100% 100%';
+                    segmentDiv.style.transform = `rotate(${currentAngle}deg)`;
+                    segmentDiv.style.clipPath = `polygon(100% 100%, 100% 0%, ${100 - (100 * Math.sin(segmentAngle * Math.PI / 180))}% ${100 * Math.cos(segmentAngle * Math.PI / 180)}%)`;
+                    
+                    // Añadir etiqueta
+                    const label = document.createElement('span');
+                    label.textContent = segment.label;
+                    label.style.position = 'absolute';
+                    label.style.top = '20%';
+                    label.style.left = '70%';
+                    label.style.transform = 'translate(-50%, -50%)';
+                    label.style.fontWeight = 'bold';
+                    label.style.fontSize = '0.8rem';
+                    label.style.color = segment.color === '#f39c12' || segment.color === '#2ecc71' ? '#000' : '#fff';
+                    segmentDiv.appendChild(label);
+                    
+                    wheel.appendChild(segmentDiv);
+                    currentAngle += segmentAngle;
+                }
+            });
+        }
+
+        // Girar ruleta
+        function spinWheel() {
+            if (gameState.isSpinning) return;
+
+            gameState.isSpinning = true;
+            const wheel = document.getElementById('probability-wheel');
+            const spinButton = document.getElementById('spin-button');
+            const resultDiv = document.getElementById('wheel-result');
+
+            spinButton.disabled = true;
+            spinButton.textContent = '🌀 Girando...';
+
+            const level = levels[gameState.currentLevel];
+            const totalSegments = level.segments.reduce((sum, seg) => sum + seg.count, 0);
+            
+            // Crear array con todos los resultados posibles
+            let possibleResults = [];
+            level.segments.forEach(segment => {
+                for (let i = 0; i < segment.count; i++) {
+                    possibleResults.push(segment);
+                }
+            });
+
+            // Seleccionar resultado aleatorio
+            const randomIndex = Math.floor(Math.random() * possibleResults.length);
+            const result = possibleResults[randomIndex];
+            gameState.lastResult = result;
+
+            // Calcular ángulo final
+            const segmentAngle = 360 / totalSegments;
+            const finalAngle = (randomIndex * segmentAngle) + (Math.random() * segmentAngle);
+            const spins = 5 + Math.random() * 3; // 5-8 vueltas completas
+            const totalRotation = (spins * 360) + finalAngle;
+
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+            setTimeout(() => {
+                gameState.isSpinning = false;
+                spinButton.disabled = false;
+                spinButton.textContent = '🎯 ¡Girar Ruleta!';
+                
+                resultDiv.innerHTML = `
+                    <div style="color: ${result.color}; font-size: 1.5rem;">
+                        Resultado: ${result.label}
+                    </div>
+                `;
+            }, 3000);
+        }
+
+        // Verificar respuesta
+        function checkAnswer() {
+            const level = levels[gameState.currentLevel];
+            const numerator = parseInt(document.getElementById('numerator').value);
+            const denominator = parseInt(document.getElementById('denominator').value);
+            const decimal = parseFloat(document.getElementById('decimal').value);
+            const percentage = parseFloat(document.getElementById('percentage').value);
+
+            gameState.totalQuestions++;
+
+            // Calcular respuesta correcta
+            const correctNum = level.correctFraction[0];
+            const correctDen = level.correctFraction[1];
+            const correctDecimal = correctNum / correctDen;
+            const correctPercentage = correctDecimal * 100;
+
+            // Verificar si alguna respuesta es correcta
+            let isCorrect = false;
+            let correctFormats = [];
+
+            // Verificar fracción (incluyendo equivalentes)
+            if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+                if (numerator / denominator === correctDecimal) {
+                    isCorrect = true;
+                    correctFormats.push('fracción');
+                }
+            }
+
+            // Verificar decimal (con tolerancia)
+            if (!isNaN(decimal)) {
+                if (Math.abs(decimal - correctDecimal) < 0.01) {
+                    isCorrect = true;
+                    correctFormats.push('decimal');
+                }
+            }
+
+            // Verificar porcentaje (con tolerancia)
+            if (!isNaN(percentage)) {
+                if (Math.abs(percentage - correctPercentage) < 1) {
+                    isCorrect = true;
+                    correctFormats.push('porcentaje');
+                }
+            }
+
+            const feedback = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                gameState.correctAnswers++;
+                gameState.totalScore += 100;
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `
+                    <div>🎉 ¡Correcto! +100 puntos</div>
+                    <div style="margin-top: 10px;">
+                        <strong>Respuestas correctas:</strong><br>
+                        • Fracción: ${correctNum}/${correctDen} (simplificada: ${simplifyFraction(correctNum, correctDen).join('/')})<br>
+                        • Decimal: ${correctDecimal.toFixed(3)}<br>
+                        • Porcentaje: ${correctPercentage.toFixed(1)}%
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.9rem;">
+                        ${level.tip}
+                    </div>
+                `;
+            } else {
+                feedback.className = 'feedback wrong';
+                feedback.innerHTML = `
+                    <div>❌ Incorrecto. ¡Inténtalo de nuevo!</div>
+                    <div style="margin-top: 10px;">
+                        <strong>Respuestas correctas:</strong><br>
+                        • Fracción: ${correctNum}/${correctDen} (simplificada: ${simplifyFraction(correctNum, correctDen).join('/')})<br>
+                        • Decimal: ${correctDecimal.toFixed(3)}<br>
+                        • Porcentaje: ${correctPercentage.toFixed(1)}%
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.9rem;">
+                        💡 ${level.tip}
+                    </div>
+                `;
+            }
+
+            feedback.style.display = 'block';
+            document.getElementById('next-button').style.display = 'block';
+            updateScoreboard();
+        }
+
+        // Simplificar fracción
+        function simplifyFraction(num, den) {
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            const divisor = gcd(num, den);
+            return [num / divisor, den / divisor];
+        }
+
+        // Ejecutar experimento
+        function runExperiment() {
+            const level = levels[gameState.currentLevel];
+            const totalSegments = level.segments.reduce((sum, seg) => sum + seg.count, 0);
+            
+            // Crear array con todos los resultados posibles
+            let possibleResults = [];
+            level.segments.forEach(segment => {
+                for (let i = 0; i < segment.count; i++) {
+                    possibleResults.push(segment);
+                }
+            });
+
+            // Simular 20 experimentos
+            const experimentCount = 20;
+            let results = [];
+            
+            for (let i = 0; i < experimentCount; i++) {
+                const randomIndex = Math.floor(Math.random() * possibleResults.length);
+                results.push(possibleResults[randomIndex]);
+            }
+
+            // Agregar a resultados globales
+            gameState.experimentResults = gameState.experimentResults.concat(results);
+
+            // Mostrar resultados visuales
+            displayExperimentResults(results);
+            updateStatistics();
+            updateScoreboard();
+        }
+
+        // Mostrar resultados del experimento
+        function displayExperimentResults(results) {
+            const container = document.getElementById('experiment-results');
+            
+            results.forEach((result, index) => {
+                setTimeout(() => {
+                    const circle = document.createElement('div');
+                    circle.className = 'result-circle';
+                    circle.style.backgroundColor = result.color;
+                    circle.textContent = result.label;
+                    container.appendChild(circle);
+                }, index * 100);
+            });
+        }
+
+        // Actualizar estadísticas
+        function updateStatistics() {
+            if (gameState.experimentResults.length === 0) return;
+
+            const level = levels[gameState.currentLevel];
+            const targetSegments = level.segments.find(seg => 
+                level.question.toLowerCase().includes(seg.label.toLowerCase()) ||
+                (level.question.includes('PAR') && ['2', '4', '6'].includes(seg.label)) ||
+                (level.question.includes('ROJA') && (seg.label === '♥️' || seg.label === '♦️')) ||
+                (level.question.includes('ROJO') && seg.color === '#e74c3c')
+            );
+
+            let successCount = 0;
+            
+            // Contar éxitos según el tipo de pregunta
+            gameState.experimentResults.forEach(result => {
+                if (level.question.includes('PAR') && ['2', '4', '6'].includes(result.label)) {
+                    successCount++;
+                } else if (level.question.includes('ROJA') && (result.label === '♥️' || result.label === '♦️')) {
+                    successCount++;
+                } else if (level.question.includes('ROJO') && result.color === '#e74c3c') {
+                    successCount++;
+                } else if (result.label === targetSegments?.label) {
+                    successCount++;
+                }
+            });
+
+            const experimentalProbability = successCount / gameState.experimentResults.length;
+            const theoreticalProbability = level.correctFraction[0] / level.correctFraction[1];
+
+            document.getElementById('statistics').innerHTML = `
+                <div class="stat-card">
+                    <h5>Experimentos Totales</h5>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #3498db;">
+                        ${gameState.experimentResults.length}
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h5>Éxitos Observados</h5>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">
+                        ${successCount}
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h5>Probabilidad Experimental</h5>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #e74c3c;">
+                        ${(experimentalProbability * 100).toFixed(1)}%
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h5>Probabilidad Teórica</h5>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #9b59b6;">
+                        ${(theoreticalProbability * 100).toFixed(1)}%
+                    </div>
+                </div>
+            `;
+        }
+
+        // Siguiente nivel
+        function nextLevel() {
+            gameState.currentLevel++;
+            gameState.experimentResults = []; // Limpiar experimentos del nivel anterior
+            document.getElementById('experiment-results').innerHTML = '';
+            document.getElementById('statistics').innerHTML = '';
+            loadLevel();
+        }
+
+        // Limpiar inputs
+        function clearInputs() {
+            document.getElementById('numerator').value = '';
+            document.getElementById('denominator').value = '';
+            document.getElementById('decimal').value = '';
+            document.getElementById('percentage').value = '';
+        }
+
+        // Ocultar elementos
+        function hideElements() {
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('wheel-result').innerHTML = '';
+        }
+
+        // Terminar juego
+        function endGame() {
+            document.getElementById('game-content').style.display = 'none';
+            document.getElementById('game-complete').style.display = 'block';
+            
+            document.getElementById('final-score').textContent = gameState.totalScore + ' puntos';
+            
+            // Determinar medallas y mensaje
+            let medals = '';
+            let message = '';
+            const accuracy = gameState.totalQuestions > 0 ? 
+                (gameState.correctAnswers / gameState.totalQuestions) * 100 : 0;
+
+            if (accuracy >= 80) {
+                medals = '<div style="font-size: 3rem; margin: 20px 0;">🥇🎯🏆</div>';
+                message = '¡Increíble! Dominas perfectamente los conceptos de probabilidad básica.';
+            } else if (accuracy >= 60) {
+                medals = '<div style="font-size: 3rem; margin: 20px 0;">🥈🎲</div>';
+                message = '¡Excelente trabajo! Tienes una buena comprensión de las probabilidades.';
+            } else if (accuracy >= 40) {
+                medals = '<div style="font-size: 3rem; margin: 20px 0;">🥉📊</div>';
+                message = '¡Buen esfuerzo! Sigues aprendiendo sobre probabilidades.';
+            } else {
+                medals = '<div style="font-size: 3rem; margin: 20px 0;">🎲📈</div>';
+                message = '¡Sigue practicando! Las probabilidades requieren práctica y experimentación.';
+            }
+
+            document.getElementById('final-medals').innerHTML = medals;
+            document.getElementById('final-message').textContent = message;
+        }
+
+        // Reiniciar juego
+        function restartGame() {
+            gameState = {
+                currentLevel: 0,
+                totalScore: 0,
+                correctAnswers: 0,
+                totalQuestions: 0,
+                experimentResults: [],
+                isSpinning: false,
+                lastResult: null
+            };
+
+            document.getElementById('game-content').style.display = 'block';
+            document.getElementById('game-complete').style.display = 'none';
+            document.getElementById('experiment-results').innerHTML = '';
+            document.getElementById('statistics').innerHTML = '';
+            
+            initGame();
+        }
+
+        // Eventos de entrada automática
+        document.getElementById('numerator').addEventListener('input', autoCalculate);
+        document.getElementById('denominator').addEventListener('input', autoCalculate);
+        document.getElementById('decimal').addEventListener('input', autoCalculateFromDecimal);
+        document.getElementById('percentage').addEventListener('input', autoCalculateFromPercentage);
+
+        function autoCalculate() {
+            const num = parseFloat(document.getElementById('numerator').value);
+            const den = parseFloat(document.getElementById('denominator').value);
+            
+            if (!isNaN(num) && !isNaN(den) && den !== 0) {
+                const decimal = num / den;
+                const percentage = decimal * 100;
+                
+                document.getElementById('decimal').value = decimal.toFixed(3);
+                document.getElementById('percentage').value = percentage.toFixed(1);
+            }
+        }
+
+        function autoCalculateFromDecimal() {
+            const decimal = parseFloat(document.getElementById('decimal').value);
+            
+            if (!isNaN(decimal) && decimal >= 0 && decimal <= 1) {
+                const percentage = decimal * 100;
+                document.getElementById('percentage').value = percentage.toFixed(1);
+                
+                // Intentar encontrar una fracción simple
+                const fraction = decimalToFraction(decimal);
+                if (fraction) {
+                    document.getElementById('numerator').value = fraction[0];
+                    document.getElementById('denominator').value = fraction[1];
+                }
+            }
+        }
+
+        function autoCalculateFromPercentage() {
+            const percentage = parseFloat(document.getElementById('percentage').value);
+            
+            if (!isNaN(percentage) && percentage >= 0 && percentage <= 100) {
+                const decimal = percentage / 100;
+                document.getElementById('decimal').value = decimal.toFixed(3);
+                
+                // Intentar encontrar una fracción simple
+                const fraction = decimalToFraction(decimal);
+                if (fraction) {
+                    document.getElementById('numerator').value = fraction[0];
+                    document.getElementById('denominator').value = fraction[1];
+                }
+            }
+        }
+
+        function decimalToFraction(decimal) {
+            // Convertir decimal común a fracción simple
+            const commonFractions = [
+                [1, 2, 0.5], [1, 3, 0.333], [2, 3, 0.667], [1, 4, 0.25], [3, 4, 0.75],
+                [1, 5, 0.2], [2, 5, 0.4], [3, 5, 0.6], [4, 5, 0.8], [1, 6, 0.167],
+                [5, 6, 0.833], [1, 8, 0.125], [3, 8, 0.375], [5, 8, 0.625], [7, 8, 0.875],
+                [1, 10, 0.1], [3, 10, 0.3], [7, 10, 0.7], [9, 10, 0.9], [1, 12, 0.083]
+            ];
+            
+            for (let [num, den, val] of commonFractions) {
+                if (Math.abs(decimal - val) < 0.01) {
+                    return [num, den];
+                }
+            }
+            return null;
+        }
+
+        // Inicializar el juego cuando se carga la página
+        window.onload = initGame;
+    </script>
+</body>
+</html>

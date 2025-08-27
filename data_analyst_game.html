@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Camino del Analista de Datos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 50%, #38ef7d 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.2);
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: block;
+        }
+
+        /* MAPA DEL CAMINO */
+        .map-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #ffd700;
+        }
+
+        .path-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .path {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #ffd700, #ffed4e, #00d4ff, #38ef7d);
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+            z-index: 1;
+        }
+
+        .path::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.8);
+            top: 50%;
+            transform: translateY(-50%);
+            animation: pathGlow 2s ease-in-out infinite alternate;
+        }
+
+        .station {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            z-index: 10;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 4px solid transparent;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .station.locked {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: #adb5bd;
+            cursor: not-allowed;
+            border-color: #495057;
+        }
+
+        .station.available {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            border-color: #ffd700;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 25px rgba(255,215,0,0.6);
+        }
+
+        .station.completed {
+            background: linear-gradient(135deg, #38ef7d, #11998e);
+            color: white;
+            border-color: #38ef7d;
+            box-shadow: 0 0 20px rgba(56,239,125,0.4);
+        }
+
+        .station.current {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border-color: #00d4ff;
+            animation: currentStation 1.5s infinite;
+            box-shadow: 0 0 30px rgba(0,212,255,0.7);
+        }
+
+        .station:hover:not(.locked) {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .station-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .station-label {
+            font-size: 0.7rem;
+            line-height: 1;
+        }
+
+        /* CHALLENGE AREA */
+        .challenge-area {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .challenge-area.active {
+            display: block;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .challenge-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .challenge-story {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #00d4ff;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .data-display {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .data-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2d1b69;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            justify-items: center;
+        }
+
+        .data-item {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 50px;
+        }
+
+        .data-item:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 8px 20px rgba(45,27,105,0.4);
+        }
+
+        .data-item.highlight {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            animation: bounce 0.6s ease;
+        }
+
+        .challenge-question {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border-left: 6px solid #00d4ff;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d1b69;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .answer-option {
+            background: #f8f9fa;
+            border: 3px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .answer-option:hover {
+            background: #e9ecef;
+            border-color: #2d1b69;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .answer-option.selected {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            color: white;
+            border-color: #2d1b69;
+            box-shadow: 0 6px 20px rgba(45,27,105,0.3);
+        }
+
+        .answer-option.correct {
+            background: linear-gradient(135deg, #38ef7d, #11998e);
+            color: white;
+            border-color: #38ef7d;
+            animation: correctAnswer 0.6s ease;
+        }
+
+        .answer-option.incorrect {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border-color: #ff6b6b;
+            animation: shake 0.5s ease;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.completed {
+            background: #38ef7d;
+            color: white;
+        }
+
+        .progress-step.current {
+            background: #ffd700;
+            color: #333;
+            animation: pulse 1s infinite;
+        }
+
+        .progress-step.pending {
+            background: rgba(255,255,255,0.2);
+            color: #adb5bd;
+        }
+
+        .progress-connector {
+            width: 40px;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .progress-connector.active {
+            background: #38ef7d;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 6px 20px rgba(255,215,0,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn.success {
+            background: linear-gradient(45deg, #38ef7d, #11998e);
+            color: white;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .feedback {
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .feedback.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback.success {
+            background: linear-gradient(135deg, #38ef7d, #11998e);
+            border: 3px solid #38ef7d;
+            box-shadow: 0 10px 30px rgba(56,239,125,0.3);
+        }
+
+        .feedback.error {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .hint-box {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid rgba(255,215,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .hint-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .calculation-steps {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #38ef7d;
+            display: none;
+        }
+
+        .calculation-steps.visible {
+            display: block;
+            animation: slideInUp 0.5s ease;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.05); }
+        }
+
+        @keyframes currentStation {
+            0%, 100% { transform: translateY(-50%) scale(1); box-shadow: 0 0 30px rgba(0,212,255,0.7); }
+            50% { transform: translateY(-50%) scale(1.1); box-shadow: 0 0 40px rgba(0,212,255,0.9); }
+        }
+
+        @keyframes pathGlow {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+            40%, 43% { transform: translate3d(0, -10px, 0); }
+            70% { transform: translate3d(0, -5px, 0); }
+            90% { transform: translate3d(0, -2px, 0); }
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,215,0,0.6);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            25% { opacity: 1; }
+            50% { transform: translateY(-40px) rotate(180deg); }
+            75% { opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .title { font-size: 2.2rem; }
+            .stats { flex-direction: column; align-items: center; }
+            .map-container, .challenge-area { padding: 20px; }
+            .station { width: 60px; height: 60px; }
+            .station-icon { font-size: 1.2rem; }
+            .data-grid { grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); }
+            .answer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🗺️ EL CAMINO DEL ANALISTA 🗺️</h1>
+            <p class="subtitle">¡Recorre el sendero de los datos y conviértete en un maestro analista!</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="score">0</span>
+                    <span>Cristales</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="level">1</span>
+                    <span>Estación</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="progress">0</span>
+                    <span>Desafíos</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA DEL CAMINO -->
+        <div class="map-container">
+            <div class="map-title">🛤️ El Sendero de los Datos</div>
+            <div class="path-container">
+                <div class="path"></div>
+                
+                <!-- Estación 1: Escuela -->
+                <div class="station available" data-station="1" style="left: 5%;" onclick="enterStation(1)">
+                    <div class="station-icon">🏫</div>
+                    <div class="station-label">Escuela</div>
+                </div>
+                
+                <!-- Estación 2: Laboratorio -->
+                <div class="station locked" data-station="2" style="left: 30%;" onclick="enterStation(2)">
+                    <div class="station-icon">🧪</div>
+                    <div class="station-label">Laboratorio</div>
+                </div>
+                
+                <!-- Estación 3: Mercado -->
+                <div class="station locked" data-station="3" style="left: 55%;" onclick="enterStation(3)">
+                    <div class="station-icon">🏪</div>
+                    <div class="station-label">Mercado</div>
+                </div>
+                
+                <!-- Estación 4: Observatorio -->
+                <div class="station locked" data-station="4" style="left: 80%;" onclick="enterStation(4)">
+                    <div class="station-icon">🔭</div>
+                    <div class="station-label">Observatorio</div>
+                </div>
+            </div>
+            
+            <div class="progress-indicator" id="pathProgress">
+                <div class="progress-step current">1</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">2</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">3</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">4</div>
+            </div>
+        </div>
+
+        <!-- ÁREA DE DESAFÍO -->
+        <div class="challenge-area" id="challengeArea">
+            <div class="challenge-header">
+                <div class="challenge-title" id="challengeTitle">🏫 Estación 1: La Escuela</div>
+                <div class="challenge_story" id="challengeStory">
+                    📚 ¡Bienvenido, joven analista! Tu primera misión te lleva a la escuela local, donde el director necesita tu ayuda para analizar las calificaciones del último examen de matemáticas. Los estudiantes y padres esperan conocer cómo fue el rendimiento general. ¡Usa tus habilidades para descifrar los secretos de estos números!
+                </div>
+            </div>
+
+            <div class="data-display" id="dataDisplay">
+                <div class="data-title" id="dataTitle">📊 Calificaciones del Examen (sobre 100)</div>
+                <div class="data-grid" id="dataGrid">
+                    <!-- Los datos aparecerán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <div class="hint-box" id="hintBox">
+                <div class="hint-title">💡 Recordatorios del Analista:</div>
+                <div><strong>Media:</strong> Suma todos los valores ÷ cantidad de valores</div>
+                <div><strong>Mediana:</strong> Valor del medio cuando ordenamos los datos</div>
+                <div><strong>Moda:</strong> El valor que más se repite</div>
+            </div>
+
+            <div class="challenge-question" id="challengeQuestion">
+                <!-- Las preguntas aparecerán aquí -->
+            </div>
+
+            <div class="calculation-steps" id="calculationSteps">
+                <!-- Los pasos de cálculo aparecerán aquí -->
+            </div>
+
+            <div class="feedback" id="feedback">
+                <!-- Feedback aparecerá aquí -->
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="checkAnswer()" id="checkBtn">🔍 Analizar Respuesta</button>
+                <button class="btn success" onclick="showCalculation()" id="showCalcBtn" style="display: none;">📊 Ver Cálculo</button>
+                <button class="btn success" onclick="nextChallenge()" id="nextBtn" style="display: none;">➡️ Siguiente Desafío</button>
+                <button class="btn success" onclick="completeStation()" id="completeBtn" style="display: none;">✅ Completar Estación</button>
+                <button class="btn danger" onclick="backToMap()">🗺️ Volver al Mapa</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Redirige si no hay usuario autenticado
+        if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
+            window.location.href = "complete-login-html.html";
+        }
+
+        // Estado del juego
+        let gameState = {
+            score: 0,
+            currentStation: 0,
+            completedStations: [],
+            currentChallenge: 0,
+            challengesCompleted: 0,
+            totalChallenges: 0,
+            currentData: [],
+            selectedAnswer: null
+        };
+
+        // Definición de estaciones y desafíos
+        const stations = {
+            1: {
+                name: "🏫 La Escuela",
+                story: "📚 ¡Bienvenido, joven analista! Tu primera misión te lleva a la escuela local, donde el director necesita tu ayuda para analizar las calificaciones del último examen de matemáticas. Los estudiantes y padres esperan conocer cómo fue el rendimiento general. ¡Usa tus habilidades para descifrar los secretos de estos números!",
+                challenges: [
+                    {
+                        data: [85, 92, 78, 85, 90, 87, 85, 83, 88, 91],
+                        dataTitle: "📊 Calificaciones del Examen (sobre 100)",
+                        question: "¿Cuál es la MEDIA (promedio) de las calificaciones?",
+                        type: "mean",
+                        options: [86.4, 85.0, 87.2, 84.8]
+                    },
+                    {
+                        data: [85, 92, 78, 85, 90, 87, 85, 83, 88, 91],
+                        dataTitle: "📊 Calificaciones del Examen (ordenadas)",
+                        question: "¿Cuál es la MEDIANA de las calificaciones?",
+                        type: "median",
+                        options: [86.5, 85.0, 87.0, 88.0]
+                    },
+                    {
+                        data: [85, 92, 78, 85, 90, 87, 85, 83, 88, 91],
+                        dataTitle: "📊 Calificaciones del Examen (frecuencias)",
+                        question: "¿Cuál es la MODA de las calificaciones?",
+                        type: "mode",
+                        options: [85, 87, 88, 90]
+                    }
+                ]
+            },
+            2: {
+                name: "🧪 El Laboratorio",
+                story: "🔬 ¡Excelente trabajo en la escuela! Ahora te diriges al laboratorio científico, donde los investigadores han estado midiendo las temperaturas de una reacción química durante varios días. Necesitan entender las tendencias para optimizar el proceso. ¡Los datos te esperan!",
+                challenges: [
+                    {
+                        data: [22.5, 24.1, 21.8, 23.2, 25.0, 24.1, 23.7, 22.9, 24.1, 23.5],
+                        dataTitle: "🌡️ Temperaturas de Reacción (°C)",
+                        question: "¿Cuál es la MEDIA de las temperaturas?",
+                        type: "mean",
+                        options: [23.6, 23.2, 24.0, 22.8]
+                    },
+                    {
+                        data: [22.5, 24.1, 21.8, 23.2, 25.0, 24.1, 23.7, 22.9, 24.1, 23.5],
+                        dataTitle: "🌡️ Temperaturas de Reacción (ordenadas)",
+                        question: "¿Cuál es la MEDIANA de las temperaturas?",
+                        type: "median",
+                        options: [23.6, 23.4, 23.8, 24.0]
+                    },
+                    {
+                        data: [22.5, 24.1, 21.8, 23.2, 25.0, 24.1, 23.7, 22.9, 24.1, 23.5],
+                        dataTitle: "🌡️ Temperaturas de Reacción (frecuencias)",
+                        question: "¿Cuál es la MODA de las temperaturas?",
+                        type: "mode",
+                        options: [24.1, 23.2, 22.5, 25.0]
+                    }
+                ]
+            },
+            3: {
+                name: "🏪 El Mercado",
+                story: "💰 ¡Genial! Tu fama como analista se extiende y ahora el dueño del mercado local te ha contratado. Necesita analizar las ventas diarias de la semana pasada para planificar mejor el inventario. Los números del comercio tienen sus propios secretos. ¡A descubrirlos!",
+                challenges: [
+                    {
+                        data: [145, 132, 168, 145, 156, 142, 145, 139, 161, 145],
+                        dataTitle: "💰 Ventas Diarias (productos vendidos)",
+                        question: "¿Cuál es la MEDIA de las ventas diarias?",
+                        type: "mean",
+                        options: [147.8, 145.0, 150.2, 143.6]
+                    },
+                    {
+                        data: [145, 132, 168, 145, 156, 142, 145, 139, 161, 145],
+                        dataTitle: "💰 Ventas Diarias (ordenadas)",
+                        question: "¿Cuál es la MEDIANA de las ventas?",
+                        type: "median",
+                        options: [145.0, 147.5, 144.0, 146.0]
+                    },
+                    {
+                        data: [145, 132, 168, 145, 156, 142, 145, 139, 161, 145],
+                        dataTitle: "💰 Ventas Diarias (frecuencias)",
+                        question: "¿Cuál es la MODA de las ventas?",
+                        type: "mode",
+                        options: [145, 156, 132, 168]
+                    }
+                ]
+            },
+            4: {
+                name: "🔭 El Observatorio",
+                story: "🌌 ¡Impresionante! Has llegado al observatorio astronómico, donde los científicos están estudiando las estrellas y planetas. Tu tarea es analizar los datos de brillo estelar para ayudar en la clasificación de nuevas estrellas. ¡El universo de los datos se expande ante ti!",
+                challenges: [
+                    {
+                        data: [5.1, 5.8, 4.9, 5.5, 6.0, 5.7, 5.2, 5.9, 5.3, 6.1],
+                        dataTitle: "🌟 Brillo Estelar (magnitudes)",
+                        question: "¿Cuál es la MEDIA del brillo estelar?",
+                        type: "mean",
+                        options: [5.6, 5.3, 5.8, 5.1]
+                    },
+                    {
+                        data: [5.1, 5.8, 4.9, 5.5, 6.0, 5.7, 5.2, 5.9, 5.3, 6.1],
+                        dataTitle: "🌟 Brillo Estelar (magnitudes ordenadas)",
+                        question: "¿Cuál es la MEDIANA del brillo estelar?",
+                        type: "median",
+                        options: [5.55, 5.6, 5.3, 5.7]
+                    },
+                    {
+                        data: [5.1, 5.8, 4.9, 5.5, 6.0, 5.7, 5.2, 5.9, 5.3, 6.1],
+                        dataTitle: "🌟 Brillo Estelar (frecuencias)",
+                        question: "¿Cuál es la MODA del brillo estelar?",
+                        type: "mode",
+                        options: [5.1, 5.5, 5.8, 6.0]
+                    }
+                ]
+            }
+        };
+
+        // Inicializa el juego
+        function initGame() {
+            gameState = {
+                score: 0,
+                currentStation: 1,
+                completedStations: [],
+                currentChallenge: 0,
+                challengesCompleted: 0,
+                totalChallenges: 0,
+                currentData: [],
+                selectedAnswer: null
+            };
+            updateUI();
+            loadStation(1);
+        }
+
+        // Actualiza la interfaz de usuario
+        function updateUI() {
+            document.getElementById('score').innerText = gameState.score;
+            document.getElementById('level').innerText = gameState.currentStation;
+            document.getElementById('progress').innerText = gameState.challengesCompleted;
+
+            // Actualiza el progreso en el mapa
+            const steps = document.querySelectorAll('.progress-step');
+            const connectors = document.querySelectorAll('.progress-connector');
+            steps.forEach((step, index) => {
+                step.classList.remove('completed', 'current');
+                if (index < gameState.currentStation - 1) {
+                    step.classList.add('completed');
+                } else if (index === gameState.currentStation - 1) {
+                    step.classList.add('current');
+                }
+            });
+            connectors.forEach((connector, index) => {
+                connector.classList.remove('active');
+                if (index < gameState.currentStation - 1) {
+                    connector.classList.add('active');
+                }
+            });
+        }
+
+        // Carga una estación
+        function loadStation(station) {
+            const stationData = stations[station];
+            if (!stationData) return;
+
+            gameState.currentStation = station;
+            gameState.challengesCompleted = 0;
+            gameState.totalChallenges = stationData.challenges.length;
+            gameState.currentChallenge = 0;
+            gameState.currentData = stationData.challenges[0].data;
+
+            document.getElementById('challengeTitle').innerText = stationData.name;
+            document.getElementById('challengeStory').innerText = stationData.story;
+            document.getElementById('dataTitle').innerText = stationData.challenges[0].dataTitle;
+
+            const dataGrid = document.getElementById('dataGrid');
+            dataGrid.innerHTML = '';
+            stationData.challenges[0].data.forEach((value) => {
+                const dataItem = document.createElement('div');
+                dataItem.className = 'data-item';
+                dataItem.innerText = value;
+                dataGrid.appendChild(dataItem);
+            });
+
+            // Reiniciar botones
+            document.getElementById('checkBtn').style.display = 'inline-block';
+            document.getElementById('showCalcBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('completeBtn').style.display = 'none';
+
+            // Reiniciar feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+
+            // Cargar pregunta
+            loadQuestion();
+            updateUI();
+        }
+
+        // Carga una pregunta del desafío
+        function loadQuestion() {
+            const challenge = stations[gameState.currentStation].challenges[gameState.currentChallenge];
+            const questionContainer = document.getElementById('challengeQuestion');
+            questionContainer.innerHTML = '';
+
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+            questionText.innerText = challenge.question;
+            questionContainer.appendChild(questionText);
+
+            // Opciones de respuesta
+            const answerGrid = document.createElement('div');
+            answerGrid.className = 'answer-grid';
+            challenge.options.forEach((option) => {
+                const optionButton = document.createElement('div');
+                optionButton.className = 'answer-option';
+                optionButton.innerText = option;
+                optionButton.onclick = () => selectAnswer(option);
+                answerGrid.appendChild(optionButton);
+            });
+            questionContainer.appendChild(answerGrid);
+        }
+
+        // Selecciona una respuesta
+        function selectAnswer(answer) {
+            gameState.selectedAnswer = answer;
+            const challenge = stations[gameState.currentStation].challenges[gameState.currentChallenge];
+
+            // Actualiza opciones
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach((option) => {
+                option.classList.remove('selected');
+                if (option.innerText == answer) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        // Verifica la respuesta
+        function checkAnswer() {
+            const challenge = stations[gameState.currentStation].challenges[gameState.currentChallenge];
+            let correct = false;
+
+            // Calcular respuesta correcta según el tipo
+            let correctAnswer;
+            switch (challenge.type) {
+                case 'mean':
+                    correctAnswer = (challenge.data.reduce((a, b) => a + b, 0) / challenge.data.length).toFixed(2);
+                    break;
+                case 'median':
+                    const sortedData = [...challenge.data].sort((a, b) => a - b);
+                    const mid = Math.floor(sortedData.length / 2);
+                    correctAnswer = sortedData.length % 2 === 0 ? ((sortedData[mid - 1] + sortedData[mid]) / 2).toFixed(2) : sortedData[mid].toFixed(2);
+                    break;
+                case 'mode':
+                    const frequency = {};
+                    let maxFreq = 0;
+                    challenge.data.forEach((value) => {
+                        frequency[value] = (frequency[value] || 0) + 1;
+                        if (frequency[value] > maxFreq) {
+                            maxFreq = frequency[value];
+                            correctAnswer = value;
+                        }
+                    });
+                    correctAnswer = correctAnswer.toFixed(2);
+                    break;
+                default:
+                    correctAnswer = null;
+            }
+
+            // Verifica si la respuesta del jugador es correcta
+            if (gameState.selectedAnswer != null && gameState.selectedAnswer.toString() === correctAnswer.toString()) {
+                correct = true;
+                gameState.score += 10;
+                showFeedback(`✅ ¡Correcto! La respuesta es ${correctAnswer}.`, true);
+            } else {
+                correct = false;
+                showFeedback(`❌ Incorrecto. La respuesta correcta es ${correctAnswer}.`, false);
+            }
+
+            // Actualiza puntaje
+            document.getElementById('score').innerText = gameState.score;
+
+            // Muestra cálculo si es correcto
+            if (correct) {
+                document.getElementById('showCalcBtn').style.display = 'inline-block';
+            }
+
+            // Desbloquear siguiente desafío o estación
+            if (gameState.challengesCompleted < gameState.totalChallenges - 1) {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('completeBtn').style.display = 'inline-block';
+            }
+
+            // Oculta botón de verificar
+            document.getElementById('checkBtn').style.display = 'none';
+        }
+
+        // Muestra el cálculo detallado
+        function showCalculation() {
+            const challenge = stations[gameState.currentStation].challenges[gameState.currentChallenge];
+            const stepsContainer = document.getElementById('calculationSteps');
+            stepsContainer.innerHTML = '';
+
+            // Ejemplo de pasos para la media
+            if (challenge.type === 'mean') {
+                const total = challenge.data.reduce((a, b) => a + b, 0);
+                const mean = (total / challenge.data.length).toFixed(2);
+
+                stepsContainer.innerHTML += `<div class="step">Suma total: ${total}</div>`;
+                stepsContainer.innerHTML += `<div class="step">Cantidad de valores: ${challenge.data.length}</div>`;
+                stepsContainer.innerHTML += `<div class="step">Media (promedio): ${mean}</div>`;
+            }
+
+            // Ejemplo de pasos para la mediana
+            else if (challenge.type === 'median') {
+                const sortedData = [...challenge.data].sort((a, b) => a - b);
+                const mid = Math.floor(sortedData.length / 2);
+
+                stepsContainer.innerHTML += `<div class="step">Datos ordenados: ${sortedData.join(', ')}</div>`;
+                stepsContainer.innerHTML += `<div class="step">Mediana: ${sortedData.length % 2 === 0 ? '(${sortedData[mid - 1]} + ${sortedData[mid]}) / 2' : sortedData[mid]}</div>`;
+            }
+
+            // Ejemplo de pasos para la moda
+            else if (challenge.type === 'mode') {
+                const frequency = {};
+                let maxFreq = 0;
+                challenge.data.forEach((value) => {
+                    frequency[value] = (frequency[value] || 0) + 1;
+                    if (frequency[value] > maxFreq) {
+                        maxFreq = frequency[value];
+                    }
+                });
+                const modes = Object.keys(frequency).filter((key) => frequency[key] === maxFreq);
+
+                stepsContainer.innerHTML += `<div class="step">Frecuencia de valores: ${JSON.stringify(frequency)}</div>`;
+                stepsContainer.innerHTML += `<div class="step">Moda: ${modes.join(', ')}</div>`;
+            }
+
+            stepsContainer.classList.add('visible');
+            document.getElementById('showCalcBtn').style.display = 'none';
+        }
+
+        // Muestra el siguiente desafío
+        function nextChallenge() {
+            const stationData = stations[gameState.currentStation];
+            gameState.currentChallenge++;
+            gameState.currentData = stationData.challenges[gameState.currentChallenge].data;
+
+            document.getElementById('dataTitle').innerText = stationData.challenges[gameState.currentChallenge].dataTitle;
+
+            const dataGrid = document.getElementById('dataGrid');
+            dataGrid.innerHTML = '';
+            stationData.challenges[gameState.currentChallenge].data.forEach((value) => {
+                const dataItem = document.createElement('div');
+                dataItem.className = 'data-item';
+                dataItem.innerText = value;
+                dataGrid.appendChild(dataItem);
+            });
+
+            // Reiniciar botones
+            document.getElementById('checkBtn').style.display = 'inline-block';
+            document.getElementById('showCalcBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('completeBtn').style.display = 'none';
+
+            // Reiniciar feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+
+            // Cargar nueva pregunta
+            loadQuestion();
+        }
+
+        // Completa la estación actual
+        function completeStation() {
+            const station = gameState.currentStation;
+            gameState.completedStations.push(station);
+            if (gameState.completedStations.length === Object.keys(stations).length) {
+                // Todos los estaciones completadas
+                showFinalMessage();
+            } else {
+                // Cargar siguiente estación disponible
+                let nextStation = null;
+                for (let i = station + 1; i <= Object.keys(stations).length; i++) {
+                    if (!gameState.completedStations.includes(i)) {
+                        nextStation = i;
+                        break;
+                    }
+                }
+                if (nextStation) {
+                    loadStation(nextStation);
+                }
+            }
+        }
+
+        // Muestra mensaje final
+        function showFinalMessage() {
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback visible';
+            feedback.innerHTML = `
+                🎉 ¡Felicidades! Has completado todas las estaciones del Camino del Analista.
+                <br>Tu puntaje final es: <strong>${gameState.score}</strong> cristales.
+                <br>¡Sigue practicando y mejorando tus habilidades analíticas!
+                <br><button class="btn success" onclick="guardarPuntajeAnalista(); window.location.href='student_dashboard.html'">Terminar</button>
+            `;
+            document.querySelector('.controls').style.display = 'none';
+        }
+
+        // Guarda el puntaje del analista
+        function guardarPuntajeAnalista() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+            const userIndex = usersDB.findIndex(u => u.email === user.email);
+
+            if (userIndex !== -1) {
+                const metrics = usersDB[userIndex].metrics;
+                if (!metrics.games) metrics.games = [];
+                let gameRecord = metrics.games.find(g => g.title === "Analista de Datos");
+                if (!gameRecord) {
+                    gameRecord = { title: "Analista de Datos", status: "completed", progress: 100, stars: 0, points: 0 };
+                    metrics.games.push(gameRecord);
+                }
+                gameRecord.points = gameState.score;
+                gameRecord.status = "completed";
+                gameRecord.progress = 100;
+                // Calificación en estrellas según puntaje
+                if (gameState.score >= 30) {
+                    gameRecord.stars = 3;
+                } else if (gameState.score >= 20) {
+                    gameRecord.stars = 2;
+                } else if (gameState.score >= 10) {
+                    gameRecord.stars = 1;
+                } else {
+                    gameRecord.stars = 0;
+                }
+                metrics.totalPoints = metrics.games.reduce((sum, g) => sum + (g.points || 0), 0);
+
+                usersDB[userIndex].metrics = metrics;
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                localStorage.setItem('currentUser', JSON.stringify(usersDB[userIndex]));
+            }
+        }
+
+        // Muestra feedback
+        function showFeedback(message, isSuccess) {
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback visible';
+            feedback.innerHTML = message;
+
+            if (isSuccess) {
+                feedback.style.background = 'linear-gradient(135deg, #38ef7d, #11998e)';
+                feedback.style.border = '3px solid #38ef7d';
+                feedback.style.boxShadow = '0 10px 30px rgba(56,239,125,0.3)';
+            } else {
+                feedback.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+                feedback.style.border = '3px solid #ff6b6b';
+                feedback.style.boxShadow = '0 10px 30px rgba(255,107,107,0.3)';
+            }
+        }
+
+        // Iniciar juego al cargar
+        window.onload = initGame;
+    </script>
+</body>
+</html>

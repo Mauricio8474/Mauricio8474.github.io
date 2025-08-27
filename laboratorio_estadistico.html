@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Estadístico - Grado 9°</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .stats-panel {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .lab-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .lab-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #495057;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-input-area {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"], select {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+        }
+
+        .data-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            margin: 15px 0;
+        }
+
+        .data-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .data-value {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-title {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .exercises-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .exercise-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .exercise-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+
+            .data-input-area {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Laboratorio Estadístico</h1>
+            <p>Explora el mundo de la estadística descriptiva - Grado 9°</p>
+        </div>
+
+        <div class="game-container">
+            <!-- Panel de estadísticas del juego -->
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <div class="stat-value" id="experimentsCount">0</div>
+                    <div class="stat-label">Experimentos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="dataPointsCount">0</div>
+                    <div class="stat-label">Datos Ingresados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="correctAnswers">0</div>
+                    <div class="stat-label">Respuestas Correctas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="currentScore">0</div>
+                    <div class="stat-label">Puntuación</div>
+                </div>
+            </div>
+
+            <!-- Sección 1: Ingreso de Datos -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">1</span>
+                    Recolección de Datos
+                </h3>
+                
+                <div class="data-input-area">
+                    <div class="input-group">
+                        <label for="dataValue">Nuevo Valor:</label>
+                        <input type="number" id="dataValue" placeholder="Ingresa un número" step="0.01">
+                    </div>
+                    <button class="btn" onclick="addDataPoint()">Agregar Dato</button>
+                    <button class="btn btn-secondary" onclick="generateRandomData()">Datos Aleatorios</button>
+                    <button class="btn btn-danger" onclick="clearData()">Limpiar Todo</button>
+                </div>
+
+                <div class="data-display">
+                    <h4>Conjunto de Datos Actual:</h4>
+                    <div class="data-values" id="dataValues"></div>
+                    <p><strong>Cantidad de datos:</strong> <span id="dataCount">0</span></p>
+                </div>
+            </div>
+
+            <!-- Sección 2: Cálculos Estadísticos -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">2</span>
+                    Análisis Estadístico
+                </h3>
+                
+                <button class="btn" onclick="calculateStatistics()">Calcular Estadísticas</button>
+                
+                <div class="results-grid" id="statisticsResults"></div>
+            </div>
+
+            <!-- Sección 3: Visualización -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">3</span>
+                    Visualización de Datos
+                </h3>
+                
+                <div class="data-input-area">
+                    <div class="input-group">
+                        <label for="chartType">Tipo de Gráfico:</label>
+                        <select id="chartType">
+                            <option value="histogram">Histograma</option>
+                            <option value="boxplot">Diagrama de Cajas</option>
+                            <option value="line">Gráfico de Línea</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="createChart()">Generar Gráfico</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="dataChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Sección 4: Ejercicios Interactivos -->
+            <div class="exercises-section">
+                <h3 class="section-title">
+                    <span class="section-icon">4</span>
+                    Desafíos Estadísticos
+                </h3>
+                
+                <div id="exerciseContainer">
+                    <!-- Los ejercicios se cargarán aquí dinámicamente -->
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = [];
+        let currentChart = null;
+        let gameStats = {
+            experiments: 0,
+            dataPoints: 0,
+            correctAnswers: 0,
+            score: 0
+        };
+        let currentExercise = 0;
+
+        const exercises = [
+            {
+                question: "¿Cuál es la diferencia entre media y mediana?",
+                options: [
+                    "La media es el valor central, la mediana es el promedio",
+                    "La media es el promedio, la mediana es el valor central",
+                    "Son exactamente lo mismo",
+                    "La mediana siempre es mayor que la media"
+                ],
+                correct: 1,
+                explanation: "La media es el promedio aritmético de todos los valores, mientras que la mediana es el valor que queda en el centro cuando los datos se ordenan."
+            },
+            {
+                question: "Si tienes los datos: 2, 4, 4, 6, 8, 10, ¿cuál es la moda?",
+                options: ["4", "5", "6", "No hay moda"],
+                correct: 0,
+                explanation: "La moda es el valor que aparece con mayor frecuencia. En este caso, el 4 aparece dos veces."
+            },
+            {
+                question: "¿Qué mide la desviación estándar?",
+                options: [
+                    "El promedio de los datos",
+                    "La dispersión de los datos respecto a la media",
+                    "El valor máximo menos el mínimo",
+                    "La cantidad de datos"
+                ],
+                correct: 1,
+                explanation: "La desviación estándar mide qué tan dispersos están los datos respecto al promedio. Valores más altos indican mayor dispersión."
+            }
+        ];
+
+        function updateStats() {
+            document.getElementById('experimentsCount').textContent = gameStats.experiments;
+            document.getElementById('dataPointsCount').textContent = gameStats.dataPoints;
+            document.getElementById('correctAnswers').textContent = gameStats.correctAnswers;
+            document.getElementById('currentScore').textContent = gameStats.score;
+        }
+
+        function addDataPoint() {
+            const input = document.getElementById('dataValue');
+            const value = parseFloat(input.value);
+            
+            if (isNaN(value)) {
+                showAlert('Por favor ingresa un número válido', 'warning');
+                return;
+            }
+            
+            currentData.push(value);
+            input.value = '';
+            gameStats.dataPoints++;
+            updateDataDisplay();
+            updateStats();
+            
+            showAlert('¡Dato agregado exitosamente!', 'success');
+        }
+
+        function generateRandomData() {
+            currentData = [];
+            const count = Math.floor(Math.random() * 15) + 10; // 10-24 datos
+            
+            for (let i = 0; i < count; i++) {
+                currentData.push(Math.floor(Math.random() * 100) + 1);
+            }
+            
+            gameStats.dataPoints += count;
+            gameStats.experiments++;
+            updateDataDisplay();
+            updateStats();
+            
+            showAlert(`¡Generados ${count} datos aleatorios!`, 'success');
+        }
+
+        function clearData() {
+            currentData = [];
+            updateDataDisplay();
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+            showAlert('Datos eliminados', 'warning');
+        }
+
+        function updateDataDisplay() {
+            const container = document.getElementById('dataValues');
+            const countElement = document.getElementById('dataCount');
+            
+            container.innerHTML = '';
+            currentData.forEach(value => {
+                const span = document.createElement('span');
+                span.className = 'data-value';
+                span.textContent = value;
+                container.appendChild(span);
+            });
+            
+            countElement.textContent = currentData.length;
+        }
+
+        function calculateStatistics() {
+            if (currentData.length === 0) {
+                showAlert('¡Primero agrega algunos datos!', 'warning');
+                return;
+            }
+            
+            const sortedData = [...currentData].sort((a, b) => a - b);
+            const n = currentData.length;
+            
+            // Media
+            const mean = currentData.reduce((sum, value) => sum + value, 0) / n;
+            
+            // Mediana
+            let median;
+            if (n % 2 === 0) {
+                median = (sortedData[n/2 - 1] + sortedData[n/2]) / 2;
+            } else {
+                median = sortedData[Math.floor(n/2)];
+            }
+            
+            // Moda
+            const frequency = {};
+            currentData.forEach(value => {
+                frequency[value] = (frequency[value] || 0) + 1;
+            });
+            const maxFreq = Math.max(...Object.values(frequency));
+            const mode = Object.keys(frequency).filter(key => frequency[key] === maxFreq);
+            
+            // Rango
+            const range = Math.max(...currentData) - Math.min(...currentData);
+            
+            // Desviación estándar
+            const variance = currentData.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / n;
+            const standardDeviation = Math.sqrt(variance);
+            
+            // Cuartiles
+            const q1 = calculateQuartile(sortedData, 0.25);
+            const q3 = calculateQuartile(sortedData, 0.75);
+            
+            displayResults({
+                media: mean.toFixed(2),
+                mediana: median.toFixed(2),
+                moda: mode.length === n ? 'No hay moda' : mode.join(', '),
+                rango: range.toFixed(2),
+                desviacion: standardDeviation.toFixed(2),
+                q1: q1.toFixed(2),
+                q3: q3.toFixed(2),
+                minimo: Math.min(...currentData),
+                maximo: Math.max(...currentData)
+            });
+            
+            gameStats.experiments++;
+            gameStats.score += 10;
+            updateStats();
+        }
+
+        function calculateQuartile(sortedData, percentile) {
+            const index = percentile * (sortedData.length - 1);
+            if (Number.isInteger(index)) {
+                return sortedData[index];
+            } else {
+                const lower = Math.floor(index);
+                const upper = Math.ceil(index);
+                return sortedData[lower] + (sortedData[upper] - sortedData[lower]) * (index - lower);
+            }
+        }
+
+        function displayResults(stats) {
+            const container = document.getElementById('statisticsResults');
+            container.innerHTML = '';
+            
+            const statsArray = [
+                { title: 'Media', value: stats.media },
+                { title: 'Mediana', value: stats.mediana },
+                { title: 'Moda', value: stats.moda },
+                { title: 'Rango', value: stats.rango },
+                { title: 'Desviación Estándar', value: stats.desviacion },
+                { title: 'Q1', value: stats.q1 },
+                { title: 'Q3', value: stats.q3 },
+                { title: 'Mínimo', value: stats.minimo },
+                { title: 'Máximo', value: stats.maximo }
+            ];
+            
+            statsArray.forEach(stat => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-title">${stat.title}</div>
+                    <div class="result-value">${stat.value}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function createChart() {
+            if (currentData.length === 0) {
+                showAlert('¡Primero agrega algunos datos!', 'warning');
+                return;
+            }
+            
+            const ctx = document.getElementById('dataChart').getContext('2d');
+            const chartType = document.getElementById('chartType').value;
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            if (chartType === 'histogram') {
+                createHistogram(ctx);
+            } else if (chartType === 'boxplot') {
+                createBoxPlot(ctx);
+            } else if (chartType === 'line') {
+                createLineChart(ctx);
+            }
+        }
+
+        function createHistogram(ctx) {
+            const bins = {};
+            const binSize = 10;
+            
+            currentData.forEach(value => {
+                const bin = Math.floor(value / binSize) * binSize;
+                bins[bin] = (bins[bin] || 0) + 1;
+            });
+            
+            const labels = Object.keys(bins).sort((a, b) => a - b).map(bin => `${bin}-${parseInt(bin) + binSize - 1}`);
+            const data = Object.keys(bins).sort((a, b) => a - b).map(bin => bins[bin]);
+            
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frecuencia',
+                        data: data,
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Histograma de Frecuencias'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createBoxPlot(ctx) {
+            const sortedData = [...currentData].sort((a, b) => a - b);
+            const q1 = calculateQuartile(sortedData, 0.25);
+            const median = calculateQuartile(sortedData, 0.5);
+            const q3 = calculateQuartile(sortedData, 0.75);
+            const min = Math.min(...currentData);
+            const max = Math.max(...currentData);
+            
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Datos'],
+                    datasets: [{
+                        label: 'Valores',
+                        data: [min, q1, median, q3, max],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Valores Estadísticos Clave'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function createLineChart(ctx) {
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: currentData.map((_, index) => `Dato ${index + 1}`),
+                    datasets: [{
+                        label: 'Valores',
+                        data: currentData,
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribución de Datos'
+                        }
+                    }
+                }
+            });
+        }
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            const container = document.querySelector('.game-container');
+            container.insertBefore(alert, container.firstChild);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        function loadExercise() {
+            if (currentExercise >= exercises.length) {
+                document.getElementById('exerciseContainer').innerHTML = `
+                    <div class="exercise-card">
+                        <h4>¡Felicitaciones! 🎉</h4>
+                        <p>Has completado todos los desafíos estadísticos. Tu comprensión de la estadística descriptiva ha mejorado significativamente.</p>
+                        <button class="btn" onclick="restartExercises()">Reiniciar Desafíos</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const exercise = exercises[currentExercise];
+            const container = document.getElementById('exerciseContainer');
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <h4 class="exercise-title">Pregunta ${currentExercise + 1} de ${exercises.length}</h4>
+                    <p><strong>${exercise.question}</strong></p>
+                    <div style="margin: 15px 0;">
+                        ${exercise.options.map((option, index) => `
+                            <button class="btn btn-secondary" onclick="answerExercise(${index})" style="display: block; width: 100%; margin: 5px 0; text-align: left;">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="exerciseResult"></div>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function answerExercise(selectedIndex) {
+            const exercise = exercises[currentExercise];
+            const resultDiv = document.getElementById('exerciseResult');
+            
+            if (selectedIndex === exercise.correct) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>¡Correcto! 🎉</strong><br>
+                        ${exercise.explanation}
+                    </div>
+                `;
+                gameStats.correctAnswers++;
+                gameStats.score += 20;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <strong>Incorrecto 😔</strong><br>
+                        La respuesta correcta es: <strong>${exercise.options[exercise.correct]}</strong><br>
+                        ${exercise.explanation}
+                    </div>
+                `;
+            }
+            
+            updateStats();
+            
+            setTimeout(() => {
+                currentExercise++;
+                loadExercise();
+            }, 3000);
+        }
+
+        function updateProgress() {
+            const progress = (currentExercise / exercises.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function restartExercises() {
+            currentExercise = 0;
+            loadExercise();
+        }
+
+        // Inicialización
+        updateStats();
+        loadExercise();
+        
+        // Event listeners
+        document.getElementById('dataValue').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addDataPoint();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -624,6 +624,22 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Grado</label>
+                    <div class="input-container">
+                        <i class="fas fa-layer-group input-icon"></i>
+                        <select class="form-input" id="registerGrade" required>
+                            <option value="">Selecciona tu grado</option>
+                            <option value="6">6°</option>
+                            <option value="7">7°</option>
+                            <option value="8">8°</option>
+                            <option value="9">9°</option>
+                            <option value="10">10°</option>
+                            <option value="11">11°</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Contraseña</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
@@ -934,90 +950,142 @@
         // Authentication Functions
         async function handleLogin(e) {
             e.preventDefault();
-            
+
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const rememberMe = document.getElementById('rememberMe').checked;
-            
+
             showLoading('loginBtn', true);
-            
-            // Simulate API call
+
             setTimeout(() => {
-                const user = mockUsers.find(u => 
-                    u.email === email && 
-                    u.password === password && 
+                let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+                let userIndex = usersDB.findIndex(u =>
+                    u.email === email &&
+                    u.password === password &&
                     u.type === currentUserType
                 );
-                
+                let user = userIndex !== -1 ? usersDB[userIndex] : null;
+
+                if (!user) {
+                    user = mockUsers.find(u =>
+                        u.email === email &&
+                        u.password === password &&
+                        u.type === currentUserType
+                    );
+                } else {
+                    // Registrar visita
+                    const today = new Date().toISOString().slice(0, 10);
+                    if (!user.metrics.visits.includes(today)) {
+                        user.metrics.visits.push(today);
+                        usersDB[userIndex] = user;
+                        localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                    }
+                }
+
                 if (user) {
                     currentUser = { ...user };
                     delete currentUser.password;
-                    
+
                     if (rememberMe) {
                         localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     } else {
                         sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
                     }
-                    
+
                     showMessage('success', `¡Bienvenido ${currentUser.firstName}!`);
                     setTimeout(() => {
-                        setupDashboard();
-                        showDashboard();
+                        if (currentUser.type === 'student') {
+                            window.location.href = "student_dashboard.html";
+                        } else if (currentUser.type === 'teacher') {
+                            // window.location.href = "teacher_dashboard.html";
+                        } else if (currentUser.type === 'admin') {
+                            // window.location.href = "admin_dashboard.html";
+                        } else {
+                            setupDashboard();
+                            showDashboard();
+                        }
                     }, 1500);
                 } else {
                     showMessage('error', 'Credenciales incorrectas o tipo de usuario incorrecto');
                 }
-                
+
                 showLoading('loginBtn', false);
             }, 1500);
         }
 
         async function handleRegister(e) {
             e.preventDefault();
-            
+
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('registerEmail').value;
             const institution = document.getElementById('institution').value;
+            const grade = parseInt(document.getElementById('registerGrade').value, 10);
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const agreeTerms = document.getElementById('agreeTerms').checked;
-            
-            // Validations
+
+            // Validaciones
             if (password !== confirmPassword) {
                 showMessage('error', 'Las contraseñas no coinciden');
                 return;
             }
-            
             if (password.length < 6) {
                 showMessage('error', 'La contraseña debe tener al menos 6 caracteres');
                 return;
             }
-            
             if (!agreeTerms) {
                 showMessage('error', 'Debes aceptar los términos y condiciones');
                 return;
             }
-            
+            if (!grade || grade < 6 || grade > 11) {
+                showMessage('error', 'Selecciona un grado válido');
+                return;
+            }
+
             showLoading('registerBtn', true);
-            
-            // Simulate API call
+
             setTimeout(() => {
-                const existingUser = mockUsers.find(u => u.email === email);
-                
-                if (existingUser) {
+                let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+                if (usersDB.some(u => u.email === email)) {
                     showMessage('error', 'Este email ya está registrado');
-                } else {
-                    // Reset form
-                    document.getElementById('registerFormElement').reset();
-                    selectUserType('student', 'register');
-                    
-                    showMessage('success', '¡Cuenta creada exitosamente! Puedes iniciar sesión ahora.');
-                    setTimeout(() => {
-                        showLogin();
-                    }, 2000);
+                    showLoading('registerBtn', false);
+                    return;
                 }
-                
+                // Crear nuevo usuario con métricas iniciales
+                const newUser = {
+                    id: usersDB.length ? usersDB[usersDB.length - 1].id + 1 : 1,
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    institution,
+                    grade,
+                    avatar: firstName[0],
+                    type: currentUserType,
+                    metrics: {
+                        totalPoints: 0,
+                        gamesCompleted: 0,
+                        level: grade,
+                        streak: 0,
+                        visits: [],
+                        progress: {
+                            algebra: 0,
+                            geometria: 0,
+                            estadistica: 0
+                        }
+                    }
+                };
+                usersDB.push(newUser);
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+
+                document.getElementById('registerFormElement').reset();
+                selectUserType('student', 'register');
+                showMessage('success', '¡Cuenta creada exitosamente! Puedes iniciar sesión ahora.');
+                setTimeout(() => {
+                    showLogin();
+                }, 2000);
+
                 showLoading('registerBtn', false);
             }, 2000);
         }
@@ -1026,14 +1094,16 @@
             e.preventDefault();
             
             const email = document.getElementById('forgotEmail').value;
-            
             showLoading('forgotBtn', true);
-            
-            // Simulate API call
+
             setTimeout(() => {
-                const user = mockUsers.find(u => u.email === email);
-                
+                // Buscar usuario en LocalStorage
+                const usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+                const user = usersDB.find(u => u.email === email);
+
                 if (user) {
+                    // Simula envío de código (puedes guardar el código en LocalStorage si lo deseas)
+                    localStorage.setItem('resetEmail', email);
                     showMessage('success', 'Se ha enviado un enlace de recuperación a tu email');
                     setTimeout(() => {
                         showResetPassword();
@@ -1041,42 +1111,49 @@
                 } else {
                     showMessage('error', 'No se encontró una cuenta con este email');
                 }
-                
+
                 showLoading('forgotBtn', false);
             }, 1500);
         }
 
         async function handleResetPassword(e) {
             e.preventDefault();
-            
+
             const token = document.getElementById('resetToken').value;
             const password = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmNewPassword').value;
-            
+
             if (password !== confirmPassword) {
                 showMessage('error', 'Las contraseñas no coinciden');
                 return;
             }
-            
+
             if (password.length < 6) {
                 showMessage('error', 'La contraseña debe tener al menos 6 caracteres');
                 return;
             }
-            
+
             showLoading('resetBtn', true);
-            
-            // Simulate API call
+
             setTimeout(() => {
-                if (token.length >= 4) { // Simple validation
+                // Simula validación de código y cambio de contraseña
+                const email = localStorage.getItem('resetEmail');
+                let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+                const userIndex = usersDB.findIndex(u => u.email === email);
+
+                if (token.length >= 4 && userIndex !== -1) {
+                    usersDB[userIndex].password = password;
+                    localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                    localStorage.removeItem('resetEmail');
                     document.getElementById('resetPasswordFormElement').reset();
                     showMessage('success', '¡Contraseña actualizada exitosamente!');
                     setTimeout(() => {
                         showLogin();
                     }, 2000);
                 } else {
-                    showMessage('error', 'Código de verificación inválido');
+                    showMessage('error', 'Código de verificación inválido o usuario no encontrado');
                 }
-                
+
                 showLoading('resetBtn', false);
             }, 1500);
         }
@@ -1314,7 +1391,7 @@
         // Call initialization functions
         initTooltips();
 
-        console.log('🚀 EduLogin Pro inicializado correctamente');
+        console.log('🚀 Matejuegos inicializado correctamente');
         console.log('💡 Atajos de teclado: Alt+1 (Estudiante), Alt+2 (Profesor), Alt+3 (Admin)');
     </script>
 </body>

@@ -336,9 +336,16 @@
                 🔄 Resolver Otro Caso
             </button>
         </div>
+        <button class="next-btn" style="margin-top: 20px;" onclick="endGame(); window.location.href='student_dashboard.html'">
+            Terminar
+        </button>
     </div>
 
     <script>
+        // Redirige si no hay usuario autenticado
+        if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
+        window.location.href = "complete-login-html.html";
+        }
         // Estado del juego
         let gameState = {
             currentQuestion: 0,
@@ -416,8 +423,8 @@
                 },
                 question: '¿En cuáles meses se vendieron más de 400 helados?',
                 options: ['Abril, Mayo y Junio', 'Mayo y Junio', 'Marzo, Abril y Mayo', 'Solo Junio'],
-                correct: 1,
-                explanation: '¡Perfecto! Mayo (750) y Junio (900) son los únicos meses con más de 400 helados vendidos.'
+                correct: 0,
+                explanation: '¡Perfecto! Abril (500), Mayo (750) y Junio (900) son los meses con más de 400 helados vendidos.'
             },
             {
                 type: 'line',
@@ -702,6 +709,42 @@
 
             document.getElementById('medals').innerHTML = medals;
             document.getElementById('final-message').textContent = message;
+
+            // Guardar el puntaje en la base de datos local
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+            const userIndex = usersDB.findIndex(u => u.email === user.email);
+
+            if (userIndex !== -1) {
+                // Buscar el juego en metrics.games y actualizar puntaje, estado y progreso
+                const metrics = usersDB[userIndex].metrics;
+                if (!metrics.games) metrics.games = [];
+                let gameRecord = metrics.games.find(g => g.title === "Detective de Datos");
+                if (!gameRecord) {
+                    gameRecord = { title: "Detective de Datos", status: "completed", progress: 100, stars: 0, points: 0 };
+                    metrics.games.push(gameRecord);
+                }
+                gameRecord.points = gameState.score;
+                gameRecord.status = "completed";
+                gameRecord.progress = 100;
+                // Calificación en estrellas según puntaje
+                if (gameState.score >= 900) {
+                    gameRecord.stars = 3;
+                } else if (gameState.score >= 700) {
+                    gameRecord.stars = 2;
+                } else if (gameState.score >= 500) {
+                    gameRecord.stars = 1;
+                } else {
+                    gameRecord.stars = 0;
+                }
+                // Actualizar el total de puntos del usuario
+                metrics.totalPoints = metrics.games.reduce((sum, g) => sum + (g.points || 0), 0);
+
+                // Guardar cambios en LocalStorage
+                usersDB[userIndex].metrics = metrics;
+                localStorage.setItem('usersDB', JSON.stringify(usersDB));
+                localStorage.setItem('currentUser', JSON.stringify(usersDB[userIndex]));
+            }
         }
 
         // Reiniciar juego
