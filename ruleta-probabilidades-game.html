@@ -525,6 +525,10 @@
     </div>
 
     <script>
+         // Redirige si no hay usuario autenticado
+        if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
+            window.location.href = "complete-login-html.html";
+        }
         // Estado del juego
         let gameState = {
             currentLevel: 0,

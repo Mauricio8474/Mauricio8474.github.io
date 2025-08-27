@@ -525,6 +525,10 @@
     </div>
 
     <script>
+         // Redirige si no hay usuario autenticado
+        if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
+            window.location.href = "complete-login-html.html";
+        }
         // Variables globales del juego
         let currentFunction = 'linear';
         let parameters = { m: 1, b: 0, a: 1, h: 0, k: 0 };
