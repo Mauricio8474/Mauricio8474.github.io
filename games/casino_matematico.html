@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XZ1QWD1TCC');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Matemático - Grado 11°</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at top, #1a0f1f 0%, #0f0a0e 50%, #000 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .casino-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .light {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .floating-cards {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .card {
+            position: absolute;
+            width: 30px;
+            height: 42px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 4px;
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(220, 20, 60, 0.2));
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #ffd700);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientAnimation 4s ease-in-out infinite;
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes gradientAnimation {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            margin-top: 15px;
+            font-size: 1.4em;
+            color: #e0e0e0;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(30, 30, 30, 0.8));
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            color: #c0c0c0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(40, 40, 40, 0.9));
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover::after {
+            opacity: 1;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+        .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .game-description {
+            color: #c0c0c0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-content {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .probability-display {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, rgba(255, 0, 0, 0.2), rgba(0, 255, 0, 0.2));
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .control-input {
+            padding: 12px;
+            border: 2px solid #ffd700;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 1em;
+            min-width: 100px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .casino-btn {
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .casino-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5);
+        }
+
+        .casino-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: #fff;
+        }
+
+        .dice-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .dice {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 2px solid #ffd700;
+        }
+
+        .dice:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .result-display {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .result-correct {
+            background: linear-gradient(45deg, rgba(0, 255, 0, 0.3), rgba(0, 200, 0, 0.3));
+            border: 2px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .result-incorrect {
+            background: linear-gradient(45deg, rgba(255, 0, 0, 0.3), rgba(200, 0, 0, 0.3));
+            border: 2px solid #ff0000;
+            color: #ff6b6b;
+        }
+
+        .formula-display {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .hint-box {
+            background: linear-gradient(45deg, rgba(0, 100, 200, 0.2), rgba(0, 150, 255, 0.2));
+            border: 1px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #4ecdc4;
+        }
+
+        .step-by-step {
+            background: rgba(0, 50, 100, 0.3);
+            border: 1px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .achievements {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .achievement {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5em;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .player-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dice-container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .game-card {
+                padding: 20px;
+            }
+            
+            .player-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="casino-lights"></div>
+    <div class="floating-cards"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">CASINO MATEMÁTICO</h1>
+            <p class="subtitle">Domina la combinatoria y probabilidad en el casino más exclusivo</p>
+            
+            <div class="player-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="chips">1000</div>
+                    <div class="stat-label">Fichas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="level">1</div>
+                    <div class="stat-label">Nivel VIP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="wins">0</div>
+                    <div class="stat-label">Victorias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="accuracy">100%</div>
+                    <div class="stat-label">Precisión</div>
+                </div>
+            </div>
+            
+            <div class="achievements" id="achievements"></div>
+        </div>
+
+        <div class="games-grid">
+            <!-- Juego de Combinaciones Básicas -->
+            <div class="game-card">
+                <h2 class="game-title">🎲 Mesa de Combinaciones</h2>
+                <p class="game-description">Aprende la diferencia entre permutaciones y combinaciones</p>
+                
+                <div class="game-content">
+                    <div class="controls">
+                        <input type="number" class="control-input" id="combN" placeholder="Total (n)" min="1" max="20" value="5" onchange="updateCombinationsGame()">
+                        <input type="number" class="control-input" id="combR" placeholder="Elegir (r)" min="0" max="20" value="3" onchange="updateCombinationsGame()">
+                        <select class="control-input" id="combType" onchange="updateCombinationsGame()">
+                            <option value="combination">Combinación C(n,r)</option>
+                            <option value="permutation">Permutación P(n,r)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="step-by-step" id="combSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Paso a paso:</h4>
+                        <div class="step">1. Identifica si el orden importa</div>
+                        <div class="step">2. Aplica la fórmula correspondiente</div>
+                        <div class="step">3. Calcula el resultado</div>
+                    </div>
+                    
+                    <div class="probability-display">
+                        <div id="combProblem">C(5,3) = ?</div>
+                        <div style="font-size: 1.2em; margin-top: 10px;">
+                            <input type="number" class="control-input" id="combAnswer" placeholder="Resultado" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="formula-display" id="combFormula">
+                        C(5,3) = 5!/(3!(5-3)!) = 5!/(3!×2!)
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkCombinationsAnswer()">🎯 Verificar</button>
+                        <button class="casino-btn secondary-btn" onclick="showCombinationsHint()">💡 Pista</button>
+                        <button class="casino-btn secondary-btn" onclick="newCombinationsProblem()">🔄 Nuevo Problema</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="combResult"></div>
+            </div>
+
+            <!-- Juego de Probabilidad con Dados -->
+            <div class="game-card">
+                <h2 class="game-title">🎲 Probabilidad con Dados</h2>
+                <p class="game-description">Calcula probabilidades con múltiples dados usando combinaciones</p>
+                
+                <div class="game-content">
+                    <div class="controls">
+                        <select class="control-input" id="diceCount" onchange="updateDiceGame()">
+                            <option value="1">1 Dado</option>
+                            <option value="2" selected>2 Dados</option>
+                            <option value="3">3 Dados</option>
+                        </select>
+                        <input type="number" class="control-input" id="targetSum" placeholder="Suma objetivo" min="2" max="18" value="7" onchange="updateDiceGame()">
+                    </div>
+                    
+                    <div class="dice-container" id="diceContainer"></div>
+                    
+                    <div class="step-by-step" id="diceSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis paso a paso:</h4>
+                        <div class="step" id="diceStep1">1. Total de resultados posibles</div>
+                        <div class="step" id="diceStep2">2. Casos favorables para la suma</div>
+                        <div class="step" id="diceStep3">3. Probabilidad = Casos favorables / Casos totales</div>
+                    </div>
+                    
+                    <div class="probability-display">
+                        <div>Probabilidad de obtener suma = <span id="diceTarget">7</span></div>
+                        <div style="font-size: 1.2em; margin-top: 10px;">
+                            <input type="text" class="control-input" id="diceAnswer" placeholder="Ej: 6/36 o 1/6" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="formula-display" id="diceFormula">
+                        P(suma = 7) = Casos favorables / Casos totales
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkDiceAnswer()">🎯 Apostar</button>
+                        <button class="casino-btn secondary-btn" onclick="rollDice()">🎲 Lanzar</button>
+                        <button class="casino-btn secondary-btn" onclick="showDiceHint()">💡 Pista</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="diceResult"></div>
+            </div>
+
+            <!-- Juego de Selección de Equipos -->
+            <div class="game-card">
+                <h2 class="game-title">👥 Formación de Equipos</h2>
+                <p class="game-description">Problemas prácticos de combinaciones en situaciones reales</p>
+                
+                <div class="game-content" id="teamContent">
+                    <div class="probability-display" id="teamProblem">
+                        De un grupo de 12 estudiantes, ¿cuántas maneras hay de formar un equipo de 4 para un proyecto?
+                    </div>
+                    
+                    <div class="step-by-step" id="teamSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis:</h4>
+                        <div class="step">1. ¿Importa el orden de selección? NO</div>
+                        <div class="step">2. Por tanto, usamos combinaciones</div>
+                        <div class="step">3. C(12,4) = 12!/(4!×8!)</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <input type="number" class="control-input" id="teamAnswer" placeholder="Número de equipos posibles" style="width: 200px;">
+                    </div>
+                    
+                    <div class="formula-display" id="teamFormula">
+                        C(12,4) = (12×11×10×9)/(4×3×2×1) = 11,880/24 = 495
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkTeamAnswer()">👥 Formar Equipo</button>
+                        <button class="casino-btn secondary-btn" onclick="newTeamProblem()">🔄 Nuevo Caso</button>
+                        <button class="casino-btn secondary-btn" onclick="showTeamHint()">💡 Ayuda</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="teamResult"></div>
+            </div>
+
+            <!-- Juego de Contraseñas -->
+            <div class="game-card">
+                <h2 class="game-title">🔐 Seguridad Digital</h2>
+                <p class="game-description">Calcula permutaciones para contraseñas y códigos de seguridad</p>
+                
+                <div class="game-content" id="passwordContent">
+                    <div class="probability-display" id="passwordProblem">
+                        ¿Cuántas contraseñas de 4 dígitos se pueden formar usando los números 1, 2, 3, 4, 5, 6 sin repetición?
+                    </div>
+                    
+                    <div class="step-by-step" id="passwordSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis de Permutaciones:</h4>
+                        <div class="step">1. ¿Importa el orden? SÍ (1234 ≠ 4321)</div>
+                        <div class="step">2. ¿Hay repetición? NO</div>
+                        <div class="step">3. P(6,4) = 6!/(6-4)! = 6!/2!</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <input type="number" class="control-input" id="passwordAnswer" placeholder="Número de contraseñas" style="width: 180px;">
+                    </div>
+                    
+                    <div class="formula-display" id="passwordFormula">
+                        P(6,4) = 6×5×4×3 = 360 contraseñas posibles
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkPasswordAnswer()">🔐 Verificar</button>
+                        <button class="casino-btn secondary-btn" onclick="newPasswordProblem()">🔄 Nuevo Código</button>
+                        <button class="casino-btn secondary-btn" onclick="showPasswordHint()">💡 Pista</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="passwordResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+         // Redirige si no hay usuario autenticado
+        if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
+            window.location.href = "complete-login-html.html";
+        }
+        // Estado del juego
+        let gameState = {
+            chips: 1000,
+            level: 1,
+            wins: 0,
+            totalGames: 0,
+            achievements: [],
+            currentProblems: {
+                team: { n: 12, r: 4, answer: 495 },
+                password: { n: 6, r: 4, answer: 360, type: 'permutation' }
+            }
+        };
+
+        // Logros disponibles
+        const achievements = [
+            { id: 'first_win', name: 'Primera Victoria', icon: '🎯', unlocked: false },
+            { id: 'combo_master', name: 'Maestro Combinaciones', icon: '🎲', unlocked: false },
+            { id: 'prob_expert', name: 'Experto Probabilidad', icon: '📊', unlocked: false },
+            { id: 'team_leader', name: 'Líder de Equipos', icon: '👥', unlocked: false },
+            { id: 'security_expert', name: 'Experto Seguridad', icon: '🔐', unlocked: false },
+            { id: 'mathematician', name: 'Matemático VIP', icon: '🧮', unlocked: false }
+        ];
+
+        // Problemas predefinidos para variedad
+        const teamProblems = [
+            { text: "De un grupo de 12 estudiantes, ¿cuántas maneras hay de formar un equipo de 4?", n: 12, r: 4 },
+            { text: "Un club con 15 miembros necesita elegir 5 para el comité directivo. ¿Cuántas formas hay?", n: 15, r: 5 },
+            { text: "De 20 libros, ¿de cuántas maneras se pueden seleccionar 6 para una exhibición?", n: 20, r: 6 },
+            { text: "En una clase de 25 estudiantes, ¿cuántas maneras hay de formar grupos de 3?", n: 25, r: 3 }
+        ];
+
+        const passwordProblems = [
+            { text: "¿Cuántas contraseñas de 4 dígitos se pueden formar con {1,2,3,4,5,6} sin repetición?", n: 6, r: 4, type: 'permutation' },
+            { text: "¿Cuántos códigos de 3 letras se pueden formar con las letras A,B,C,D,E sin repetir?", n: 5, r: 3, type: 'permutation' },
+            { text: "De 8 colores disponibles, ¿cuántas secuencias de 5 colores diferentes se pueden crear?", n: 8, r: 5, type: 'permutation' },
+            { text: "¿Cuántas maneras hay de organizar 4 personas en una fila de 7 asientos disponibles?", n: 7, r: 4, type: 'permutation' }
+        ];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            createCasinoEffects();
+            updateCombinationsGame();
+            updateDiceGame();
+            newTeamProblem();
+            newPasswordProblem();
+            updateUI();
+        });
+
+        // Crear efectos visuales del casino
+        function createCasinoEffects() {
+            // Luces del casino
+            const lightsContainer = document.querySelector('.casino-lights');
+            for (let i = 0; i < 100; i++) {
+                const light = document.createElement('div');
+                light.className = 'light';
+                light.style.left = Math.random() * 100 + '%';
+                light.style.top = Math.random() * 100 + '%';
+                light.style.animationDelay = Math.random() * 2 + 's';
+                light.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                lightsContainer.appendChild(light);
+            }
+
+            // Cartas flotantes
+            const cardsContainer = document.querySelector('.floating-cards');
+            for (let i = 0; i < 15; i++) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.left = Math.random() * 100 + '%';
+                card.style.animationDelay = Math.random() * 15 + 's';
+                card.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                cardsContainer.appendChild(card);
+            }
+        }
+
+        // === JUEGO DE COMBINACIONES BÁSICAS ===
+        function updateCombinationsGame() {
+            const n = parseInt(document.getElementById('combN').value) || 5;
+            const r = parseInt(document.getElementById('combR').value) || 3;
+            const type = document.getElementById('combType').value;
+            
+            // Validar entrada
+            if (r > n) {
+                document.getElementById('combR').value = n;
+                return;
+            }
+            
+            const symbol = type === 'combination' ? 'C' : 'P';
+            document.getElementById('combProblem').textContent = `${symbol}(${n},${r}) = ?`;
+            
+            // Actualizar pasos explicativos
+            const stepsContainer = document.getElementById('combSteps');
+            if (type === 'combination') {
+                stepsContainer.innerHTML = `
+                    <h4 style="color: #ffd700; margin-bottom: 15px;">Combinación - El orden NO importa:</h4>
+                    <div class="step">1. Usamos C(n,r) = n!/(r!(n-r)!)</div>
+                    <div class="step">2. C(${n},${r}) = ${n}!/(${r}!×${n-r}!)</div>
+                    <div class="step">3. Simplificamos y calculamos</div>
+                `;
+                document.getElementById('combFormula').innerHTML = `C(${n},${r}) = ${n}!/(${r}!×${n-r}!)`;
+            } else {
+                stepsContainer.innerHTML = `
+                    <h4 style="color: #ffd700; margin-bottom: 15px;">Permutación - El orden SÍ importa:</h4>
+                    <div class="step">1. Usamos P(n,r) = n!/(n-r)!</div>
+                    <div class="step">2. P(${n},${r}) = ${n}!/(${n-r})!</div>
+                    <div class="step">3. Multiplicamos desde n hasta (n-r+1)</div>
+                `;
+                document.getElementById('combFormula').innerHTML = `P(${n},${r}) = ${n}!/(${n-r})! = ${generatePermutationCalc(n,r)}`;
+            }
+        }
+
+        function generatePermutationCalc(n, r) {
+            let calc = '';
+            for (let i = n; i > n - r; i--) {
+                calc += i;
+                if (i > n - r + 1) calc += '×';
+            }
+            return calc;
+        }
+
+        function checkCombinationsAnswer() {
+            const n = parseInt(document.getElementById('combN').value);
+            const r = parseInt(document.getElementById('combR').value);
+            const type = document.getElementById('combType').value;
+            const userAnswerText = document.getElementById('combAnswer').value.trim();
+            
+            if (!userAnswerText) {
+                showNotification('Por favor ingresa tu respuesta', 'error');
+                return;
+            }
+            
+            const userAnswer = parseInt(userAnswerText);
+            if (isNaN(userAnswer)) {
+                showNotification('Por favor ingresa un número válido', 'error');
+                return;
+            }
+            
+            const correctAnswer = type === 'combination' ? combination(n, r) : permutation(n, r);
+            const isCorrect = userAnswer === correctAnswer;
+            
+            gameState.totalGames++;
+            
+            if (isCorrect) {
+                gameState.wins++;
+                gameState.chips += 75;
+                document.getElementById('combResult').className = 'result-display result-correct';
+                document.getElementById('combResult').textContent = 
+                    `¡Correcto! ${type === 'combination' ? 'C' : 'P'}(${n},${r}) = ${correctAnswer}. +75 fichas`;
+                checkAchievements('combinations');
+            } else {
+                gameState.chips = Math.max(0, gameState.chips - 35);
+                document.getElementById('combResult').className = 'result-display result-incorrect';
+                document.getElementById('combResult').textContent = 
+                    `Incorrecto. ${type === 'combination' ? 'C' : 'P'}(${n},${r}) = ${correctAnswer}. -35 fichas`;
+            }
+            
+            updateUI();
+        }
+
+        function showCombinationsHint() {
+            const type = document.getElementById('combType').value;
+            const hint = type === 'combination' ? 
+                'COMBINACIÓN: El orden NO importa. Ej: elegir 3 estudiantes de 10 para un proyecto. Usa C(n,r) = n!/(r!(n-r)!)' :
+                'PERMUTACIÓN: El orden SÍ importa. Ej: ordenar 3 personas en una fila. Usa P(n,r) = n!/(n-r)!';
+            showNotification(hint, 'info');
+        }
+
+        function newCombinationsProblem() {
+            const n = Math.floor(Math.random() * 15) + 5; // 5-20
+            const r = Math.floor(Math.random() * Math.min(n, 8)) + 1; // 1-min(n,8)
+            
+            document.getElementById('combN').value = n;
+            document.getElementById('combR').value = r;
+            document.getElementById('combAnswer').value = '';
+            document.getElementById('combResult').textContent = '';
+            updateCombinationsGame();
+        }
+
+        // === JUEGO DE DADOS MEJORADO ===
+        function updateDiceGame() {
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            const targetSum = parseInt(document.getElementById('targetSum').value) || 7;
+            
+            // Actualizar límites del input según número de dados
+            const targetInput = document.getElementById('targetSum');
+            targetInput.min = diceCount;
+            targetInput.max = diceCount * 6;
+            
+            // Mostrar dados
+            const container = document.getElementById('diceContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < diceCount; i++) {
+                const dice = document.createElement('div');
+                dice.className = 'dice';
+                dice.textContent = '?';
+                container.appendChild(dice);
+            }
+            
+            // Actualizar display y pasos
+            document.getElementById('diceTarget').textContent = targetSum;
+            
+            const totalOutcomes = Math.pow(6, diceCount);
+            const favorableCases = countFavorableCases(diceCount, targetSum);
+            
+            document.getElementById('diceStep1').textContent = `1. Total de resultados: 6^${diceCount} = ${totalOutcomes}`;
+            document.getElementById('diceStep2').textContent = `2. Casos favorables para suma ${targetSum}: ${favorableCases}`;
+            document.getElementById('diceStep3').textContent = `3. Probabilidad = ${favorableCases}/${totalOutcomes}`;
+            
+            document.getElementById('diceFormula').innerHTML = 
+                `P(suma = ${targetSum}) = ${favorableCases}/${totalOutcomes}`;
+        }
+
+        function countFavorableCases(diceCount, targetSum) {
+            // Función recursiva para contar casos favorables
+            function count(dices, sum, current = 0) {
+                if (dices === 0) {
+                    return sum === 0 ? 1 : 0;
+                }
+                
+                let total = 0;
+                for (let i = 1; i <= 6; i++) {
+                    if (sum - i >= 0) {
+                        total += count(dices - 1, sum - i, current + i);
+                    }
+                }
+                return total;
+            }
+            
+            return count(diceCount, targetSum);
+        }
+
+        function rollDice() {
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            const diceElements = document.querySelectorAll('#diceContainer .dice');
+            
+            let sum = 0;
+            diceElements.forEach(dice => {
+                const value = Math.floor(Math.random() * 6) + 1;
+                dice.textContent = value;
+                sum += value;
+                
+                // Animación de giro
+                dice.style.transform = 'rotate(360deg)';
+                setTimeout(() => dice.style.transform = 'rotate(0deg)', 300);
+            });
+            
+            setTimeout(() => {
+                showNotification(`Resultado: ${sum}`, 'info');
+            }, 300);
+        }
+
+        function checkDiceAnswer() {
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            const targetSum = parseInt(document.getElementById('targetSum').value);
+            const userAnswer = document.getElementById('diceAnswer').value.trim();
+            
+            if (!userAnswer) {
+                showNotification('Por favor ingresa tu respuesta', 'error');
+                return;
+            }
+            
+            const totalOutcomes = Math.pow(6, diceCount);
+            const favorableCases = countFavorableCases(diceCount, targetSum);
+            const correctProb = favorableCases / totalOutcomes;
+            
+            const userProb = parseUserProbability(userAnswer);
+            
+            const tolerance = 0.01;
+            const isCorrect = Math.abs(userProb - correctProb) < tolerance;
+            
+            gameState.totalGames++;
+            
+            if (isCorrect) {
+                gameState.wins++;
+                gameState.chips += 60;
+                document.getElementById('diceResult').className = 'result-display result-correct';
+                document.getElementById('diceResult').textContent = 
+                    `¡Correcto! P = ${favorableCases}/${totalOutcomes} = ${(correctProb * 100).toFixed(2)}%. +60 fichas`;
+                checkAchievements('probability');
+            } else {
+                gameState.chips = Math.max(0, gameState.chips - 30);
+                document.getElementById('diceResult').className = 'result-display result-incorrect';
+                document.getElementById('diceResult').textContent = 
+                    `Incorrecto. P = ${favorableCases}/${totalOutcomes} = ${(correctProb * 100).toFixed(2)}%. -30 fichas`;
+            }
+            
+            updateUI();
+        }
+
+        function showDiceHint() {
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            const targetSum = parseInt(document.getElementById('targetSum').value);
+            
+            let hint = `Para ${diceCount} dados y suma ${targetSum}: `;
+            if (diceCount === 2 && targetSum === 7) {
+                hint += 'Las combinaciones son: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) = 6 casos de 36 posibles.';
+            } else {
+                hint += `Lista todas las combinaciones posibles que sumen ${targetSum} y divide por ${Math.pow(6, diceCount)}.`;
+            }
+            
+            showNotification(hint, 'info');
+        }
+
+        // === JUEGO DE EQUIPOS ===
+        function newTeamProblem() {
+            const problemIndex = Math.floor(Math.random() * teamProblems.length);
+            const problem = teamProblems[problemIndex];
+            
+            gameState.currentProblems.team = {
+                n: problem.n,
+                r: problem.r,
+                answer: combination(problem.n, problem.r),
+                text: problem.text
+            };
+            
+            document.getElementById('teamProblem').textContent = problem.text;
+            document.getElementById('teamSteps').innerHTML = `
+                <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis:</h4>
+                <div class="step">1. ¿Importa el orden de selección? NO</div>
+                <div class="step">2. Por tanto, usamos combinaciones</div>
+                <div class="step">3. C(${problem.n},${problem.r}) = ${problem.n}!/(${problem.r}!×${problem.n-problem.r}!)</div>
+            `;
+            document.getElementById('teamFormula').innerHTML = `C(${problem.n},${problem.r}) = ${generateCombinationCalc(problem.n, problem.r)}`;
+            document.getElementById('teamAnswer').value = '';
+            document.getElementById('teamResult').textContent = '';
+        }
+
+        function generateCombinationCalc(n, r) {
+            const result = combination(n, r);
+            if (n <= 10 && r <= 5) {
+                let numerator = '';
+                for (let i = n; i > n - r; i--) {
+                    numerator += i;
+                    if (i > n - r + 1) numerator += '×';
+                }
+                let denominator = '';
+                for (let i = r; i > 0; i--) {
+                    denominator += i;
+                    if (i > 1) denominator += '×';
+                }
+                return `(${numerator})/(${denominator}) = ${result}`;
+            }
+            return result.toString();
+        }
+
+        function checkTeamAnswer() {
+            const userAnswerText = document.getElementById('teamAnswer').value.trim();
+            
+            if (!userAnswerText) {
+                showNotification('Por favor ingresa tu respuesta', 'error');
+                return;
+            }
+            
+            const userAnswer = parseInt(userAnswerText);
+            if (isNaN(userAnswer)) {
+                showNotification('Por favor ingresa un número válido', 'error');
+                return;
+            }
+            
+            const correctAnswer = gameState.currentProblems.team.answer;
+            const isCorrect = userAnswer === correctAnswer;
+            gameState.totalGames++;
+            
+            if (isCorrect) {
+                gameState.wins++;
+                gameState.chips += 100;
+                document.getElementById('teamResult').className = 'result-display result-correct';
+                document.getElementById('teamResult').textContent = 
+                    `¡Correcto! Hay ${correctAnswer} maneras diferentes. +100 fichas`;
+                checkAchievements('teams');
+            } else {
+                gameState.chips = Math.max(0, gameState.chips - 50);
+                document.getElementById('teamResult').className = 'result-display result-incorrect';
+                document.getElementById('teamResult').textContent = 
+                    `Incorrecto. La respuesta correcta es ${correctAnswer}. -50 fichas`;
+            }
+            
+            updateUI();
+        }
+
+        function showTeamHint() {
+            const problem = gameState.currentProblems.team;
+            showNotification(`Pista: Como el orden no importa al formar el equipo, usa combinaciones. C(${problem.n},${problem.r}) = ${problem.n}!/(${problem.r}!×${problem.n-problem.r}!)`, 'info');
+        }
+
+        // === JUEGO DE CONTRASEÑAS ===
+        function newPasswordProblem() {
+            const problemIndex = Math.floor(Math.random() * passwordProblems.length);
+            const problem = passwordProblems[problemIndex];
+            
+            gameState.currentProblems.password = {
+                n: problem.n,
+                r: problem.r,
+                answer: permutation(problem.n, problem.r),
+                text: problem.text,
+                type: problem.type
+            };
+            
+            document.getElementById('passwordProblem').textContent = problem.text;
+            document.getElementById('passwordSteps').innerHTML = `
+                <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis de Permutaciones:</h4>
+                <div class="step">1. ¿Importa el orden? SÍ (1234 ≠ 4321)</div>
+                <div class="step">2. ¿Hay repetición? NO</div>
+                <div class="step">3. P(${problem.n},${problem.r}) = ${problem.n}!/(${problem.n-problem.r})!</div>
+            `;
+            document.getElementById('passwordFormula').innerHTML = `P(${problem.n},${problem.r}) = ${generatePermutationCalc(problem.n, problem.r)} = ${permutation(problem.n, problem.r)}`;
+            document.getElementById('passwordAnswer').value = '';
+            document.getElementById('passwordResult').textContent = '';
+        }
+
+        function checkPasswordAnswer() {
+            const userAnswerText = document.getElementById('passwordAnswer').value.trim();
+            
+            if (!userAnswerText) {
+                showNotification('Por favor ingresa tu respuesta', 'error');
+                return;
+            }
+            
+            const userAnswer = parseInt(userAnswerText);
+            if (isNaN(userAnswer)) {
+                showNotification('Por favor ingresa un número válido', 'error');
+                return;
+            }
+            
+            const correctAnswer = gameState.currentProblems.password.answer;
+            const isCorrect = userAnswer === correctAnswer;
+            gameState.totalGames++;
+            
+            if (isCorrect) {
+                gameState.wins++;
+                gameState.chips += 125;
+                document.getElementById('passwordResult').className = 'result-display result-correct';
+                document.getElementById('passwordResult').textContent = 
+                    `¡Correcto! Hay ${correctAnswer} posibilidades. +125 fichas`;
+                checkAchievements('security');
+            } else {
+                gameState.chips = Math.max(0, gameState.chips - 60);
+                document.getElementById('passwordResult').className = 'result-display result-incorrect';
+                document.getElementById('passwordResult').textContent = 
+                    `Incorrecto. La respuesta correcta es ${correctAnswer}. -60 fichas`;
+            }
+            
+            updateUI();
+        }
+
+        function showPasswordHint() {
+            const problem = gameState.currentProblems.password;
+            showNotification(`Pista: El orden importa en contraseñas y códigos. Usa permutaciones. P(${problem.n},${problem.r}) = ${problem.n}×${problem.n-1}×${problem.n-2}...`, 'info');
+        }
+
+        // === FUNCIONES MATEMÁTICAS ===
+        function combination(n, r) {
+            if (r > n) return 0;
+            if (r === 0 || r === n) return 1;
+            
+            // Optimización: C(n,r) = C(n,n-r)
+            r = Math.min(r, n - r);
+            
+            let result = 1;
+            for (let i = 0; i < r; i++) {
+                result = result * (n - i) / (i + 1);
+            }
+            return Math.round(result);
+        }
+
+        function permutation(n, r) {
+            if (r > n) return 0;
+            if (r === 0) return 1;
+            
+            let result = 1;
+            for (let i = n; i > n - r; i--) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function parseUserProbability(input) {
+            // Parsear fracciones como 6/36, decimales como 0.167
+            input = input.toLowerCase().replace(/[%\s]/g, '');
+            
+            if (input.includes('/')) {
+                const parts = input.split('/');
+                return parseFloat(parts[0]) / parseFloat(parts[1]);
+            } else if (parseFloat(input) > 1) {
+                return parseFloat(input) / 100;
+            } else {
+                return parseFloat(input);
+            }
+        }
+
+        // === SISTEMA DE LOGROS ===
+        function checkAchievements(gameType) {
+            // Primera victoria
+            if (gameState.wins === 1 && !achievements[0].unlocked) {
+                unlockAchievement(0);
+            }
+            
+            // Maestros de cada tipo de juego
+            if (gameType === 'combinations' && gameState.wins >= 3 && !achievements[1].unlocked) {
+                unlockAchievement(1);
+            }
+            if (gameType === 'probability' && gameState.wins >= 5 && !achievements[2].unlocked) {
+                unlockAchievement(2);
+            }
+            if (gameType === 'teams' && gameState.wins >= 7 && !achievements[3].unlocked) {
+                unlockAchievement(3);
+            }
+            if (gameType === 'security' && gameState.wins >= 10 && !achievements[4].unlocked) {
+                unlockAchievement(4);
+            }
+            
+            // Matemático VIP
+            if (gameState.wins >= 15 && !achievements[5].unlocked) {
+                unlockAchievement(5);
+            }
+        }
+
+        function unlockAchievement(index) {
+            achievements[index].unlocked = true;
+            gameState.chips += 200;
+            showNotification(`¡Logro desbloqueado: ${achievements[index].name} ${achievements[index].icon}! +200 fichas bonus`, 'success');
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('chips').textContent = gameState.chips.toLocaleString();
+            document.getElementById('level').textContent = Math.floor(gameState.chips / 1000) + 1;
+            document.getElementById('wins').textContent = gameState.wins;
+            
+            const accuracy = gameState.totalGames > 0 ? 
+                Math.round((gameState.wins / gameState.totalGames) * 100) : 100;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            // Actualizar logros
+            const achievementsContainer = document.getElementById('achievements');
+            achievementsContainer.innerHTML = '';
+            achievements.forEach(achievement => {
+                if (achievement.unlocked) {
+                    const elem = document.createElement('div');
+                    elem.className = 'achievement';
+                    elem.textContent = achievement.icon;
+                    elem.title = achievement.name;
+                    achievementsContainer.appendChild(elem);
+                }
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '10px';
+            notification.style.fontWeight = '600';
+            notification.style.zIndex = '1000';
+            notification.style.maxWidth = '400px';
+            notification.style.transform = 'translateX(100%)';
+            notification.style.transition = 'transform 0.5s ease';
+            notification.style.fontSize = '14px';
+            notification.style.lineHeight = '1.4';
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+                notification.style.color = 'black';
+                notification.style.boxShadow = '0 5px 15px rgba(0, 255, 0, 0.3)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(45deg, #ff4444, #cc0000)';
+                notification.style.color = 'white';
+                notification.style.boxShadow = '0 5px 15px rgba(255, 68, 68, 0.3)';
+            } else {
+                notification.style.background = 'linear-gradient(45deg, #ffd700, #ffed4e)';
+                notification.style.color = 'black';
+                notification.style.boxShadow = '0 5px 15px rgba(255, 215, 0, 0.3)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 500);
+            }, 4500);
+        }
+
+        // Eventos de redimensionamiento
+        window.addEventListener('resize', updateUI);
+    </script>
+</body>
+</html>
