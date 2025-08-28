@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Estadístico - Grado 9°</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+  <link rel="stylesheet" href="/assets/css/games/laboratorio_estadistico.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Laboratorio Estadístico</h1>
+            <p>Explora el mundo de la estadística descriptiva - Grado 9°</p>
+        </div>
+
+        <div class="game-container">
+            <!-- Panel de estadísticas del juego -->
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <div class="stat-value" id="experimentsCount">0</div>
+                    <div class="stat-label">Experimentos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="dataPointsCount">0</div>
+                    <div class="stat-label">Datos Ingresados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="correctAnswers">0</div>
+                    <div class="stat-label">Respuestas Correctas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="currentScore">0</div>
+                    <div class="stat-label">Puntuación</div>
+                </div>
+            </div>
+
+            <!-- Sección 1: Ingreso de Datos -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">1</span>
+                    Recolección de Datos
+                </h3>
+                
+                <div class="data-input-area">
+                    <div class="input-group">
+                        <label for="dataValue">Nuevo Valor:</label>
+                        <input type="number" id="dataValue" placeholder="Ingresa un número" step="0.01">
+                    </div>
+                    <button class="btn" onclick="addDataPoint()">Agregar Dato</button>
+                    <button class="btn btn-secondary" onclick="generateRandomData()">Datos Aleatorios</button>
+                    <button class="btn btn-danger" onclick="clearData()">Limpiar Todo</button>
+                </div>
+
+                <div class="data-display">
+                    <h4>Conjunto de Datos Actual:</h4>
+                    <div class="data-values" id="dataValues"></div>
+                    <p><strong>Cantidad de datos:</strong> <span id="dataCount">0</span></p>
+                </div>
+            </div>
+
+            <!-- Sección 2: Cálculos Estadísticos -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">2</span>
+                    Análisis Estadístico
+                </h3>
+                
+                <button class="btn" onclick="calculateStatistics()">Calcular Estadísticas</button>
+                
+                <div class="results-grid" id="statisticsResults"></div>
+            </div>
+
+            <!-- Sección 3: Visualización -->
+            <div class="lab-section">
+                <h3 class="section-title">
+                    <span class="section-icon">3</span>
+                    Visualización de Datos
+                </h3>
+                
+                <div class="data-input-area">
+                    <div class="input-group">
+                        <label for="chartType">Tipo de Gráfico:</label>
+                        <select id="chartType">
+                            <option value="histogram">Histograma</option>
+                            <option value="boxplot">Diagrama de Cajas</option>
+                            <option value="line">Gráfico de Línea</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="createChart()">Generar Gráfico</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="dataChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Sección 4: Ejercicios Interactivos -->
+            <div class="exercises-section">
+                <h3 class="section-title">
+                    <span class="section-icon">4</span>
+                    Desafíos Estadísticos
+                </h3>
+                
+                <div id="exerciseContainer">
+                    <!-- Los ejercicios se cargarán aquí dinámicamente -->
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/laboratorio_estadistico.js" defer></script>
+</body>
+</html>

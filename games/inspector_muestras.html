@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspector de Muestras - Grado 10°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/inspector_muestras.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Inspector de Muestras</h1>
+            <p>Aprende estadística inferencial analizando poblaciones y muestras</p>
+            <div class="stats-bar">
+                <div class="stat">🎯 Nivel: <span id="level">1</span></div>
+                <div class="stat">⭐ Puntos: <span id="points">0</span></div>
+                <div class="stat">🧪 Experimentos: <span id="experiments">0</span></div>
+                <div class="stat">🏆 Aciertos: <span id="correct">0</span>/5</div>
+            </div>
+        </div>
+        
+        <div class="main-layout">
+            <div class="sidebar">
+                <h3>🎯 Escenarios de Investigación</h3>
+                <div class="scenario-selector" id="scenarios">
+                    <!-- Los escenarios se generarán con JavaScript -->
+                </div>
+                
+                <div class="sampling-controls">
+                    <h4 style="color: #2d3748; margin-bottom: 15px; text-align: center;">⚙️ Configuración de Muestra</h4>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Tamaño de Muestra (n)</label>
+                        <input type="range" class="control-input" id="sampleSize" min="10" max="200" value="30">
+                        <div style="text-align: center; color: #4a5568; font-weight: bold; margin-top: 5px;">
+                            n = <span id="sampleSizeValue">30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Nivel de Confianza</label>
+                        <select class="control-input" id="confidenceLevel">
+                            <option value="90">90%</option>
+                            <option value="95" selected>95%</option>
+                            <option value="99">99%</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="takeSample()">🎲 Tomar Muestra</button>
+                </div>
+            </div>
+            
+            <div class="lab-area">
+                <h2>🧪 Laboratorio Estadístico</h2>
+                
+                <div class="population-display">
+                    <h3 style="color: #2d3748; margin-bottom: 15px;">👥 Población Objetivo</h3>
+                    <div id="populationDescription">
+                        Selecciona un escenario de investigación para comenzar
+                    </div>
+                    <div class="population-info" id="populationInfo">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="sample-display" id="sampleDisplay" style="display: none;">
+                    <h3 style="color: #744210; margin-bottom: 15px; text-align: center;">📋 Muestra Obtenida</h3>
+                    <div class="sample-points" id="samplePoints">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="chart-container" id="chartContainer" style="display: none;">
+                    <h4 style="color: #2d3748; text-align: center; margin-bottom: 15px;">📊 Distribución de la Muestra</h4>
+                    <div class="histogram" id="histogram">
+                        <!-- Se generará con JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="analysis-panel">
+                <h3>📈 Análisis Estadístico</h3>
+                
+                <div class="statistics-summary" id="statisticsSummary" style="display: none;">
+                    <h4 style="color: #2d3748; text-align: center; margin-bottom: 15px;">📋 Estadísticas de la Muestra</h4>
+                    <div id="sampleStats">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                    <div class="confidence-interval" id="confidenceInterval">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="problem-section" id="problemSection" style="display: none;">
+                    <h4 style="color: #2d3748; text-align: center; margin-bottom: 15px;">🧮 Pregunta de Análisis</h4>
+                    <div class="problem-text" id="problemText">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                    <div class="answer-options" id="answerOptions">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                    <div class="feedback" id="feedback" style="display: none;">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+                </div>
+                
+                <button class="btn success" onclick="newExperiment()" style="margin-top: 20px;">🔄 Nuevo Experimento</button>
+            </div>
+        </div>
+    </div>
+
+    
+    
+    
+  <script src="/assets/js/games/inspector_muestras.js" defer></script>
+</body>
+</html>

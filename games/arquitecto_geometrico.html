@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+       <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitecto Geométrico - Grado 7°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/arquitecto_geometrico.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Arquitecto Geométrico</h1>
+            <p>Construye edificios increíbles mientras aprendes geometría</p>
+            <div class="stats-bar">
+                <div class="stat">🏢 Edificios: <span id="buildings">0</span></div>
+                <div class="stat">🎯 Nivel: <span id="level">1</span></div>
+                <div class="stat">⭐ Puntos: <span id="points">0</span></div>
+                <div class="stat">🏆 Aciertos: <span id="correct">0</span>/3</div>
+            </div>
+        </div>
+        
+        <div class="game-layout">
+            <div class="tools-panel">
+                <h3>🔧 Herramientas</h3>
+                <div class="shape-tools">
+                    <button class="shape-tool active" data-shape="rectangle">📐 Rectángulo</button>
+                    <button class="shape-tool" data-shape="square">⬜ Cuadrado</button>
+                    <button class="shape-tool" data-shape="circle">⭕ Círculo</button>
+                    <button class="shape-tool" data-shape="triangle">🔺 Triángulo</button>
+                </div>
+                
+                <div class="shape-info" id="shapeInfo">
+                    <h4>Rectángulo</h4>
+                    <div class="formula">Área = base × altura</div>
+                    <div class="formula">Perímetro = 2(b + h)</div>
+                </div>
+                
+                <div class="building-gallery">
+                    <h4>🏗️ Mis Edificios</h4>
+                    <div class="buildings" id="buildingsGallery">
+                        <div style="text-align: center; color: #718096; width: 100%;">¡Construye tu primer edificio!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="blueprint">
+                <h2>📋 Plano de Construcción</h2>
+                <div class="canvas-area" id="canvas">
+                    <div class="empty-canvas-message">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🏗️</div>
+                        <div>Haz clic y arrastra para crear figuras</div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="clearCanvas()">🗑️ Limpiar</button>
+                    <button class="btn success" onclick="saveBuilding()">💾 Guardar Edificio</button>
+                    <button class="btn" onclick="generateProblem()">🎲 Nuevo Desafío</button>
+                </div>
+            </div>
+            
+            <div class="problem-panel">
+                <h3>🧮 Desafío Geométrico</h3>
+                <div class="problem-text" id="problemText">
+                    ¡Crea figuras geométricas para comenzar!
+                </div>
+                <div class="answer-section">
+                    <input type="number" class="answer-input" id="answerInput" placeholder="Tu respuesta" step="0.01">
+                    <button class="btn" onclick="checkAnswer()">✅ Verificar</button>
+                </div>
+                <div class="feedback" id="feedback" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/arquitecto_geometrico.js" defer></script>
+</body>
+</html>

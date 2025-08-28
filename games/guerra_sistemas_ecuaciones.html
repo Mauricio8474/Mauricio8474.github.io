@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guerra de Sistemas de Ecuaciones - Grado 9°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/guerra_sistemas_ecuaciones.css">
+</head>
+<body>
+    <div class="battlefield">
+        <div class="container">
+            <div class="header">
+                <h1>⚔️ GUERRA DE SISTEMAS</h1>
+                <p class="subtitle">Derrota al enemigo resolviendo sistemas de ecuaciones</p>
+            </div>
+
+            <div class="timer" id="timer">⏱️ 00:00</div>
+            <div class="combo-counter" id="combo" style="display: none;">🔥 Combo x<span id="comboValue">0</span></div>
+
+            <div class="battle-stats">
+                <div class="stat-card">
+                    <span class="stat-icon">🏆</span>
+                    <div class="stat-value" id="victories">0</div>
+                    <div class="stat-label">Victorias</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⚡</span>
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">Racha</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🎯</span>
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">Precisión</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">💎</span>
+                    <div class="stat-value" id="points">0</div>
+                    <div class="stat-label">Puntos</div>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <!-- Sección del Jugador -->
+                <div class="player-section">
+                    <h2 class="section-title">👤 Tu Ejército</h2>
+                    <div class="health-text">Vida: <span id="playerHealthText">100/100</span></div>
+                    <div class="health-bar">
+                        <div class="health-fill player-health" id="playerHealth" style="width: 100%"></div>
+                    </div>
+
+                    <div class="equation-panel">
+                        <div class="current-equation" id="currentEquation">
+                            <div class="equation-line">2x + 3y = 7</div>
+                            <div class="equation-line">x - y = 1</div>
+                        </div>
+
+                        <div class="method-selector">
+                            <button class="method-btn active" onclick="selectMethod('substitution')">Sustitución</button>
+                            <button class="method-btn" onclick="selectMethod('elimination')">Eliminación</button>
+                            <button class="method-btn" onclick="selectMethod('graphical')">Gráfico</button>
+                        </div>
+
+                        <div class="step-by-step" id="solutionSteps"></div>
+
+                        <div class="solution-input">
+                            <div class="input-group">
+                                <label for="xValue">Valor de X:</label>
+                                <input type="number" id="xValue" step="0.1" placeholder="x = ?">
+                            </div>
+                            <div class="input-group">
+                                <label for="yValue">Valor de Y:</label>
+                                <input type="number" id="yValue" step="0.1" placeholder="y = ?">
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="attack()">⚔️ Atacar</button>
+                            <button class="btn btn-secondary" onclick="showHint()">💡 Pista</button>
+                            <button class="btn" onclick="newEquation()">🔄 Nueva Batalla</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección del Enemigo -->
+                <div class="enemy-section">
+                    <h2 class="section-title">🏴‍☠️ Ejército Enemigo</h2>
+                    <div class="health-text">Vida: <span id="enemyHealthText">100/100</span></div>
+                    <div class="health-bar">
+                        <div class="health-fill enemy-health" id="enemyHealth" style="width: 100%"></div>
+                    </div>
+
+                    <div class="equation-panel">
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;" id="enemyIcon">👹</div>
+                            <h3 id="enemyName">General Álgebra</h3>
+                            <p id="enemyStatus">Esperando tu movimiento...</p>
+                            <div style="margin-top: 20px;">
+                                <div style="font-size: 1.2rem; color: #ff6b6b;" id="enemyPower">
+                                    💪 Poder: <span id="enemyPowerValue">100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log de Batalla -->
+            <div class="battle-log">
+                <h3>📜 Registro de Batalla</h3>
+                <div id="logEntries"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Victoria -->
+    <div class="victory-screen" id="victoryScreen">
+        <div class="victory-content">
+            <h2 class="victory-title" id="victoryTitle">¡VICTORIA!</h2>
+            <p id="victoryMessage">Has derrotado al General Álgebra</p>
+            <div id="victoryStats"></div>
+            <button class="btn btn-primary" onclick="nextBattle()" style="margin-top: 20px;">
+                ⚔️ Siguiente Batalla
+            </button>
+            <button class="btn btn-secondary" onclick="closeVictory()" style="margin-top: 10px;">
+                📊 Continuar Entrenando
+            </button>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/guerra_sistemas_ecuaciones.js" defer></script>
+</body>
+</html>

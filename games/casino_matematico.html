@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Matemático - Grado 11°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/casino_matematico.css">
+</head>
+<body>
+    <div class="casino-lights"></div>
+    <div class="floating-cards"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">CASINO MATEMÁTICO</h1>
+            <p class="subtitle">Domina la combinatoria y probabilidad en el casino más exclusivo</p>
+            
+            <div class="player-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="chips">1000</div>
+                    <div class="stat-label">Fichas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="level">1</div>
+                    <div class="stat-label">Nivel VIP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="wins">0</div>
+                    <div class="stat-label">Victorias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="accuracy">100%</div>
+                    <div class="stat-label">Precisión</div>
+                </div>
+            </div>
+            
+            <div class="achievements" id="achievements"></div>
+        </div>
+
+        <div class="games-grid">
+            <!-- Juego de Combinaciones Básicas -->
+            <div class="game-card">
+                <h2 class="game-title">🎲 Mesa de Combinaciones</h2>
+                <p class="game-description">Aprende la diferencia entre permutaciones y combinaciones</p>
+                
+                <div class="game-content">
+                    <div class="controls">
+                        <input type="number" class="control-input" id="combN" placeholder="Total (n)" min="1" max="20" value="5" onchange="updateCombinationsGame()">
+                        <input type="number" class="control-input" id="combR" placeholder="Elegir (r)" min="0" max="20" value="3" onchange="updateCombinationsGame()">
+                        <select class="control-input" id="combType" onchange="updateCombinationsGame()">
+                            <option value="combination">Combinación C(n,r)</option>
+                            <option value="permutation">Permutación P(n,r)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="step-by-step" id="combSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Paso a paso:</h4>
+                        <div class="step">1. Identifica si el orden importa</div>
+                        <div class="step">2. Aplica la fórmula correspondiente</div>
+                        <div class="step">3. Calcula el resultado</div>
+                    </div>
+                    
+                    <div class="probability-display">
+                        <div id="combProblem">C(5,3) = ?</div>
+                        <div style="font-size: 1.2em; margin-top: 10px;">
+                            <input type="number" class="control-input" id="combAnswer" placeholder="Resultado" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="formula-display" id="combFormula">
+                        C(5,3) = 5!/(3!(5-3)!) = 5!/(3!×2!)
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkCombinationsAnswer()">🎯 Verificar</button>
+                        <button class="casino-btn secondary-btn" onclick="showCombinationsHint()">💡 Pista</button>
+                        <button class="casino-btn secondary-btn" onclick="newCombinationsProblem()">🔄 Nuevo Problema</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="combResult"></div>
+            </div>
+
+            <!-- Juego de Probabilidad con Dados -->
+            <div class="game-card">
+                <h2 class="game-title">🎲 Probabilidad con Dados</h2>
+                <p class="game-description">Calcula probabilidades con múltiples dados usando combinaciones</p>
+                
+                <div class="game-content">
+                    <div class="controls">
+                        <select class="control-input" id="diceCount" onchange="updateDiceGame()">
+                            <option value="1">1 Dado</option>
+                            <option value="2" selected>2 Dados</option>
+                            <option value="3">3 Dados</option>
+                        </select>
+                        <input type="number" class="control-input" id="targetSum" placeholder="Suma objetivo" min="2" max="18" value="7" onchange="updateDiceGame()">
+                    </div>
+                    
+                    <div class="dice-container" id="diceContainer"></div>
+                    
+                    <div class="step-by-step" id="diceSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis paso a paso:</h4>
+                        <div class="step" id="diceStep1">1. Total de resultados posibles</div>
+                        <div class="step" id="diceStep2">2. Casos favorables para la suma</div>
+                        <div class="step" id="diceStep3">3. Probabilidad = Casos favorables / Casos totales</div>
+                    </div>
+                    
+                    <div class="probability-display">
+                        <div>Probabilidad de obtener suma = <span id="diceTarget">7</span></div>
+                        <div style="font-size: 1.2em; margin-top: 10px;">
+                            <input type="text" class="control-input" id="diceAnswer" placeholder="Ej: 6/36 o 1/6" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="formula-display" id="diceFormula">
+                        P(suma = 7) = Casos favorables / Casos totales
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkDiceAnswer()">🎯 Apostar</button>
+                        <button class="casino-btn secondary-btn" onclick="rollDice()">🎲 Lanzar</button>
+                        <button class="casino-btn secondary-btn" onclick="showDiceHint()">💡 Pista</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="diceResult"></div>
+            </div>
+
+            <!-- Juego de Selección de Equipos -->
+            <div class="game-card">
+                <h2 class="game-title">👥 Formación de Equipos</h2>
+                <p class="game-description">Problemas prácticos de combinaciones en situaciones reales</p>
+                
+                <div class="game-content" id="teamContent">
+                    <div class="probability-display" id="teamProblem">
+                        De un grupo de 12 estudiantes, ¿cuántas maneras hay de formar un equipo de 4 para un proyecto?
+                    </div>
+                    
+                    <div class="step-by-step" id="teamSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis:</h4>
+                        <div class="step">1. ¿Importa el orden de selección? NO</div>
+                        <div class="step">2. Por tanto, usamos combinaciones</div>
+                        <div class="step">3. C(12,4) = 12!/(4!×8!)</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <input type="number" class="control-input" id="teamAnswer" placeholder="Número de equipos posibles" style="width: 200px;">
+                    </div>
+                    
+                    <div class="formula-display" id="teamFormula">
+                        C(12,4) = (12×11×10×9)/(4×3×2×1) = 11,880/24 = 495
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkTeamAnswer()">👥 Formar Equipo</button>
+                        <button class="casino-btn secondary-btn" onclick="newTeamProblem()">🔄 Nuevo Caso</button>
+                        <button class="casino-btn secondary-btn" onclick="showTeamHint()">💡 Ayuda</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="teamResult"></div>
+            </div>
+
+            <!-- Juego de Contraseñas -->
+            <div class="game-card">
+                <h2 class="game-title">🔐 Seguridad Digital</h2>
+                <p class="game-description">Calcula permutaciones para contraseñas y códigos de seguridad</p>
+                
+                <div class="game-content" id="passwordContent">
+                    <div class="probability-display" id="passwordProblem">
+                        ¿Cuántas contraseñas de 4 dígitos se pueden formar usando los números 1, 2, 3, 4, 5, 6 sin repetición?
+                    </div>
+                    
+                    <div class="step-by-step" id="passwordSteps">
+                        <h4 style="color: #ffd700; margin-bottom: 15px;">Análisis de Permutaciones:</h4>
+                        <div class="step">1. ¿Importa el orden? SÍ (1234 ≠ 4321)</div>
+                        <div class="step">2. ¿Hay repetición? NO</div>
+                        <div class="step">3. P(6,4) = 6!/(6-4)! = 6!/2!</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <input type="number" class="control-input" id="passwordAnswer" placeholder="Número de contraseñas" style="width: 180px;">
+                    </div>
+                    
+                    <div class="formula-display" id="passwordFormula">
+                        P(6,4) = 6×5×4×3 = 360 contraseñas posibles
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="casino-btn" onclick="checkPasswordAnswer()">🔐 Verificar</button>
+                        <button class="casino-btn secondary-btn" onclick="newPasswordProblem()">🔄 Nuevo Código</button>
+                        <button class="casino-btn secondary-btn" onclick="showPasswordHint()">💡 Pista</button>
+                    </div>
+                </div>
+                
+                <div class="result-display" id="passwordResult"></div>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/casino_matematico.js" defer></script>
+</body>
+</html>

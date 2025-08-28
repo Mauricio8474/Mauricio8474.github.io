@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Virtual - Grado 7°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/mercado_virtual.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Mercado Virtual</h1>
+            <p>Aprende proporciones y porcentajes comprando en nuestro mercado</p>
+            <div class="stats-bar">
+                <div class="stat">💰 Dinero: $<span id="money">10000</span></div>
+                <div class="stat">🎯 Nivel: <span id="level">1</span></div>
+                <div class="stat">⭐ Puntos: <span id="points">0</span></div>
+                <div class="stat">🏆 Aciertos: <span id="correct">0</span>/5</div>
+            </div>
+        </div>
+        
+        <div class="level-indicator">
+            <h3>Progreso del Nivel</h3>
+            <div class="level-bar">
+                <div class="level-progress" id="levelProgress"></div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="market">
+                <h2>🛒 Productos Disponibles</h2>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Los productos se generarán con JavaScript -->
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="cart">
+                    <h3>🛍️ Mi Carrito</h3>
+                    <div class="cart-items" id="cartItems">
+                        <p style="text-align: center; color: #718096;">Tu carrito está vacío</p>
+                    </div>
+                    <div class="total" id="cartTotal">Total: $0</div>
+                    <button class="btn" onclick="clearCart()">Vaciar Carrito</button>
+                </div>
+                
+                <div class="problem">
+                    <h3>🧮 Desafío Matemático</h3>
+                    <div class="problem-text" id="problemText">
+                        ¡Selecciona productos para comenzar!
+                    </div>
+                    <div class="answer-section">
+                        <input type="number" class="answer-input" id="answerInput" placeholder="Tu respuesta aquí">
+                        <button class="btn" onclick="checkAnswer()">Verificar Respuesta</button>
+                    </div>
+                    <div class="feedback" id="feedback" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/mercado_virtual.js" defer></script>
+</body>
+</html>

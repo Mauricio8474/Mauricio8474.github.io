@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficador Espacial - Grado 9°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/graficador_espacial.css">
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">GRAFICADOR ESPACIAL</h1>
+            <p class="subtitle">Explora las funciones lineales y cuadráticas en el espacio matemático</p>
+            
+            <div class="game-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="score">0</div>
+                    <div class="stat-label">Puntos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="level">1</div>
+                    <div class="stat-label">Nivel</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="challenges">0</div>
+                    <div class="stat-label">Desafíos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="streak">0</div>
+                    <div class="stat-label">Racha</div>
+                </div>
+            </div>
+            
+            <div class="achievements" id="achievements"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h2 class="section-title">Panel de Control</h2>
+                
+                <div class="function-selector">
+                    <button class="function-btn active" onclick="selectFunction('linear')" id="linearBtn">
+                        Lineal
+                    </button>
+                    <button class="function-btn" onclick="selectFunction('quadratic')" id="quadraticBtn">
+                        Cuadrática
+                    </button>
+                </div>
+
+                <div class="current-equation" id="currentEquation">
+                    y = x
+                </div>
+
+                <div class="parameter-controls" id="parameterControls">
+                    <div class="parameter-group">
+                        <label class="parameter-label">Pendiente (m)</label>
+                        <input type="range" class="slider" min="-5" max="5" step="0.1" value="1" 
+                               onInput="updateParameter('m', this.value)" id="mSlider">
+                        <input type="number" class="parameter-input" min="-5" max="5" step="0.1" value="1" 
+                               onInput="updateParameter('m', this.value)" id="mInput">
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="parameter-label">Intersección Y (b)</label>
+                        <input type="range" class="slider" min="-10" max="10" step="0.1" value="0" 
+                               onInput="updateParameter('b', this.value)" id="bSlider">
+                        <input type="number" class="parameter-input" min="-10" max="10" step="0.1" value="0" 
+                               onInput="updateParameter('b', this.value)" id="bInput">
+                    </div>
+                </div>
+            </div>
+
+            <div class="graph-container">
+                <h2 class="section-title">Plano Cartesiano Espacial</h2>
+                <div class="canvas-container">
+                    <canvas id="graphCanvas" width="600" height="500"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenge-section">
+            <h2 class="section-title">Misión Actual</h2>
+            <div class="challenge-card" id="currentChallenge">
+                <div class="challenge-title">Desafío 1: Primera Función Lineal</div>
+                <div class="challenge-description">
+                    Crea una función lineal que pase por los puntos (0, 2) y (2, 6).
+                    <br><strong>Pista:</strong> Recuerda que en una función lineal y = mx + b, 'm' es la pendiente y 'b' es donde la línea cruza el eje Y.
+                </div>
+                <button class="check-btn" onclick="checkChallenge()">Verificar Solución</button>
+                <button class="hint-btn" onclick="showHint()">💡 Pista</button>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/graficador_espacial.js" defer></script>
+</body>
+</html>

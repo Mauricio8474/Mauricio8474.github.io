@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Figuras - Grado 6°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/constructor_figuras.css">
+</head>
+<body>
+    <div class="geometric-background"></div>
+    
+    <button class="sound-toggle" onclick="toggleSound()" id="soundToggle">🔊</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ CONSTRUCTOR DE FIGURAS</h1>
+            <p class="subtitle">¡Construye figuras geométricas y calcula perímetros y áreas!</p>
+            
+            <div class="game-mode-selector">
+                <button class="mode-btn active" onclick="setGameMode('construccion')">🔨 Construcción Libre</button>
+                <button class="mode-btn" onclick="setGameMode('desafio')">🎯 Desafíos</button>
+                <button class="mode-btn" onclick="setGameMode('tutorial')">📚 Tutorial</button>
+            </div>
+        </div>
+
+        <!-- Panel de Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">📐</span>
+                <div class="stat-value" id="figuresCreated">0</div>
+                <div class="stat-label">Figuras Creadas</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🎯</span>
+                <div class="stat-value" id="challengesCompleted">0</div>
+                <div class="stat-label">Desafíos Completados</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📏</span>
+                <div class="stat-value" id="totalPerimeter">0</div>
+                <div class="stat-label">Perímetro Total</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📊</span>
+                <div class="stat-value" id="totalArea">0</div>
+                <div class="stat-label">Área Total</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <div class="stat-value" id="totalScore">0</div>
+                <div class="stat-label">Puntuación</div>
+            </div>
+        </div>
+
+        <!-- Área de Trabajo Principal -->
+        <div class="main-workspace">
+            <!-- Panel de Herramientas -->
+            <div class="tools-panel">
+                <h3 class="panel-title">🛠️ Herramientas</h3>
+                
+                <div class="shape-tools">
+                    <button class="shape-btn active" onclick="selectShape('rectangle')" data-shape="rectangle">
+                        <span class="shape-icon">⬜</span>
+                        <span>Rectángulo</span>
+                    </button>
+                    <button class="shape-btn" onclick="selectShape('square')" data-shape="square">
+                        <span class="shape-icon">🟦</span>
+                        <span>Cuadrado</span>
+                    </button>
+                    <button class="shape-btn" onclick="selectShape('triangle')" data-shape="triangle">
+                        <span class="shape-icon">🔺</span>
+                        <span>Triángulo</span>
+                    </button>
+                    <button class="shape-btn" onclick="selectShape('circle')" data-shape="circle">
+                        <span class="shape-icon">🔵</span>
+                        <span>Círculo</span>
+                    </button>
+                </div>
+
+                <div class="measurement-controls">
+                    <div class="control-group">
+                        <label class="control-label">Ancho/Radio:</label>
+                        <input type="number" id="widthInput" class="control-input" min="1" max="20" value="5" onchange="updateMeasurements()">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Alto:</label>
+                        <input type="number" id="heightInput" class="control-input" min="1" max="20" value="3" onchange="updateMeasurements()">
+                    </div>
+                </div>
+
+                <div class="color-palette">
+                    <div class="color-btn active" style="background: #ff6b6b;" onclick="selectColor('#ff6b6b')" data-color="#ff6b6b"></div>
+                    <div class="color-btn" style="background: #4ecdc4;" onclick="selectColor('#4ecdc4')" data-color="#4ecdc4"></div>
+                    <div class="color-btn" style="background: #45b7d1;" onclick="selectColor('#45b7d1')" data-color="#45b7d1"></div>
+                    <div class="color-btn" style="background: #96ceb4;" onclick="selectColor('#96ceb4')" data-color="#96ceb4"></div>
+                    <div class="color-btn" style="background: #feca57;" onclick="selectColor('#feca57')" data-color="#feca57"></div>
+                    <div class="color-btn" style="background: #ff9ff3;" onclick="selectColor('#ff9ff3')" data-color="#ff9ff3"></div>
+                    <div class="color-btn" style="background: #54a0ff;" onclick="selectColor('#54a0ff')" data-color="#54a0ff"></div>
+                    <div class="color-btn" style="background: #5f27cd;" onclick="selectColor('#5f27cd')" data-color="#5f27cd"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="createShape()">Crear Figura</button>
+                    <button class="btn btn-danger" onclick="clearCanvas()">Limpiar</button>
+                </div>
+
+                <div class="formula-display" id="formulaDisplay">
+                    <div class="formula-title">Fórmula Actual</div>
+                    <div class="formula-text" id="formulaText">
+                        Perímetro: 2(a + b)<br>
+                        Área: a × b
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área del Canvas -->
+            <div class="canvas-area">
+                <div class="canvas-container">
+                    <canvas id="constructorCanvas" width="800" height="600"></canvas>
+                </div>
+            </div>
+
+            <!-- Panel de Información -->
+            <div class="info-panel">
+                <h3 class="panel-title">📊 Resultados</h3>
+                
+                <div class="results-display">
+                    <div class="result-item">
+                        <span class="result-label">Perímetro:</span>
+                        <span class="result-value" id="currentPerimeter">0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Área:</span>
+                        <span class="result-value" id="currentArea">0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Figura:</span>
+                        <span class="result-value" id="currentShape">Rectángulo</span>
+                    </div>
+                </div>
+
+                <div class="challenge-panel" id="challengePanel" style="display: none;">
+                    <div class="challenge-title">🎯 Desafío Actual</div>
+                    <div class="challenge-description" id="challengeDescription">
+                        Crea un rectángulo con área de 20 unidades cuadradas
+                    </div>
+                    <div class="challenge-target" id="challengeTarget">
+                        Meta: Área = 20
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="challengeProgress" style="width: 0%"></div>
+                    </div>
+                    <button class="btn btn-warning" onclick="newChallenge()">Nuevo Desafío</button>
+                </div>
+
+                <div class="shape-info">
+                    <h4 style="color: #ffc107; margin-bottom: 10px;">📋 Información de la Figura</h4>
+                    <div id="shapeDetails">
+                        Selecciona una herramienta y ajusta las medidas para comenzar.
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="calculateAll()">📊 Calcular Todo</button>
+                    <button class="btn btn-warning" onclick="showHint()">💡 Pista</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-content">
+            <div class="tutorial-step active" id="step1">
+                <h2>¡Bienvenido al Constructor de Figuras! 🏗️</h2>
+                <p>Aquí aprenderás a calcular perímetros y áreas de diferentes figuras geométricas.</p>
+                <button class="btn btn-primary" onclick="nextTutorialStep()">Continuar</button>
+            </div>
+            <div class="tutorial-step" id="step2">
+                <h2>Herramientas de Construcción 🛠️</h2>
+                <p>En el panel izquierdo puedes seleccionar diferentes figuras: rectángulos, cuadrados, triángulos y círculos.</p>
+                <button class="btn btn-primary" onclick="nextTutorialStep()">Continuar</button>
+            </div>
+            <div class="tutorial-step" id="step3">
+                <h2>Medidas y Cálculos 📏</h2>
+                <p>Ajusta las medidas y observa cómo cambian automáticamente el perímetro y el área de tu figura.</p>
+                <button class="btn btn-primary" onclick="nextTutorialStep()">Continuar</button>
+            </div>
+            <div class="tutorial-step" id="step4">
+                <h2>¡Comienza a Construir! 🎯</h2>
+                <p>Usa el botón "Crear Figura" para dibujar en el canvas y completar desafíos matemáticos.</p>
+                <button class="btn btn-success" onclick="closeTutorial()">¡Empezar!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    
+  <script src="/assets/js/games/constructor_figuras.js" defer></script>
+</body>
+</html>

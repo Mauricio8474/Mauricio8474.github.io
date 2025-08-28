@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Camino del Analista de Datos</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/data_analyst_game.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🗺️ EL CAMINO DEL ANALISTA 🗺️</h1>
+            <p class="subtitle">¡Recorre el sendero de los datos y conviértete en un maestro analista!</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="score">0</span>
+                    <span>Cristales</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="level">1</span>
+                    <span>Estación</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="progress">0</span>
+                    <span>Desafíos</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA DEL CAMINO -->
+        <div class="map-container">
+            <div class="map-title">🛤️ El Sendero de los Datos</div>
+            <div class="path-container">
+                <div class="path"></div>
+                
+                <!-- Estación 1: Escuela -->
+                <div class="station available" data-station="1" style="left: 5%;" onclick="enterStation(1)">
+                    <div class="station-icon">🏫</div>
+                    <div class="station-label">Escuela</div>
+                </div>
+                
+                <!-- Estación 2: Laboratorio -->
+                <div class="station locked" data-station="2" style="left: 30%;" onclick="enterStation(2)">
+                    <div class="station-icon">🧪</div>
+                    <div class="station-label">Laboratorio</div>
+                </div>
+                
+                <!-- Estación 3: Mercado -->
+                <div class="station locked" data-station="3" style="left: 55%;" onclick="enterStation(3)">
+                    <div class="station-icon">🏪</div>
+                    <div class="station-label">Mercado</div>
+                </div>
+                
+                <!-- Estación 4: Observatorio -->
+                <div class="station locked" data-station="4" style="left: 80%;" onclick="enterStation(4)">
+                    <div class="station-icon">🔭</div>
+                    <div class="station-label">Observatorio</div>
+                </div>
+            </div>
+            
+            <div class="progress-indicator" id="pathProgress">
+                <div class="progress-step current">1</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">2</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">3</div>
+                <div class="progress-connector"></div>
+                <div class="progress-step pending">4</div>
+            </div>
+        </div>
+
+        <!-- ÁREA DE DESAFÍO -->
+        <div class="challenge-area" id="challengeArea">
+            <div class="challenge-header">
+                <div class="challenge-title" id="challengeTitle">🏫 Estación 1: La Escuela</div>
+                <div class="challenge_story" id="challengeStory">
+                    📚 ¡Bienvenido, joven analista! Tu primera misión te lleva a la escuela local, donde el director necesita tu ayuda para analizar las calificaciones del último examen de matemáticas. Los estudiantes y padres esperan conocer cómo fue el rendimiento general. ¡Usa tus habilidades para descifrar los secretos de estos números!
+                </div>
+            </div>
+
+            <div class="data-display" id="dataDisplay">
+                <div class="data-title" id="dataTitle">📊 Calificaciones del Examen (sobre 100)</div>
+                <div class="data-grid" id="dataGrid">
+                    <!-- Los datos aparecerán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <div class="hint-box" id="hintBox">
+                <div class="hint-title">💡 Recordatorios del Analista:</div>
+                <div><strong>Media:</strong> Suma todos los valores ÷ cantidad de valores</div>
+                <div><strong>Mediana:</strong> Valor del medio cuando ordenamos los datos</div>
+                <div><strong>Moda:</strong> El valor que más se repite</div>
+            </div>
+
+            <div class="challenge-question" id="challengeQuestion">
+                <!-- Las preguntas aparecerán aquí -->
+            </div>
+
+            <div class="calculation-steps" id="calculationSteps">
+                <!-- Los pasos de cálculo aparecerán aquí -->
+            </div>
+
+            <div class="feedback" id="feedback">
+                <!-- Feedback aparecerá aquí -->
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="checkAnswer()" id="checkBtn">🔍 Analizar Respuesta</button>
+                <button class="btn success" onclick="showCalculation()" id="showCalcBtn" style="display: none;">📊 Ver Cálculo</button>
+                <button class="btn success" onclick="nextChallenge()" id="nextBtn" style="display: none;">➡️ Siguiente Desafío</button>
+                <button class="btn success" onclick="completeStation()" id="completeBtn" style="display: none;">✅ Completar Estación</button>
+                <button class="btn danger" onclick="backToMap()">🗺️ Volver al Mapa</button>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/data_analyst_game.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective de Datos - Grado 6°</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+  <link rel="stylesheet" href="/assets/css/games/detective-datos-game.css">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="detective-badge">
+                <span class="detective-icon">🕵️‍♂️</span>
+                <strong>Detective de Datos</strong>
+            </div>
+            <h1 class="game-title">¡Resuelve el Misterio de las Gráficas!</h1>
+            <p style="color: #6c757d; font-size: 1.1rem;">Grado 6° - Interpretación de Gráficas Básicas</p>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <span>🏆</span>
+                <span>Puntos: <span id="score">0</span></span>
+            </div>
+            <div class="score-item">
+                <span>🎯</span>
+                <span>Pregunta: <span id="current-question">1</span>/<span id="total-questions">10</span></span>
+            </div>
+            <div class="score-item">
+                <span>⭐</span>
+                <span>Racha: <span id="streak">0</span></span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div id="game-content">
+            <div class="game-area">
+                <div class="chart-section">
+                    <h3 class="chart-title" id="chart-title">Cargando gráfica...</h3>
+                    <div class="chart-container">
+                        <canvas id="main-chart"></canvas>
+                    </div>
+                    <div id="chart-description" style="text-align: center; color: #6c757d; font-style: italic;"></div>
+                </div>
+
+                <div class="questions-section">
+                    <div class="question-card">
+                        <div class="question-text" id="question-text">Cargando pregunta...</div>
+                        <div class="options" id="options-container"></div>
+                        <div class="feedback" id="feedback" style="display: none;"></div>
+                        <button class="next-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
+                            Siguiente Pregunta 🔍
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-complete" class="game-complete" style="display: none;">
+            <h2>🎉 ¡Caso Resuelto! 🎉</h2>
+            <div class="final-score">
+                <span id="final-score">0</span> puntos
+            </div>
+            <div class="medals" id="medals"></div>
+            <p id="final-message">¡Excelente trabajo, detective!</p>
+            <button class="next-btn" onclick="restartGame()" style="margin-top: 30px;">
+                🔄 Resolver Otro Caso
+            </button>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/detective-datos-game.js" defer></script>
+</body>
+</html>

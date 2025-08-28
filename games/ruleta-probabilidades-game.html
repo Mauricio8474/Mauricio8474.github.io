@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de Probabilidades - Grado 7°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/ruleta-probabilidades-game.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="casino-badge">
+                <span style="font-size: 1.5rem;">🎰</span>
+                <strong style="color: white; margin-left: 10px;">Ruleta de Probabilidades</strong>
+            </div>
+            <h1 class="game-title">¡Descubre los Secretos del Azar!</h1>
+            <p style="color: #6c757d; font-size: 1.1rem;">Grado 7° - Probabilidad Básica</p>
+        </div>
+
+        <div class="score-dashboard">
+            <div class="score-card">
+                <div class="score-value" id="current-level">1</div>
+                <div class="score-label">Nivel Actual</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="total-score">0</div>
+                <div class="score-label">Puntos Totales</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="accuracy">0%</div>
+                <div class="score-label">Precisión</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value" id="experiments-done">0</div>
+                <div class="score-label">Experimentos</div>
+            </div>
+        </div>
+
+        <div id="game-content">
+            <div class="game-area">
+                <div class="wheel-section">
+                    <h3 id="wheel-title">Ruleta de Colores</h3>
+                    <div class="wheel-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="probability-wheel">
+                            <!-- Los segmentos se generan dinámicamente -->
+                        </div>
+                        <div class="wheel-center"></div>
+                    </div>
+                    <button class="spin-btn" id="spin-button" onclick="spinWheel()">
+                        🎯 ¡Girar Ruleta!
+                    </button>
+                    <div id="wheel-result" style="margin-top: 15px; font-size: 1.2rem; font-weight: bold;"></div>
+                </div>
+
+                <div class="question-section">
+                    <div class="scenario-card">
+                        <div class="scenario-title" id="scenario-title">Cargando escenario...</div>
+                        <div class="scenario-text" id="scenario-description">Cargando descripción...</div>
+                        
+                        <div id="question-container">
+                            <div style="margin-bottom: 15px;">
+                                <strong>¿Cuál es la probabilidad de obtener <span id="target-outcome"></span>?</strong>
+                            </div>
+                            
+                            <div class="probability-formats">
+                                <div class="format-card">
+                                    <div class="format-label">Fracción</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="numerator" placeholder="1" min="0" max="100">
+                                        <span>/</span>
+                                        <input type="number" id="denominator" placeholder="6" min="1" max="100">
+                                    </div>
+                                </div>
+                                
+                                <div class="format-card">
+                                    <div class="format-label">Decimal</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="decimal" placeholder="0.167" step="0.001" min="0" max="1">
+                                    </div>
+                                </div>
+                                
+                                <div class="format-card">
+                                    <div class="format-label">Porcentaje</div>
+                                    <div class="probability-input">
+                                        <input type="number" id="percentage" placeholder="16.7" step="0.1" min="0" max="100">
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="check-btn" onclick="checkAnswer()">✅ Verificar Respuesta</button>
+                            <button class="check-btn" onclick="runExperiment()" style="background: linear-gradient(45deg, #6c5ce7, #a29bfe);">
+                                🧪 Hacer Experimento
+                            </button>
+                        </div>
+
+                        <div id="feedback" class="feedback" style="display: none;"></div>
+                        <button class="next-btn" id="next-button" onclick="nextLevel()" style="display: none;">
+                            ➡️ Siguiente Nivel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experiments-section">
+                <h4>🔬 Laboratorio de Experimentos</h4>
+                <p>Resultados de tus experimentos:</p>
+                <div class="experiment-results" id="experiment-results"></div>
+                <div class="statistics" id="statistics"></div>
+            </div>
+        </div>
+
+        <div id="game-complete" class="game-complete" style="display: none;">
+            <h2>🎉 ¡Felicitaciones, Maestro de las Probabilidades! 🎉</h2>
+            <div style="font-size: 2rem; margin: 20px 0;" id="final-score">0 puntos</div>
+            <div id="final-medals"></div>
+            <p id="final-message">¡Has dominado los conceptos básicos de probabilidad!</p>
+            <button class="next-btn" onclick="restartGame()" style="margin-top: 30px;">
+                🔄 Jugar de Nuevo
+            </button>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/ruleta-probabilidades-game.js" defer></script>
+</body>
+</html>

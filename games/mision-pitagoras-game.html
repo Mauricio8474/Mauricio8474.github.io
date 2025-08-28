@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión Pitágoras - Grado 8°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/mision-pitagoras-game.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="mission-badge">
+                <span class="compass-icon">🧭</span>
+                <strong style="color: white; margin-left: 10px;">Misión Pitágoras</strong>
+            </div>
+            <h1 class="game-title">¡Resuelve el Misterio del Triángulo!</h1>
+            <div class="theorem-formula">
+                a² + b² = c²
+            </div>
+            <p style="color: #6c757d; font-size: 1.1rem;">Grado 8° - Teorema de Pitágoras</p>
+        </div>
+
+        <div class="mission-dashboard">
+            <div class="mission-card">
+                <div class="mission-value" id="current-mission">1</div>
+                <div class="mission-label">Misión Actual</div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-value" id="total-score">0</div>
+                <div class="mission-label">Puntos Totales</div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-value" id="success-rate">0%</div>
+                <div class="mission-label">Tasa de Éxito</div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-value" id="hints-used">0</div>
+                <div class="mission-label">Pistas Usadas</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div id="game-content">
+            <div class="game-area">
+                <div class="triangle-section">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">
+                        📐 Triángulo de la Misión
+                    </h3>
+                    <div class="triangle-container" id="triangle-container">
+                        <!-- El triángulo se genera dinámicamente -->
+                    </div>
+                    <div id="triangle-info" style="text-align: center; margin-top: 20px; color: #6c757d; font-style: italic;">
+                        Observa las medidas del triángulo rectángulo
+                    </div>
+                </div>
+
+                <div class="challenge-section">
+                    <div class="challenge-card">
+                        <div class="challenge-title">
+                            <span id="mission-icon">🏗️</span>
+                            <span id="challenge-title-text">Cargando misión...</span>
+                        </div>
+                        
+                        <div class="challenge-story" id="challenge-story">
+                            Cargando historia de la misión...
+                        </div>
+
+                        <div class="challenge-question" id="challenge-question">
+                            ¿Cuál es la medida del lado faltante?
+                        </div>
+
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Cateto a</div>
+                                <input type="number" class="measurement-field" id="cateto-a" readonly>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-top: 5px;">metros</div>
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Cateto b</div>
+                                <input type="number" class="measurement-field" id="cateto-b" readonly>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-top: 5px;">metros</div>
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Hipotenusa c</div>
+                                <input type="number" class="measurement-field" id="hipotenusa" step="0.1">
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-top: 5px;">metros</div>
+                            </div>
+                        </div>
+
+                        <div class="calculation-steps" id="calculation-steps" style="display: none;">
+                            <h4 style="margin-bottom: 15px; color: #2c3e50;">🧮 Pasos de Cálculo:</h4>
+                            <div id="steps-container"></div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn calculate-btn" onclick="showCalculationSteps()">
+                                🧮 Mostrar Cálculos
+                            </button>
+                            <button class="action-btn hint-btn" onclick="showHint()">
+                                💡 Pista
+                            </button>
+                            <button class="action-btn check-btn" onclick="checkAnswer()">
+                                ✅ Verificar Respuesta
+                            </button>
+                        </div>
+
+                        <div id="feedback" class="feedback" style="display: none;"></div>
+                        <button class="next-mission-btn" id="next-mission-btn" onclick="nextMission()" style="display: none;">
+                            🚀 Siguiente Misión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mission-complete" class="mission-complete" style="display: none;">
+            <h2>🎉 ¡Misión Completada! 🎉</h2>
+            <div style="font-size: 2.5rem; margin: 20px 0;" id="final-score">0 puntos</div>
+            <div class="achievement-badges" id="achievement-badges"></div>
+            <p id="final-message">¡Has dominado el Teorema de Pitágoras!</p>
+            <button class="next-mission-btn" onclick="restartGame()" style="margin-top: 30px;">
+                🔄 Nueva Misión
+            </button>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/mision-pitagoras-game.js" defer></script>
+</body>
+</html>

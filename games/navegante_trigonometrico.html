@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navegante Trigonométrico - Grado 10°</title>
+    
+  <link rel="stylesheet" href="/assets/css/games/navegante_trigonometrico.css">
+</head>
+<body>
+    <div class="ocean-background"></div>
+    
+    <button class="sound-toggle" onclick="toggleSound()" id="soundToggle">🔊</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🧭 NAVEGANTE TRIGONOMÉTRICO</h1>
+            <p class="subtitle">Usa la trigonometría para navegar los océanos y encontrar tesoros</p>
+            
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" onclick="setDifficulty('facil')">📚 Fácil</button>
+                <button class="difficulty-btn" onclick="setDifficulty('medio')">⚖️ Medio</button>
+                <button class="difficulty-btn" onclick="setDifficulty('dificil')">🎯 Difícil</button>
+            </div>
+
+            <div class="level-progress">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">Nivel 1 - 0/5 tesoros</div>
+            </div>
+        </div>
+
+        <!-- Panel de Estadísticas -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <span class="stat-icon">🏆</span>
+                <div class="stat-value" id="treasuresFound">0</div>
+                <div class="stat-label">Tesoros Encontrados</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📍</span>
+                <div class="stat-value" id="navigationAttempts">0</div>
+                <div class="stat-label">Navegaciones</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🎯</span>
+                <div class="stat-value" id="accuracy">0%</div>
+                <div class="stat-label">Precisión</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <div class="stat-value" id="totalScore">0</div>
+                <div class="stat-label">Puntuación</div>
+            </div>
+        </div>
+
+        <!-- Panel Principal de Navegación -->
+        <div class="navigation-panel">
+            <!-- Estado del Barco -->
+            <div class="ship-status">
+                <h3 class="section-title">⛵ Mi Barco</h3>
+                <div class="ship-icon">🚢</div>
+                
+                <div class="coordinate-display">
+                    <div>Posición Actual:</div>
+                    <div class="coordinate-value" id="currentPosition">
+                        X: <span id="shipX">50.0</span><br>
+                        Y: <span id="shipY">50.0</span>
+                    </div>
+                </div>
+
+                <div class="coordinate-display">
+                    <div>Rumbo Actual:</div>
+                    <div class="coordinate-value" id="currentHeading">0°</div>
+                </div>
+
+                <div class="coordinate-display">
+                    <div>Distancia Navegada:</div>
+                    <div class="coordinate-value" id="totalDistance">0.0 millas</div>
+                </div>
+            </div>
+
+            <!-- Mapa del Océano -->
+            <div class="ocean-map">
+                <h3 class="section-title">🗺️ Mapa de Navegación</h3>
+                
+                <div class="map-canvas" id="mapCanvas">
+                    <div class="ship-position" id="shipMarker">🚢</div>
+                    <div class="treasure-position" id="treasureMarker">💎</div>
+                </div>
+
+                <div class="treasure-info">
+                    <div class="mission-description" id="missionText">
+                        🎯 Misión: Encuentra el tesoro usando trigonometría
+                    </div>
+                    <div class="distance-display" id="treasureDistance">
+                        Distancia al tesoro: ? millas
+                    </div>
+                </div>
+            </div>
+
+            <!-- Herramientas de Brújula -->
+            <div class="compass-tools">
+                <h3 class="section-title">🧭 Instrumentos</h3>
+                
+                <div class="compass">
+                    <div class="compass-needle" id="compassNeedle"></div>
+                    <div style="position: absolute; color: #fdcb6e; font-weight: bold; top: 10px;">N</div>
+                </div>
+
+                <div class="angle-input-section">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #fdcb6e;">📐 Cálculos</h4>
+                    
+                    <div class="function-buttons">
+                        <button class="func-btn active" onclick="selectFunction('sin')">SEN</button>
+                        <button class="func-btn" onclick="selectFunction('cos')">COS</button>
+                        <button class="func-btn" onclick="selectFunction('tan')">TAN</button>
+                    </div>
+
+                    <div class="angle-inputs">
+                        <div class="input-group">
+                            <label>Ángulo (°):</label>
+                            <input type="number" id="angleInput" placeholder="0-360" min="0" max="360" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Distancia:</label>
+                            <input type="number" id="distanceInput" placeholder="millas náuticas" min="1" max="50" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="angle-inputs">
+                        <div class="input-group">
+                            <label>Resultado X:</label>
+                            <input type="number" id="calculatedX" step="0.1" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label>Resultado Y:</label>
+                            <input type="number" id="calculatedY" step="0.1" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles de Navegación -->
+        <div class="navigation-controls">
+            <button class="btn" onclick="calculatePosition()">📊 Calcular Posición</button>
+            <button class="btn btn-success" onclick="navigate()" id="navigateBtn" disabled>⛵ Navegar</button>
+            <button class="btn btn-warning" onclick="showHint()">💡 Pista</button>
+            <button class="btn" onclick="newTreasure()">🗺️ Nuevo Tesoro</button>
+            <button class="btn" onclick="resetGame()">🔄 Reiniciar</button>
+        </div>
+
+        <!-- Panel de Pistas -->
+        <div class="hint-panel" id="hintPanel">
+            <h3 style="color: #fdcb6e; text-align: center; margin-bottom: 15px;">💡 Pista Trigonométrica</h3>
+            <div id="hintContent"></div>
+        </div>
+
+        <!-- Panel de Misión -->
+        <div class="mission-panel">
+            <h3 class="mission-title">🎯 Misión Actual</h3>
+            <div class="mission-description" id="currentMission">
+                Usa trigonometría para navegar hacia el tesoro. Calcula las coordenadas usando ángulos y distancias.
+            </div>
+            
+            <div class="calculation-display" id="calculationSteps">
+                <div class="calculation-step">1. Selecciona la función trigonométrica apropiada</div>
+                <div class="calculation-step">2. Ingresa el ángulo de navegación (0° = Norte)</div>
+                <div class="calculation-step">3. Ingresa la distancia a navegar</div>
+                <div class="calculation-step">4. Calcula las nuevas coordenadas</div>
+                <div class="calculation-step">5. Navega hacia la nueva posición</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Tesoro Encontrado -->
+    <div class="treasure-found" id="treasureScreen">
+        <div class="treasure-content">
+            <h2 class="treasure-title">🏆 ¡TESORO ENCONTRADO!</h2>
+            <div style="font-size: 4rem; margin: 20px 0;">💎✨</div>
+            <p id="treasureMessage">¡Has navegado exitosamente usando trigonometría!</p>
+            <div id="treasureStats" style="margin: 20px 0;"></div>
+            <div id="achievementBadges"></div>
+            <button class="btn btn-success" onclick="nextTreasure()" style="margin-top: 20px;">
+                🗺️ Buscar Siguiente Tesoro
+            </button>
+            <button class="btn" onclick="closeTreasure()" style="margin-top: 10px;">
+                📊 Continuar Navegando
+            </button>
+        </div>
+    </div>
+
+    
+  <script src="/assets/js/games/navegante_trigonometrico.js" defer></script>
+</body>
+</html>
