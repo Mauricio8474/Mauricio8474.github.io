@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
+       <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -167,6 +167,7 @@
             color: #2d3748;
             user-select: none;
             transition: all 0.3s ease;
+            font-size: 12px;
         }
         
         .shape:hover {
@@ -344,6 +345,16 @@
             transform: scale(1.1);
         }
         
+        .empty-canvas-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #718096;
+            text-align: center;
+            pointer-events: none;
+        }
+        
         @media (max-width: 1200px) {
             .game-layout {
                 grid-template-columns: 1fr;
@@ -418,7 +429,7 @@
             <div class="blueprint">
                 <h2>📋 Plano de Construcción</h2>
                 <div class="canvas-area" id="canvas">
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #718096; text-align: center;">
+                    <div class="empty-canvas-message">
                         <div style="font-size: 3rem; margin-bottom: 10px;">🏗️</div>
                         <div>Haz clic y arrastra para crear figuras</div>
                     </div>
@@ -445,7 +456,7 @@
     </div>
 
     <script>
-        // Redirige si no hay usuario autenticado
+         // Redirige si no hay usuario autenticado
         if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
             window.location.href = "complete-login-html.html";
         }
@@ -516,15 +527,19 @@
         function handleTouch(e) {
             e.preventDefault();
             const touch = e.touches[0] || e.changedTouches[0];
-            const mouseEvent = new MouseEvent(
-                e.type === 'touchstart' ? 'mousedown' : 
-                e.type === 'touchmove' ? 'mousemove' : 'mouseup',
-                {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                }
-            );
-            e.target.dispatchEvent(mouseEvent);
+            if (!touch) return;
+            
+            const rect = e.target.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            if (e.type === 'touchstart') {
+                startDrawing({ target: e.target, offsetX: x, offsetY: y });
+            } else if (e.type === 'touchmove' && gameData.isDrawing) {
+                drawing({ target: e.target, offsetX: x, offsetY: y });
+            } else if (e.type === 'touchend') {
+                stopDrawing({ target: e.target, offsetX: x, offsetY: y });
+            }
         }
 
         // Seleccionar herramienta
@@ -556,19 +571,14 @@
         function startDrawing(e) {
             const rect = e.target.getBoundingClientRect();
             gameData.isDrawing = true;
-            gameData.startX = e.clientX - rect.left;
-            gameData.startY = e.clientY - rect.top;
+            gameData.startX = e.offsetX || (e.clientX - rect.left);
+            gameData.startY = e.offsetY || (e.clientY - rect.top);
         }
 
         // Dibujando
         function drawing(e) {
             if (!gameData.isDrawing) return;
-            
-            const rect = e.target.getBoundingClientRect();
-            const currentX = e.clientX - rect.left;
-            const currentY = e.clientY - rect.top;
-            
-            // Mostrar preview (opcional - podrías implementar una vista previa)
+            // Aquí podrías agregar una vista previa si quisieras
         }
 
         // Terminar de dibujar
@@ -576,19 +586,22 @@
             if (!gameData.isDrawing) return;
             
             const rect = e.target.getBoundingClientRect();
-            const endX = e.clientX - rect.left;
-            const endY = e.clientY - rect.top;
+            const endX = e.offsetX || (e.clientX - rect.left);
+            const endY = e.offsetY || (e.clientY - rect.top);
             
             const width = Math.abs(endX - gameData.startX);
             const height = Math.abs(endY - gameData.startY);
             
             // Tamaño mínimo
-            if (width < 20 || height < 20) {
+            if (width < 30 || height < 30) {
                 gameData.isDrawing = false;
                 return;
             }
             
-            createShape(gameData.startX, gameData.startY, width, height);
+            const x = Math.min(gameData.startX, endX);
+            const y = Math.min(gameData.startY, endY);
+            
+            createShape(x, y, width, height);
             gameData.isDrawing = false;
         }
 
@@ -624,9 +637,9 @@
                 const radius = width / 2;
                 label = `r=${Math.round(radius)}`;
             } else if (gameData.currentTool === 'square') {
-                label = `l=${Math.round(width)}`;
+                label = `${Math.round(width)}`;
             } else if (gameData.currentTool === 'triangle') {
-                label = `b=${Math.round(width)}`;
+                label = `${Math.round(width)}`;
             } else {
                 label = `${Math.round(width)}×${Math.round(height)}`;
             }
@@ -635,6 +648,12 @@
             shape.onclick = () => selectShape(shapeId);
             
             canvas.appendChild(shape);
+            
+            // Ocultar mensaje de canvas vacío
+            const emptyMessage = canvas.querySelector('.empty-canvas-message');
+            if (emptyMessage) {
+                emptyMessage.style.display = 'none';
+            }
             
             // Guardar datos de la figura
             gameData.shapes.push({
@@ -660,7 +679,7 @@
         function clearCanvas() {
             const canvas = document.getElementById('canvas');
             canvas.innerHTML = `
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #718096; text-align: center;">
+                <div class="empty-canvas-message">
                     <div style="font-size: 3rem; margin-bottom: 10px;">🏗️</div>
                     <div>Haz clic y arrastra para crear figuras</div>
                 </div>
@@ -683,7 +702,7 @@
             
             // Agregar a la galería
             const gallery = document.getElementById('buildingsGallery');
-            if (gallery.children[0].style) { // Remover mensaje inicial
+            if (gallery.innerHTML.includes('primer edificio')) {
                 gallery.innerHTML = '';
             }
             
@@ -767,7 +786,6 @@
                         question = `¿Cuál es el área del triángulo de base ${Math.round(base)} y altura ${Math.round(triangleHeight)} unidades?`;
                         explanation = `Área = (base × altura) ÷ 2 = (${Math.round(base)} × ${Math.round(triangleHeight)}) ÷ 2 = ${Math.round(answer)} unidades²`;
                     } else {
-                        // Para simplificar, asumimos triángulo equilátero
                         answer = 3 * base;
                         question = `Si el triángulo es equilátero con lado ${Math.round(base)} unidades, ¿cuál es su perímetro?`;
                         explanation = `Perímetro = 3 × lado = 3 × ${Math.round(base)} = ${Math.round(answer)} unidades`;
@@ -775,7 +793,7 @@
                     break;
             }
             
-            return { question, answer: Math.round(answer), explanation, tolerance: 5 };
+            return { question, answer: Math.round(answer), explanation };
         }
 
         // Verificar respuesta
@@ -792,7 +810,8 @@
                 return;
             }
             
-            const isCorrect = Math.abs(userAnswer - gameData.currentProblem.answer) <= gameData.currentProblem.tolerance;
+            const tolerance = Math.max(1, Math.round(gameData.currentProblem.answer * 0.05));
+            const isCorrect = Math.abs(userAnswer - gameData.currentProblem.answer) <= tolerance;
             
             if (isCorrect) {
                 feedback.innerHTML = `¡Correcto! 🎉<br><small>${gameData.currentProblem.explanation}</small>`;
@@ -807,23 +826,79 @@
                 feedback.innerHTML = `Incorrecto. La respuesta correcta es ${gameData.currentProblem.answer}<br><small>${gameData.currentProblem.explanation}</small>`;
                 feedback.className = 'feedback incorrect';
             }
-        }
-    
-        // Actualizar estadísticas
-        function updateStats() {
-            document.getElementById('level').textContent = gameData.level;
-            document.getElementById('points').textContent = gameData.points;
-            document.getElementById('correct').textContent = gameData.correctAnswers;
-            document.getElementById('buildings').textContent = gameData.buildings;
+            
+            feedback.style.display = 'block';
+            updateStats();
+            
+            setTimeout(() => {
+                generateProblem();
+            }, 3000);
         }
 
         // Subir de nivel
         function levelUp() {
             gameData.level++;
             gameData.correctAnswers = 0;
-            alert(`¡Felicidades! Has subido al nivel ${gameData.level} 🚀\nNuevos desafíos te esperan.`);
+            alert(`¡Felicitaciones! Has alcanzado el nivel ${gameData.level} 🎊\n¡Eres un mejor arquitecto!`);
             updateStats();
         }
 
-        // Iniciar el juego
-        initGame();
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('buildings').textContent = gameData.buildings;
+            document.getElementById('level').textContent = gameData.level;
+            document.getElementById('points').textContent = gameData.points;
+            document.getElementById('correct').textContent = gameData.correctAnswers;
+        }
+
+        // Eliminar figura seleccionada
+        function deleteSelectedShape() {
+            const selected = document.querySelector('.shape.selected');
+            if (selected) {
+                const shapeId = parseInt(selected.id.replace('shape-', ''));
+                selected.remove();
+                gameData.shapes = gameData.shapes.filter(s => s.id !== shapeId);
+                
+                // Mostrar mensaje de canvas vacío si no hay figuras
+                if (gameData.shapes.length === 0) {
+                    const canvas = document.getElementById('canvas');
+                    const emptyMessage = canvas.querySelector('.empty-canvas-message');
+                    if (emptyMessage) {
+                        emptyMessage.style.display = 'block';
+                    }
+                }
+                
+                generateProblem();
+            }
+        }
+
+        // Detectar teclas para funciones rápidas
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Delete':
+                case 'Backspace':
+                    deleteSelectedShape();
+                    break;
+                case '1':
+                    selectTool('rectangle');
+                    break;
+                case '2':
+                    selectTool('square');
+                    break;
+                case '3':
+                    selectTool('circle');
+                    break;
+                case '4':
+                    selectTool('triangle');
+                    break;
+                case 'Enter':
+                    checkAnswer();
+                    break;
+            }
+        });
+
+        // Inicializar cuando cargue la página
+        window.onload = initGame;
+    </script>
+</body>
+</html>
