@@ -7,8 +7,8 @@ window.dataLayer = window.dataLayer || [];
 
 // Redirige si no hay usuario autenticado
         if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
-    window.location.href = "complete-login-html.html";
-}
+            window.location.replace('/complete-login-html.html');
+        }
 
         // Estado del juego
         let gameState = {

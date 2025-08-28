@@ -76,11 +76,8 @@ function selectGrade(grade) {
 
 // Play game function
 function playGame(gameId) {
-    if (gameId === 'detective-datos') {
-        window.location.href = 'games/detective-datos-game.html';
-    } else {
-        //alert(`🎮 ¡El juego ${gameId} se está cargando!\n\n¿Te gustaría que desarrolle este juego como el próximo paso?`);
-    }
+    if (!gameId) return;
+    window.location.href = `/games/${gameId}-game.html`;
 }
 
 // Header background on scroll

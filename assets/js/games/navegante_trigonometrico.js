@@ -7,7 +7,7 @@ window.dataLayer = window.dataLayer || [];
 
 // Redirige si no hay usuario autenticado
         if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('currentUser')) {
-            window.location.href = "complete-login-html.html";
+            window.location.replace('/complete-login-html.html');
         }
         let gameState = {
             ship: { x: 50, y: 50 },
