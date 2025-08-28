@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador SABER 11 - Matemáticas</title>
+    <link rel="stylesheet" href="/assets/css/games/saber11.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>📊 Simulador SABER 11</h1>
+                <p>Matemáticas - Preparación Examen de Estado</p>
+            </div>
+            <div class="score-board">
+                <div class="score-item">
+                    <span class="label">Pregunta:</span>
+                    <span id="current-question">1</span>/<span id="total-questions">15</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Puntaje:</span>
+                    <span id="current-score">0</span>
+                </div>
+                <div class="timer">
+                    <span class="label">⏱️ Tiempo:</span>
+                    <span id="timer">02:30</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Container -->
+        <main class="game-container">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="screen active">
+                <div class="welcome-content">
+                    <h2>🎯 Bienvenido al Simulador SABER 11</h2>
+                    <div class="instructions">
+                        <h3>Instrucciones:</h3>
+                        <ul>
+                            <li>📝 Responderás 15 preguntas de matemáticas</li>
+                            <li>⏰ Tienes 2 minutos y 30 segundos por pregunta</li>
+                            <li>📊 Cada respuesta correcta suma 20 puntos</li>
+                            <li>🎯 Al final obtendrás tu puntaje y nivel</li>
+                            <li>💡 Las preguntas están basadas en el examen real SABER 11</li>
+                        </ul>
+                    </div>
+                    <button id="start-game" class="btn-primary">Comenzar Simulacro</button>
+                </div>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="question-screen" class="screen">
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <div class="question-info">
+                            <span class="difficulty" id="difficulty-level">Nivel: Básico</span>
+                            <span class="category" id="question-category">Álgebra</span>
+                        </div>
+                    </div>
+
+                    <div class="question-content">
+                        <h3 id="question-text">Pregunta aparecerá aquí...</h3>
+                        <div id="question-image" class="question-image hidden">
+                            <!-- Imagen de la pregunta si es necesario -->
+                        </div>
+                    </div>
+
+                    <div class="answers-container">
+                        <div id="answers-grid" class="answers-grid">
+                            <!-- Las opciones se generarán dinámicamente -->
+                        </div>
+                    </div>
+
+                    <div class="question-actions">
+                        <button id="skip-question" class="btn-secondary">Saltar Pregunta</button>
+                        <button id="confirm-answer" class="btn-primary" disabled>Confirmar Respuesta</button>
+                    </div>
+                </div>
+
+                <!-- Feedback Modal -->
+                <div id="feedback-modal" class="modal">
+                    <div class="modal-content">
+                        <div id="feedback-content">
+                            <div class="feedback-icon">✅</div>
+                            <h3 id="feedback-title">¡Correcto!</h3>
+                            <p id="feedback-explanation">Explicación de la respuesta...</p>
+                            <div class="feedback-stats">
+                                <span>+20 puntos</span>
+                            </div>
+                        </div>
+                        <button id="next-question" class="btn-primary">Siguiente Pregunta</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="screen">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2>🏆 Resultados del Simulacro</h2>
+                        <div class="final-score">
+                            <span id="final-score">0</span>
+                            <small>/ 300 puntos</small>
+                        </div>
+                    </div>
+
+                    <div class="performance-analysis">
+                        <div class="performance-card">
+                            <h3>📊 Tu Rendimiento</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">Respuestas Correctas:</span>
+                                    <span id="correct-answers" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Respuestas Incorrectas:</span>
+                                    <span id="incorrect-answers" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Preguntas Saltadas:</span>
+                                    <span id="skipped-questions" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Tiempo Promedio:</span>
+                                    <span id="average-time" class="stat-value">0s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="level-card">
+                            <h3 id="performance-level">Nivel Alcanzado</h3>
+                            <div id="level-description" class="level-description">
+                                <!-- Descripción del nivel -->
+                            </div>
+                            <div class="level-progress">
+                                <div id="level-bar" class="level-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-breakdown">
+                        <h3>📈 Rendimiento por Categoría</h3>
+                        <div id="categories-chart" class="categories-chart">
+                            <!-- Gráfico de categorías -->
+                        </div>
+                    </div>
+
+                    <div class="recommendations">
+                        <h3>💡 Recomendaciones de Estudio</h3>
+                        <ul id="study-recommendations">
+                            <!-- Recomendaciones generadas dinámicamente -->
+                        </ul>
+                    </div>
+
+                    <div class="results-actions">
+                        <button id="restart-game" class="btn-primary">Nuevo Simulacro</button>
+                        <button id="review-answers" class="btn-secondary">Revisar Respuestas</button>
+                        <button id="share-results" class="btn-tertiary">Compartir Resultados</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Screen -->
+            <div id="review-screen" class="screen">
+                <div class="review-container">
+                    <div class="review-header">
+                        <h2>📋 Revisión de Respuestas</h2>
+                        <button id="back-to-results" class="btn-secondary">Volver a Resultados</button>
+                    </div>
+                    <div id="review-list" class="review-list">
+                        <!-- Lista de preguntas y respuestas -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Cargando siguiente pregunta...</p>
+        </div>
+    </div>
+
+    <script src="/assets/js/games/saber11.js"></script>
+</body>
+</html>
