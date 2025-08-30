@@ -995,7 +995,7 @@ class DerivativesGame {
 
     showFormulas() {
         const formulasContent = `
-            <h3>📝 Fórmulas de Derivadas</h3>
+            <h3>Fórmulas de Derivadas</h3>
             <div class="formulas-list">
                 <div class="formula-item">
                     <strong>Regla de la Potencia:</strong> (x^n)' = n·x^(n-1)
@@ -1169,11 +1169,11 @@ class DerivativesGame {
             {
                 title: "¿Qué es una derivada?",
                 content: `
-                    <h3>🎯 Concepto Principal</h3>
+                    <h3>Concepto Principal</h3>
                     <p>La derivada de una función representa la <strong>tasa de cambio instantánea</strong> o la <strong>pendiente de la recta tangente</strong> en cualquier punto de la función.</p>
                     
                     <div class="key-points">
-                        <h4>💡 Puntos Clave:</h4>
+                        <h4>Puntos Clave:</h4>
                         <ul>
                             <li>La derivada nos dice qué tan rápido cambia una función</li>
                             <li>Se denota como f'(x) o df/dx</li>
@@ -1186,7 +1186,7 @@ class DerivativesGame {
             {
                 title: "Regla de la Potencia",
                 content: `
-                    <h3>⚡ Regla Fundamental</h3>
+                    <h3>Regla Fundamental</h3>
                     <p>Para derivar funciones de la forma x^n:</p>
                     <div class="formula-box">
                         <strong>Si f(x) = x^n, entonces f'(x) = n·x^(n-1)</strong>
@@ -1204,7 +1204,7 @@ class DerivativesGame {
             {
                 title: "Regla de la Constante",
                 content: `
-                    <h3>🔢 Constantes</h3>
+                    <h3>Constantes</h3>
                     <p>Las constantes desaparecen al derivar:</p>
                     <div class="formula-box">
                         <strong>Si f(x) = c (constante), entonces f'(x) = 0</strong>
@@ -1219,7 +1219,7 @@ class DerivativesGame {
             {
                 title: "Regla de la Suma",
                 content: `
-                    <h3>➕ Suma de Funciones</h3>
+                    <h3>Suma de Funciones</h3>
                     <p>La derivada de una suma es la suma de las derivadas:</p>
                     <div class="formula-box">
                         <strong>(f + g)' = f' + g'</strong>
@@ -1233,7 +1233,7 @@ class DerivativesGame {
             {
                 title: "Regla del Producto",
                 content: `
-                    <h3>✖️ Producto de Funciones</h3>
+                    <h3>Producto de Funciones</h3>
                     <p>Para el producto de dos funciones:</p>
                     <div class="formula-box">
                         <strong>(f·g)' = f'·g + f·g'</strong>
@@ -1249,11 +1249,11 @@ class DerivativesGame {
             {
                 title: "¡A Practicar!",
                 content: `
-                    <h3>🎮 Hora de Practicar</h3>
+                    <h3>Hora de Practicar</h3>
                     <p>Ahora que conoces las reglas básicas, es momento de aplicarlas.</p>
                     
                     <div class="practice-tips">
-                        <h4>💡 Consejos para practicar:</h4>
+                        <h4>Consejos para practicar:</h4>
                         <ul>
                             <li>Identifica qué regla aplicar</li>
                             <li>Trabaja paso a paso</li>
