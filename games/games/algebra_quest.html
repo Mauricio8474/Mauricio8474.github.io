@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZ1QWD1TCC"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álgebra Quest</title>
+    <link rel="stylesheet" href="/assets/css/games/algebra_quest.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">⚔️ ÁLGEBRA QUEST ⚔️</h1>
+            <p class="subtitle">¡Conviértete en un héroe resolviendo ecuaciones!</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="score">0</span>
+                    <span>Puntos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="level">1</span>
+                    <span>Nivel</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="streak">0</span>
+                    <span>Racha</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="quest-info">
+                <div class="level-badge" id="levelBadge">Misión 1: El Dragón de las Ecuaciones</div>
+                <div class="story-text" id="storyText">
+                    🐉 Un poderoso dragón ha encerrado el tesoro del reino en una caja mágica. 
+                    Solo podrás abrirla resolviendo correctamente la ecuación que guarda el secreto. 
+                    ¡Encuentra el valor de X para liberar el tesoro y salvar el reino!
+                </div>
+            </div>
+
+            <div class="equation-container">
+                <div class="equation-label">Resuelve la ecuación:</div>
+                <div class="equation" id="equation">2x + 5 = 13</div>
+                
+                <div class="steps-container" id="stepsContainer"></div>
+
+                <div class="input-group">
+                    <label for="answer" style="font-size: 1.3rem; font-weight: bold;">x = </label>
+                    <input type="number" id="answer" class="answer-input" placeholder="?">
+                    <button class="btn" onclick="checkAnswer()">🗡️ Atacar</button>
+                </div>
+
+                <button class="hint-btn" onclick="showHint()">💡 Pista Mágica</button>
+            </div>
+
+            <div class="hint" id="hint" style="display: none;"></div>
+            <div class="feedback" id="feedback"></div>
+
+            <div class="level-controls" id="levelControls" style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none; margin: 0 10px;">
+                    ➡️ Siguiente Pregunta
+                </button>
+                <button class="btn" onclick="nextLevel()" id="levelUpBtn" style="display: none; margin: 0 10px; background: linear-gradient(45deg, #ffd700, #ffed4e); color: #333;">
+                    🆙 Subir Nivel
+                </button>
+                <button class="btn" onclick="resetGame()" style="margin: 0 10px; background: linear-gradient(45deg, #ff6b6b, #ee5a52);">
+                    🔄 Nuevo Juego
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/games/algebra_quest.js"></script>
+</body>
+</html>

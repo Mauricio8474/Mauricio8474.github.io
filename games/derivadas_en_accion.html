@@ -9,391 +9,331 @@
     <link rel="stylesheet" href="/assets/css/games/derivadas_en_accion.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <h1>📈 Derivadas en Acción</h1>
-                <p>Aprende Cálculo Diferencial Jugando</p>
+    <!-- Header with game stats -->
+    <header class="game-header">
+        <div class="header-content">
+            <div class="game-title">
+                <h1>Derivadas en Acción</h1>
+                <span class="beta-badge">Beta</span>
             </div>
-            <div class="stats-board">
+            <div class="game-stats">
                 <div class="stat-item">
-                    <span class="label">Nivel:</span>
-                    <span id="current-level">1</span>
-                </div>
-                <div class="stat-item">
-                    <span class="label">Puntos:</span>
-                    <span id="total-points">0</span>
+                    <span class="stat-label">Nivel</span>
+                    <span id="current-level" class="stat-value">1</span>
                 </div>
                 <div class="stat-item">
-                    <span class="label">Racha:</span>
-                    <span id="streak">0</span>
+                    <span class="stat-label">Puntos</span>
+                    <span id="total-points" class="stat-value">0</span>
                 </div>
                 <div class="stat-item">
-                    <span class="label">⚡</span>
-                    <span id="energy">100</span>
+                    <span class="stat-label">Racha</span>
+                    <span id="streak" class="stat-value">0</span>
                 </div>
-            </div>
-        </header>
-
-        <!-- Main Game Container -->
-        <main class="game-container">
-            <!-- Welcome Screen -->
-            <div id="welcome-screen" class="screen active">
-                <div class="welcome-content">
-                    <h2>🚀 ¡Bienvenido a Derivadas en Acción!</h2>
-                    <div class="game-modes">
-                        <div class="mode-card" data-mode="tutorial">
-                            <div class="mode-icon">🎓</div>
-                            <h3>Tutorial Interactivo</h3>
-                            <p>Aprende los conceptos básicos de derivadas paso a paso</p>
-                            <div class="difficulty">Principiante</div>
-                        </div>
-                        <div class="mode-card" data-mode="practice">
-                            <div class="mode-icon">🏋️</div>
-                            <h3>Modo Práctica</h3>
-                            <p>Resuelve problemas de derivadas con diferentes niveles</p>
-                            <div class="difficulty">Intermedio</div>
-                        </div>
-                        <div class="mode-card" data-mode="challenge">
-                            <div class="mode-icon">⚡</div>
-                            <h3>Desafío Extremo</h3>
-                            <p>Contra reloj: resuelve derivadas lo más rápido posible</p>
-                            <div class="difficulty">Avanzado</div>
-                        </div>
-                        <div class="mode-card" data-mode="visual">
-                            <div class="mode-icon">📊</div>
-                            <h3>Laboratorio Visual</h3>
-                            <p>Explora gráficamente cómo se comportan las derivadas</p>
-                            <div class="difficulty">Exploración</div>
-                        </div>
-                    </div>
+                <div class="stat-item">
+                    <span class="stat-label">Energía</span>
+                    <span id="energy" class="stat-value">100</span>
                 </div>
-            </div>
-
-            <!-- Tutorial Screen -->
-            <div id="tutorial-screen" class="screen">
-                <div class="tutorial-container">
-                    <div class="tutorial-header">
-                        <h2 id="tutorial-title">Concepto: ¿Qué es una derivada?</h2>
-                        <div class="tutorial-progress">
-                            <div id="tutorial-progress-bar" class="progress-bar"></div>
-                            <span id="tutorial-step">1 / 6</span>
-                        </div>
-                    </div>
-                    
-                    <div class="tutorial-content">
-                        <div id="tutorial-explanation" class="explanation-box">
-                            <h3>🎯 Concepto Principal</h3>
-                            <p>La derivada de una función representa la <strong>tasa de cambio instantánea</strong> o la <strong>pendiente de la recta tangente</strong> en cualquier punto de la función.</p>
-                            
-                            <div class="visual-example">
-                                <canvas id="tutorial-canvas" width="400" height="300"></canvas>
-                            </div>
-                            
-                            <div class="key-points">
-                                <h4>💡 Puntos Clave:</h4>
-                                <ul>
-                                    <li>La derivada nos dice qué tan rápido cambia una función</li>
-                                    <li>Se denota como f'(x) o df/dx</li>
-                                    <li>Geométricamente es la pendiente de la recta tangente</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="interactive-demo" id="tutorial-demo">
-                            <!-- Contenido interactivo específico del tutorial -->
-                        </div>
-                    </div>
-                    
-                    <div class="tutorial-actions">
-                        <button id="prev-tutorial" class="btn-secondary">← Anterior</button>
-                        <button id="tutorial-quiz" class="btn-primary">Prueba Rápida</button>
-                        <button id="next-tutorial" class="btn-primary">Siguiente →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Practice Screen -->
-            <div id="practice-screen" class="screen">
-                <div class="practice-container">
-                    <div class="practice-header">
-                        <div class="problem-info">
-                            <h3 id="problem-type">Regla de la Potencia</h3>
-                            <div class="difficulty-badge" id="problem-difficulty">Nivel 1</div>
-                        </div>
-                        <div class="practice-stats">
-                            <div class="timer-circle">
-                                <span id="problem-timer">30</span>
-                            </div>
-                            <div class="hints-left">
-                                💡 <span id="hints-count">3</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="problem-container">
-                        <div class="function-display">
-                            <h2>Encuentra la derivada de:</h2>
-                            <div id="function-to-derive" class="math-expression">
-                                f(x) = x³ + 2x² - 5x + 3
-                            </div>
-                        </div>
-
-                        <div class="solution-area">
-                            <h3>Tu solución:</h3>
-                            <div id="solution-input" class="math-input">
-                                <input type="text" id="derivative-input" placeholder="Escribe la derivada aquí..." autocomplete="off">
-                                <div class="input-helpers">
-                                    <button class="helper-btn" data-symbol="x^">x^n</button>
-                                    <button class="helper-btn" data-symbol="+">+</button>
-                                    <button class="helper-btn" data-symbol="-">-</button>
-                                    <button class="helper-btn" data-symbol="*">×</button>
-                                    <button class="helper-btn" data-symbol="/">/</button>
-                                    <button class="helper-btn" data-symbol="sqrt">√</button>
-                                    <button class="helper-btn" data-symbol="ln">ln</button>
-                                    <button class="helper-btn" data-symbol="e^">e^x</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="step-by-step" id="step-by-step">
-                            <h4>📝 Pasos de resolución:</h4>
-                            <div id="steps-container">
-                                <!-- Los pasos se generarán dinámicamente -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="practice-actions">
-                        <button id="show-hint" class="btn-secondary">💡 Pista</button>
-                        <button id="show-steps" class="btn-tertiary">📝 Ver Pasos</button>
-                        <button id="check-answer" class="btn-primary">Verificar</button>
-                        <button id="skip-problem" class="btn-warning">Saltar</button>
-                    </div>
-                </div>
-
-                <!-- Hint Modal -->
-                <div id="hint-modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>💡 Pista</h3>
-                            <button class="close-modal">&times;</button>
-                        </div>
-                        <div id="hint-content" class="hint-content">
-                            <!-- Contenido de la pista -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Challenge Screen -->
-            <div id="challenge-screen" class="screen">
-                <div class="challenge-container">
-                    <div class="challenge-header">
-                        <h2>⚡ Desafío Extremo</h2>
-                        <div class="challenge-info">
-                            <div class="time-left">
-                                <span class="label">Tiempo:</span>
-                                <span id="challenge-timer">02:00</span>
-                            </div>
-                            <div class="problems-solved">
-                                <span class="label">Resueltos:</span>
-                                <span id="problems-count">0</span>
-                            </div>
-                            <div class="multiplier">
-                                <span class="label">Multiplicador:</span>
-                                <span id="score-multiplier">1x</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rapid-fire-problem">
-                        <div class="problem-number">Problema #<span id="current-problem-num">1</span></div>
-                        <div id="rapid-function" class="math-expression-large">
-                            f(x) = 3x² + 7x - 2
-                        </div>
-                        
-                        <div class="multiple-choice" id="rapid-choices">
-                            <div class="choice" data-choice="0">A) 6x + 7</div>
-                            <div class="choice" data-choice="1">B) 3x + 7</div>
-                            <div class="choice" data-choice="2">C) 6x² + 7x</div>
-                            <div class="choice" data-choice="3">D) x² + x</div>
-                        </div>
-                    </div>
-
-                    <div class="challenge-stats">
-                        <div class="combo-meter">
-                            <div class="combo-label">COMBO</div>
-                            <div class="combo-bar">
-                                <div id="combo-fill" class="combo-fill"></div>
-                            </div>
-                            <div id="combo-count">0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Visual Laboratory Screen -->
-            <div id="visual-screen" class="screen">
-                <div class="visual-container">
-                    <div class="visual-header">
-                        <h2>📊 Laboratorio Visual de Derivadas</h2>
-                        <div class="controls">
-                            <button id="play-animation" class="btn-primary">▶️ Reproducir</button>
-                            <button id="reset-graph" class="btn-secondary">🔄 Reiniciar</button>
-                        </div>
-                    </div>
-
-                    <div class="visual-content">
-                        <div class="graph-container">
-                            <canvas id="main-graph" width="600" height="400"></canvas>
-                            <div class="graph-controls">
-                                <div class="control-group">
-                                    <label>Función:</label>
-                                    <select id="function-select">
-                                        <option value="polynomial">f(x) = x³ - 3x</option>
-                                        <option value="quadratic">f(x) = x²</option>
-                                        <option value="sine">f(x) = sin(x)</option>
-                                        <option value="exponential">f(x) = eˣ</option>
-                                        <option value="logarithmic">f(x) = ln(x)</option>
-                                    </select>
-                                </div>
-                                <div class="control-group">
-                                    <label>Punto x:</label>
-                                    <input type="range" id="x-slider" min="-3" max="3" step="0.1" value="1">
-                                    <span id="x-value">1.0</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-panel">
-                            <h3>📈 Análisis en el punto</h3>
-                            <div class="analysis-info">
-                                <div class="info-item">
-                                    <span class="label">x =</span>
-                                    <span id="point-x" class="value">1.0</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="label">f(x) =</span>
-                                    <span id="point-y" class="value">-2.0</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="label">f'(x) =</span>
-                                    <span id="derivative-value" class="value">0.0</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="label">Pendiente:</span>
-                                    <span id="slope-description" class="value">Horizontal</span>
-                                </div>
-                            </div>
-
-                            <div class="interpretation">
-                                <h4>💡 Interpretación:</h4>
-                                <p id="interpretation-text">
-                                    En este punto, la función tiene una pendiente horizontal, 
-                                    lo que indica un máximo o mínimo local.
-                                </p>
-                            </div>
-
-                            <div class="derivative-rules">
-                                <h4>📚 Reglas aplicadas:</h4>
-                                <ul id="rules-applied">
-                                    <li>Regla de la potencia: (xⁿ)' = n·xⁿ⁻¹</li>
-                                    <li>Regla de la constante: (c)' = 0</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Results Screen -->
-            <div id="results-screen" class="screen">
-                <div class="results-container">
-                    <div class="results-header">
-                        <h2 id="results-title">🏆 ¡Sesión Completada!</h2>
-                        <div class="final-stats">
-                            <div class="stat-card">
-                                <div class="stat-number" id="final-score">1250</div>
-                                <div class="stat-label">Puntos Totales</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="problems-solved">15</div>
-                                <div class="stat-label">Problemas Resueltos</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="accuracy-rate">87%</div>
-                                <div class="stat-label">Precisión</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="achievements-section">
-                        <h3>🏅 Logros Desbloqueados</h3>
-                        <div id="achievements-grid" class="achievements-grid">
-                            <!-- Logros se generarán dinámicamente -->
-                        </div>
-                    </div>
-
-                    <div class="progress-section">
-                        <h3>📊 Tu Progreso</h3>
-                        <div class="skill-progress">
-                            <div class="skill-item">
-                                <span class="skill-name">Regla de la Potencia</span>
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 85%"></div>
-                                </div>
-                                <span class="skill-level">85%</span>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Regla del Producto</span>
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 72%"></div>
-                                </div>
-                                <span class="skill-level">72%</span>
-                            </div>
-                            <div class="skill-item">
-                                <span class="skill-name">Regla de la Cadena</span>
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 60%"></div>
-                                </div>
-                                <span class="skill-level">60%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="results-actions">
-                        <button id="continue-playing" class="btn-primary">Continuar Jugando</button>
-                        <button id="review-mistakes" class="btn-secondary">Revisar Errores</button>
-                        <button id="share-progress" class="btn-tertiary">Compartir Progreso</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Floating Action Button -->
-        <div class="fab" id="help-fab">
-            <span>?</span>
-            <div class="fab-menu">
-                <button class="fab-option" data-action="tutorial">📚 Tutorial</button>
-                <button class="fab-option" data-action="formulas">📝 Fórmulas</button>
-                <button class="fab-option" data-action="calculator">🧮 Calculadora</button>
             </div>
         </div>
+    </header>
 
-        <!-- Loading Screen -->
-        <div id="loading" class="loading hidden">
-            <div class="loading-spinner"></div>
-            <p id="loading-text">Cargando problema...</p>
-        </div>
-
-        <!-- Notification System -->
-        <div id="notifications" class="notifications-container">
-            <!-- Notificaciones dinámicas -->
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="screen-content">
+            <div class="welcome-hero">
+                <h2>¡Bienvenido a Derivadas en Acción!</h2>
+                <p>Aprende y practica derivadas de manera interactiva y divertida</p>
+            </div>
+            
+            <div class="game-modes">
+                <div class="mode-card" data-mode="tutorial">
+                    <div class="mode-icon">📚</div>
+                    <h3>Tutorial</h3>
+                    <p>Aprende los conceptos básicos paso a paso</p>
+                    <div class="mode-badge recommended">Recomendado</div>
+                </div>
+                
+                <div class="mode-card" data-mode="practice">
+                    <div class="mode-icon">🎯</div>
+                    <h3>Práctica</h3>
+                    <p>Resuelve problemas a tu ritmo</p>
+                </div>
+                
+                <div class="mode-card" data-mode="challenge">
+                    <div class="mode-icon">⚡</div>
+                    <h3>Desafío</h3>
+                    <p>Respuestas rápidas contra el tiempo</p>
+                    <div class="mode-badge challenge">Desafío</div>
+                </div>
+                
+                <div class="mode-card" data-mode="visual">
+                    <div class="mode-icon">📊</div>
+                    <h3>Laboratorio Visual</h3>
+                    <p>Explora derivadas gráficamente</p>
+                    <div class="mode-badge new">Nuevo</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="/assets/js/games/derivadas_en_accion.js"></script>
+    <!-- Tutorial Screen -->
+    <div id="tutorial-screen" class="screen">
+        <div class="screen-content">
+            <div class="tutorial-header">
+                <h2 id="tutorial-title">Conceptos Básicos</h2>
+                <div class="tutorial-progress">
+                    <div class="progress-bar">
+                        <div id="tutorial-progress-bar" class="progress-fill"></div>
+                    </div>
+                    <span id="tutorial-step">1 / 6</span>
+                </div>
+            </div>
+            
+            <div class="tutorial-content">
+                <div id="tutorial-explanation" class="tutorial-text">
+                    <!-- Tutorial content will be populated by JavaScript -->
+                </div>
+                
+                <div id="tutorial-demo" class="tutorial-demo">
+                    <canvas id="tutorial-canvas" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <div class="tutorial-controls">
+                <button id="prev-tutorial" class="btn btn-secondary">Anterior</button>
+                <button id="tutorial-quiz" class="btn btn-accent">Quiz</button>
+                <button id="next-tutorial" class="btn btn-primary">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice Screen -->
+    <div id="practice-screen" class="screen">
+        <div class="screen-content">
+            <div class="practice-header">
+                <div class="problem-info">
+                    <h2>Modo Práctica</h2>
+                    <div class="problem-details">
+                        <span id="problem-type" class="problem-type">Regla de la Potencia</span>
+                        <span id="problem-difficulty" class="difficulty-badge">Nivel 1</span>
+                    </div>
+                </div>
+                
+                <div class="practice-stats">
+                    <div class="timer-container">
+                        <span class="timer-icon">⏱️</span>
+                        <span id="problem-timer" class="timer">30</span>
+                    </div>
+                    <div class="hints-container">
+                        <span class="hints-icon">💡</span>
+                        <span>Pistas: <span id="hints-count">3</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="practice-content">
+                <div class="problem-statement">
+                    <h3>Encuentra la derivada de:</h3>
+                    <div id="function-to-derive" class="function-display">f(x) = x³</div>
+                </div>
+                
+                <div class="answer-section">
+                    <label for="derivative-input">f'(x) = </label>
+                    <div class="input-container">
+                        <input type="text" id="derivative-input" placeholder="Ingresa tu respuesta">
+                        <div class="input-helpers">
+                            <button class="helper-btn" data-symbol="x">x</button>
+                            <button class="helper-btn" data-symbol="²">²</button>
+                            <button class="helper-btn" data-symbol="³">³</button>
+                            <button class="helper-btn" data-symbol="⁴">⁴</button>
+                            <button class="helper-btn" data-symbol="^">^</button>
+                            <button class="helper-btn" data-symbol="√">√</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="practice-actions">
+                    <button id="check-answer" class="btn btn-primary">Verificar Respuesta</button>
+                    <button id="show-hint" class="btn btn-secondary">Mostrar Pista</button>
+                    <button id="show-steps" class="btn btn-accent">Ver Pasos</button>
+                    <button id="skip-problem" class="btn btn-outline">Saltar</button>
+                </div>
+                
+                <div id="steps-container" class="steps-container">
+                    <!-- Steps will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge Screen -->
+    <div id="challenge-screen" class="screen">
+        <div class="screen-content">
+            <div class="challenge-header">
+                <h2>Desafío Rápido</h2>
+                <div class="challenge-stats">
+                    <div class="challenge-timer">
+                        <span id="challenge-timer">02:00</span>
+                    </div>
+                    <div class="challenge-info">
+                        <span>Problema <span id="current-problem-num">1</span></span>
+                        <span>Resueltos: <span id="problems-count">0</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="challenge-content">
+                <div class="rapid-problem">
+                    <h3>Deriva rápidamente:</h3>
+                    <div id="rapid-function" class="function-display">f(x) = 2x²</div>
+                </div>
+                
+                <div class="choices-container">
+                    <div class="choice">A) 4x</div>
+                    <div class="choice">B) 2x</div>
+                    <div class="choice">C) x²</div>
+                    <div class="choice">D) 4x²</div>
+                </div>
+                
+                <div class="challenge-progress">
+                    <div class="combo-section">
+                        <span>Combo: <span id="combo-count">0</span></span>
+                        <div class="combo-bar">
+                            <div id="combo-fill" class="combo-fill"></div>
+                        </div>
+                    </div>
+                    <div class="multiplier-section">
+                        <span>Multiplicador: <span id="score-multiplier">1x</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visual Lab Screen -->
+    <div id="visual-screen" class="screen">
+        <div class="screen-content">
+            <div class="visual-header">
+                <h2>Laboratorio Visual de Derivadas</h2>
+                <p>Explora cómo cambian las funciones y sus derivadas</p>
+            </div>
+            
+            <div class="visual-content">
+                <div class="graph-container">
+                    <canvas id="main-graph" width="600" height="400"></canvas>
+                    
+                    <div class="graph-controls">
+                        <div class="control-group">
+                            <label for="function-select">Función:</label>
+                            <select id="function-select">
+                                <option value="polynomial">f(x) = x³ - 3x</option>
+                                <option value="quadratic">f(x) = x²</option>
+                                <option value="sine">f(x) = sin(x)</option>
+                                <option value="exponential">f(x) = e^(x/2)</option>
+                                <option value="logarithmic">f(x) = ln(x)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="x-slider">Valor de x: <span id="x-value">0</span></label>
+                            <input type="range" id="x-slider" min="-3" max="3" step="0.1" value="0">
+                        </div>
+                        
+                        <div class="control-buttons">
+                            <button id="play-animation" class="btn btn-primary">Animar</button>
+                            <button id="reset-graph" class="btn btn-secondary">Reiniciar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-panel">
+                    <h3>Análisis del Punto</h3>
+                    <div class="point-info">
+                        <div class="info-item">
+                            <span class="info-label">Coordenadas:</span>
+                            <span class="info-value">(<span id="point-x">0</span>, <span id="point-y">0</span>)</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Derivada:</span>
+                            <span id="derivative-value" class="info-value">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Pendiente:</span>
+                            <span id="slope-description" class="info-value">Horizontal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="interpretation">
+                        <h4>Interpretación:</h4>
+                        <p id="interpretation-text">En este punto, la función tiene una pendiente horizontal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="screen-content">
+            <div class="results-header">
+                <h2>¡Sesión Completada!</h2>
+                <div class="final-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="final-score">0</span>
+                        <span class="stat-label">Puntos Totales</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="problems-solved">0</span>
+                        <span class="stat-label">Problemas Resueltos</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="accuracy-rate">0%</span>
+                        <span class="stat-label">Precisión</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="achievements-section">
+                <h3>Logros Desbloqueados</h3>
+                <div id="achievements-grid" class="achievements-grid">
+                    <!-- Achievements will be populated dynamically -->
+                </div>
+            </div>
+            
+            <div class="results-actions">
+                <button id="continue-playing" class="btn btn-primary">Continuar Jugando</button>
+                <button id="review-mistakes" class="btn btn-secondary">Revisar Errores</button>
+                <button id="share-progress" class="btn btn-accent">Compartir Progreso</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="hint-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="hint-content">
+                <!-- Hint content will be populated dynamically -->
+            </div>
+            <button class="btn btn-primary close-modal">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-menu">
+        <button id="help-fab" class="fab-button">?</button>
+        <div class="fab-options">
+            <button class="fab-option" data-action="tutorial">📚 Tutorial</button>
+            <button class="fab-option" data-action="formulas">📝 Fórmulas</button>
+            <button class="fab-option" data-action="calculator">🧮 Calculadora</button>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div id="notifications" class="notifications-container">
+        <!-- Notifications will be added dynamically -->
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
